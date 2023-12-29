@@ -1,7 +1,6 @@
 import BrainCanvas from "@/components/brain/brain-canvas";
 import NavbarPage from "@/components/navbar";
 import { Button, Link } from "@nextui-org/react";
-import Image from "next/image";
 
 export default function Home() {
   return (

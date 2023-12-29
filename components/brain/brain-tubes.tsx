@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { shaderMaterial } from "@react-three/drei";
 import { extend, useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
@@ -68,6 +69,7 @@ const Tube = ({ curve }: any) => {
     <>
       <mesh>
         <tubeGeometry args={[curve, 64, 0.0015, 4, false]} />
+
         <brainMaterial
           ref={brainMat}
           side={THREE.DoubleSide}

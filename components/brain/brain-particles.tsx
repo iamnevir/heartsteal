@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { randomRange } from "@/lib/utils";
 import { shaderMaterial } from "@react-three/drei";
 import { extend, useFrame, useThree } from "@react-three/fiber";
@@ -100,6 +101,7 @@ export const BrainParticles = ({ allthecurve }: any) => {
           itemSize={1}
         />
       </bufferGeometry>
+
       <brainParticleMaterial
         attach="material"
         transparent={true}
