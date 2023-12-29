@@ -6,11 +6,11 @@ export default function Home() {
   return (
     <>
       <NavbarPage />
-      <div className=" w-full h-full relative flex items-center">
-        <div className="absolute  w-[70%] h-[70%] rounded-full white__gradient top-0 bg-gradient-to-br from-[#fa5560] via-[#b14bf4] to-[#4d91ff]" />
-        <div className=" w-[50dvw]  h-[100dvh] flex items-center justify-center flex-col">
-          <div className="w-[35dvw] flex flex-col items-start gap-3">
-            <span className=" text-[3vw] font-semibold ">
+      <div className=" w-full h-full relative flex flex-col md:flex-row items-center">
+        <div className="absolute w-[70%] h-[70%] rounded-full white__gradient top-0 bg-gradient-to-br from-[#fa5560] via-[#b14bf4] to-[#4d91ff]" />
+        <div className="md:w-[50dvw] w-[100dvw] h-full md:h-[100dvh] md:mt-0 mt-20 flex items-center justify-center flex-col">
+          <div className="md:w-[35dvw] w-[80dvw] flex flex-col items-start md:gap-3 gap-5">
+            <span className=" text-4xl font-semibold ">
               Unleash your
               <span className="gradient-text"> Creativity </span>
               with the power of
@@ -31,7 +31,7 @@ export default function Home() {
             <span className=" ml-9 text-sm">No credit card needed</span>
           </div>
         </div>
-        <div className=" w-[50dvw] relative z-10 h-[100dvh]">
+        <div className=" md:w-[50dvw] w-full relative z-10 h-full md:h-[100dvh]">
           <BrainCanvas />
         </div>
       </div>
