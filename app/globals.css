@@ -2,26 +2,89 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+*::-webkit-scrollbar {
+  width: 0.5em;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
+.cl-userButtonPopoverCard {
+  height: 25%;
+  width: 20% !important;
+}
+
+.cl-internal-b3fm6y {
+  background-color: transparent;
+  backdrop-filter: blur(1px);
+}
+.cl-card {
+  background-color: transparent;
+  backdrop-filter: blur(4px);
+  width: 100%;
+}
+
+.cl-formFieldInput {
+  background: rgba(55, 55, 100, 0);
+}
+
+.cl-formButtonPrimary {
+  overflow: hidden;
+  height: 40px;
+  background-image: linear-gradient(
+    122deg,
+    rgb(250, 85, 96) 0.01%,
+    rgb(177, 75, 244) 49.9%,
+    rgb(77, 145, 255) 100%
+  );
+}
+.cl-internal-b3fm6y {
+  background-image: url("https://utfs.io/f/0aa2dcc9-3890-4b28-8ebe-e862ed4cac6f-exb0im.png");
+  background-size: contain; /* Hoặc có thể sử dụng 'contain' hoặc kích thước cụ thể */
+  background-repeat: no-repeat; /* Ngăn lặp lại ảnh */
+  background-position: start center; /* Căn giữa ảnh */
+  /* Các thuộc tính CSS khác để tùy chỉnh nền */
+  width: 550px;
+  height: 445px;
+  margin: 97px 2px 15px 0px;
+  transform: rotate(-90deg);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-color: transparent;
+}
+
+.cl-internal-v37v88 {
+  transform: rotate(90deg);
+  margin: 30px 0px 0px -55px;
+}
+.cl-internal-uf3377 {
+  transform: rotate(90deg);
+  margin: -70px 0px 15px 0px;
+}
+.gradient-text {
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    122deg,
+    rgba(250, 85, 96) 0.01%,
+    rgb(177, 75, 244) 49.9%,
+    rgb(77, 145, 255) 100%
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.bg-gr {
+  background-image: linear-gradient(
+    122deg,
+    rgb(250, 85, 96) 0.01%,
+    rgb(177, 75, 244) 49.9%,
+    rgb(77, 145, 255) 100%
+  );
+}
+.white__gradient {
+  filter: blur(990px);
 }
