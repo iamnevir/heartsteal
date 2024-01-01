@@ -16,7 +16,7 @@ const CommunityFeed = ({ users }: { users: string }) => {
   );
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
-    <div className=" grid grid-cols-5 gap-4 pr-2 my-4 pb-10">
+    <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
       {results.map((item, index) => (
         <ImageItem image={item} key={index} users={JSON.parse(users)} />
       ))}

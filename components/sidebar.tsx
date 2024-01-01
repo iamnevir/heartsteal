@@ -33,7 +33,7 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        " fixed z-[9999] dark:bg-black bg-white w-56 h-full flex flex-col items-start overflow-y-auto border-r border-white/65",
+        " fixed z-[9999] dark:bg-black bg-white w-56 h-full hidden sm:flex flex-col items-start overflow-y-auto border-r border-white/65",
         pathname === "/ai/generation" ? "hidden" : ""
       )}
     >

@@ -6,7 +6,7 @@ import Link from "next/link";
 const AIPage = () => {
   return (
     <div className=" w-full h-full flex-col flex">
-      <div className="font-semibold text-lg pl-64 mt-5 gap-5 flex items-center w-full">
+      <div className="font-semibold px-3 text-lg sm:pl-64 mt-5 gap-5 flex-col sm:flex-row flex items-center w-full">
         <span>
           <span className="gradient-text">Get Started</span> Here
         </span>

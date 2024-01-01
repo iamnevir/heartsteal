@@ -1,6 +1,6 @@
 import BrainCanvas from "@/components/brain/brain-canvas";
+import HomePageButton from "@/components/home-page-button";
 import NavbarPage from "@/components/navbar";
-import { Button, Link } from "@nextui-org/react";
 
 export default function Home() {
   return (
@@ -20,14 +20,7 @@ export default function Home() {
               Create production-quality visual assets for your projects with
               unprecedented quality, speed, and style-consistency.
             </span>
-            <Button
-              as={Link}
-              href="/ai"
-              className="bg-gr hover:scale-105 duration-500 transition-all px-10 py-7 text-lg font-semibold"
-              variant="shadow"
-            >
-              Create an account
-            </Button>
+            <HomePageButton />
             <span className=" ml-9 text-sm">No credit card needed</span>
           </div>
         </div>

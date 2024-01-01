@@ -1,5 +1,4 @@
 "use client";
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 import {
   Navbar,
   NavbarBrand,
@@ -11,22 +10,13 @@ import {
   NavbarMenuItem,
   Button,
 } from "@nextui-org/react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "usehooks-ts";
 import ModeToggle from "./theme-button";
-import { Github } from "lucide-react";
 import UnderlineText from "./link-underline";
 import Logo from "./logo";
 
 const NavbarPage = () => {
-  const { theme } = useTheme();
-  const isMobile = useMediaQuery("(max-width:768px)");
-  const auth = useAuth();
   const menuItems = ["Collections", "Contact", "API", "Github", "Discord"];
-  const pathname = usePathname();
   return (
     <>
       <Navbar
@@ -97,24 +87,6 @@ const NavbarPage = () => {
               </svg>
             </Link>
           </NavbarItem>
-
-          {auth.userId ? (
-            <>
-              <NavbarItem>
-                <UserButton />
-              </NavbarItem>
-            </>
-          ) : (
-            <>
-              <NavbarItem className="flex">
-                <SignInButton mode="modal">
-                  <span className="gradient-text font-semibold duration-500 cursor-pointer">
-                    Sign In
-                  </span>
-                </SignInButton>
-              </NavbarItem>
-            </>
-          )}
           <ModeToggle />
           <NavbarItem>
             <Button

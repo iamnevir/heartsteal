@@ -6,7 +6,7 @@ import { Divider } from "@nextui-org/react";
 const CommunityFeedPage = async () => {
   const users = await clerkClient.users.getUserList();
   return (
-    <div className="pl-64 pt-5">
+    <div className="sm:pl-64 px-3 pt-5">
       <span className="font-semibold text-lg">
         <span className="gradient-text">Recent</span> Creations
       </span>

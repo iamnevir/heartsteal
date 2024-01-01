@@ -4,7 +4,7 @@ import { Divider } from "@nextui-org/react";
 
 const PersonalFeedPage = async () => {
   return (
-    <div className="pl-64 pt-5">
+    <div className="sm:pl-64 px-3 pt-5">
       <span className="font-semibold text-lg">
         <span className="gradient-text">Your</span> Creations
       </span>
