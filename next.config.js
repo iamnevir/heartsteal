@@ -6,6 +6,9 @@ const nextConfig = {
         hostname: "utfs.io",
       },
       {
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
+      {
         hostname: "files.edgestore.dev",
       },
     ],

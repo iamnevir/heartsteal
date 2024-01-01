@@ -22,7 +22,6 @@ body,
 
 .cl-internal-b3fm6y {
   background-color: transparent;
-  backdrop-filter: blur(1px);
 }
 .cl-card {
   background-color: transparent;
@@ -52,7 +51,7 @@ body,
   /* Các thuộc tính CSS khác để tùy chỉnh nền */
   width: 550px;
   height: 445px;
-  margin: 97px 2px 15px 0px;
+  margin: 97px 0px 0px 65px;
   transform: rotate(-90deg);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
@@ -85,6 +84,39 @@ body,
     rgb(77, 145, 255) 100%
   );
 }
+.bg-gr-hover:hover {
+  background-image: linear-gradient(
+    122deg,
+    rgb(250, 85, 96) 0.01%,
+    rgb(177, 75, 244) 49.9%,
+    rgb(77, 145, 255) 100%
+  );
+}
+.bg-gr-hover {
+  background-color: #101622;
+}
 .white__gradient {
   filter: blur(990px);
+}
+.border-gr-hover:hover {
+  border-width: 1px;
+  border-image: linear-gradient(
+      122deg,
+      rgb(250, 85, 96) 0.01%,
+      rgb(177, 75, 244) 49.9%,
+      rgb(77, 145, 255) 100%
+    )
+    1;
+  border-style: solid;
+}
+
+.border-gr {
+  border-width: 1px;
+  border-image: linear-gradient(
+      122deg,
+      rgb(250, 85, 96) 0.01%,
+      rgb(177, 75, 244) 49.9%,
+      rgb(77, 145, 255) 100%
+    )
+    1;
 }

@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextUiProviders } from "@/components/provider/nextui-provider";
 import AuthProvider from "@/components/provider/auth-provider";
+import { EdgeStoreProvider } from "@/lib/edgestore";
+import ConvexClientProvider from "@/components/provider/convex-provider";
+import { Toaster } from "@/components/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +22,13 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body className={inter.className}>
-          <NextUiProviders>{children}</NextUiProviders>
+          <ConvexClientProvider>
+            <EdgeStoreProvider>
+              <NextUiProviders>
+                {children} <Toaster />
+              </NextUiProviders>
+            </EdgeStoreProvider>
+          </ConvexClientProvider>
         </body>
       </html>
     </AuthProvider>

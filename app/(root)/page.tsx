@@ -9,14 +9,14 @@ export default function Home() {
       <div className=" w-full h-full relative flex flex-col md:flex-row items-center">
         <div className="absolute w-[70%] h-[70%] rounded-full white__gradient top-0 bg-gradient-to-br from-[#fa5560] via-[#b14bf4] to-[#4d91ff]" />
         <div className="md:w-[50dvw] w-[100dvw] h-full md:h-[100dvh] md:mt-0 mt-20 flex items-center justify-center flex-col">
-          <div className="md:w-[35dvw] w-[80dvw] flex flex-col items-start md:gap-3 gap-5">
-            <span className=" text-4xl font-semibold ">
+          <div className="md:w-[37dvw] w-[88dvw] flex flex-col items-start md:gap-3 gap-5">
+            <span className=" md:text-5xl text-3xl font-semibold ">
               Unleash your
               <span className="gradient-text"> Creativity </span>
               with the power of
               <span className="gradient-text"> HeartSteal Ai</span>
             </span>
-            <span className=" text-lg">
+            <span className=" md:text-lg text-base">
               Create production-quality visual assets for your projects with
               unprecedented quality, speed, and style-consistency.
             </span>
@@ -31,7 +31,7 @@ export default function Home() {
             <span className=" ml-9 text-sm">No credit card needed</span>
           </div>
         </div>
-        <div className=" md:w-[50dvw] w-full relative z-10 h-full md:h-[100dvh]">
+        <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
           <BrainCanvas />
         </div>
       </div>

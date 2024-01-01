@@ -5,11 +5,9 @@ import { Canvas } from "@react-three/fiber";
 import { brainData } from "@/public/data/brain";
 import { BrainParticles } from "./brain-particles";
 import Tubes from "./brain-tubes";
-import { useTheme } from "next-themes";
 
 export default function BrainCanvas() {
   const PATHS = brainData.economics[0].paths;
-  const { theme } = useTheme();
   let brainCurves: any[] = [];
   PATHS.forEach((path) => {
     let points = [];
@@ -21,10 +19,6 @@ export default function BrainCanvas() {
   });
   return (
     <Canvas camera={{ position: [0, 0, 0.25], near: 0.001, far: 5 }}>
-      {/* <color
-        attach="background"
-        args={[theme === "dark" ? "black" : "white"]}
-      /> */}
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <Tubes allthecurve={brainCurves} />

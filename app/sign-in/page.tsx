@@ -6,10 +6,10 @@ import { useMediaQuery } from "usehooks-ts";
 export default function Home() {
   const isMobile = useMediaQuery("(max-width:768px)");
   const style = {
-    "--gradient-color-1": "#c3e4ff",
+    "--gradient-color-1": "#ff8093",
     "--gradient-color-2": "#6ec3f4",
-    "--gradient-color-3": "#eae2ff",
-    "--gradient-color-4": "#b9beff",
+    "--gradient-color-3": "#a785ff",
+    "--gradient-color-4": "#7ab4ff",
   };
   return (
     <div className=" h-full w-full justify-center ">

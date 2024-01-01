@@ -19,7 +19,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 headerSubtitle: "gradient-text",
                 formFieldLabel: pathname === "/" ? "" : "text-black",
                 formFieldInput: pathname === "/" ? "" : "text-black",
-                modalContent: "ml-[500px] mt-[50px] ",
+                modalContent: "ml-[300px] mt-[80px] ",
                 formButtonPrimary:
                   "hover:scale-[1.05] shadow-[0_0px_30px_-10px_rgba(77,145,255,0.8)]",
                 socialButtonsBlockButton:
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 footerAction: " hidden",
               },
               layout: {
-                socialButtonsPlacement: "bottom",
+                socialButtonsPlacement: "top",
                 socialButtonsVariant: "auto",
               },
             }
@@ -42,7 +42,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 card: "ml-0 rounded-tr-[10px] rounded-br-[10px] rounded-tl-[0px] rounded-bl-[0px] border-transparent h-[550px] mr-[50px]",
               },
               layout: {
-                socialButtonsPlacement: "bottom",
+                socialButtonsPlacement: "top",
                 socialButtonsVariant: "auto",
               },
             }
