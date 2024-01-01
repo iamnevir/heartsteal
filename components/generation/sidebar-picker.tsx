@@ -158,8 +158,8 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                If it's on, your photo will look vibrant, otherwise it will look
-                more natural. This param is only supported for Dall-E-3.
+                If it&apos;s on, your photo will look vibrant, otherwise it will
+                look more natural. This param is only supported for Dall-E-3.
               </div>
             }
           >
