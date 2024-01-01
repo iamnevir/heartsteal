@@ -17,7 +17,7 @@ const SidebarPicker = () => {
   const sizes = ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"];
   const generation = useGenerateImage();
   return (
-    <div className="fixed z-[99] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2">
+    <div className="fixed z-[99999] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2">
       <Link href="/" className="flex items-center gap-1 p-5">
         <Image
           src="/logo.png"

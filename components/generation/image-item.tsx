@@ -2,6 +2,7 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@nextui-org/react";
+import axios from "axios";
 import { useMutation } from "convex/react";
 import {
   ArrowRightLeft,
@@ -14,12 +15,10 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import useDownloader from "react-use-downloader";
 const ImageItem = ({ image }: { image: Doc<"image"> }) => {
   const remove = useMutation(api.image.remove);
   const update = useMutation(api.image.update);
-  const { size, elapsed, percentage, download, cancel, error, isInProgress } =
-    useDownloader();
+
   const [hover, setHover] = useState(false);
   const handleDelete = async () => {
     try {
@@ -42,6 +41,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       toast("Updated Failed.");
     }
   };
+
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -58,7 +58,6 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         blurDataURL="/logo.png"
         src={image.url}
         fill
-        priority
         sizes="(max-width: 768px) 100vw,66vw"
         style={{ objectFit: "cover" }}
       />
@@ -76,7 +75,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       </Tooltip>
       <Tooltip size="sm" delay={100} closeDelay={100} content="Download image">
         <div
-          onClick={() => download(image.url, "hearsteal.png")}
+          onClick={() => window.open(image.url)}
           className={cn(
             " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-12 bottom-2 rounded-full",
             hover

@@ -1,16 +1,57 @@
+import { useGenerateImage } from "@/hooks/use-generate-picker";
+import axios from "axios";
 import { motion } from "framer-motion";
+import { useState } from "react";
 const Dive = () => {
+  const [loading, setLoading] = useState(false);
+  const generation = useGenerateImage();
+  const handleRandomPrompt = async () => {
+    setLoading(true);
+    const prompt = [
+      { role: "user", content: "Generate a random prompt for dall-e-2" },
+    ];
+    const key =
+      process.env.OPENAI_API_KEY! ||
+      "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";
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          messages: prompt,
+          model: "gpt-3.5-turbo",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${key}`,
+          },
+        }
+      );
+
+      const generatedPrompt = response.data.choices[0].message.content;
+      generation.setPrompt(generatedPrompt);
+    } catch (error) {
+      console.error("Error generating prompt:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <motion.div
-      whileHover={{
-        scale: [1, 1.1, 1.1, 1, 1],
-        rotate: [0, 0, 270, 270, 0],
-        borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-        transition: {
-          duration: 2,
-          ease: "easeInOut",
-        },
-      }}
+      onClick={handleRandomPrompt}
+      animate={
+        loading
+          ? {
+              scale: [1, 1.1, 1.1, 1, 1],
+              rotate: [0, 0, 270, 270, 0],
+              borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+              transition: {
+                duration: 2,
+                ease: "easeInOut",
+              },
+            }
+          : {}
+      }
       className=" bg-slate-200 dark:bg-slate-900/70 h-12 w-12 p-2 cursor-pointer rounded-md flex items-center justify-center"
     >
       <svg viewBox="0 0 38 32" focusable="false" aria-hidden="true">

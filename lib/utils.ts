@@ -1,7 +1,5 @@
 import { Doc } from "@/convex/_generated/dataModel";
-import axios from "axios";
 import { type ClassValue, clsx } from "clsx";
-import { Readable } from "stream";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {

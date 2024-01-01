@@ -41,7 +41,7 @@ const ImageGenerationMain = () => {
     try {
       const key =
         process.env.OPENAI_API_KEY! ||
-        "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";
+        "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";
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
           toast("No image input found.");
@@ -79,7 +79,6 @@ const ImageGenerationMain = () => {
           size: generation.imageSize,
           prompt: generation.prompt,
         };
-
         const res = await axios({
           method: "post",
           url: "https://api.openai.com/v1/images/generations",

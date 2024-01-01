@@ -29,12 +29,13 @@ const Sidebar = () => {
     { icon: KeyRound, title: "API Access", href: "/ai/api" },
     { icon: Settings, title: "Settings", href: "/ai/settings" },
   ];
-
+  if (pathname === "/ai/generation") {
+    return null;
+  }
   return (
     <div
       className={cn(
-        " fixed z-[9999] dark:bg-black bg-white w-56 h-full hidden sm:flex flex-col items-start overflow-y-auto border-r border-white/65",
-        pathname === "/ai/generation" ? "hidden" : ""
+        " fixed z-[9999] dark:bg-black bg-white w-56 h-full hidden sm:flex flex-col items-start overflow-y-auto border-r border-white/65"
       )}
     >
       <Link href="/" className="flex items-center gap-1 p-5">

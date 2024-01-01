@@ -9,13 +9,11 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Snippet,
   Tooltip,
   User,
   useDisclosure,
 } from "@nextui-org/react";
+import { motion } from "framer-motion";
 import { useMutation } from "convex/react";
 import {
   Check,
@@ -28,7 +26,6 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import useDownloader from "react-use-downloader";
 import { User as UserType } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
 import { useCopyToClipboard } from "usehooks-ts";
@@ -43,8 +40,6 @@ const ImageCommunityItem = ({
   const update = useMutation(api.image.update);
   const { user } = useUser();
   const imageAuthor = users ? users.find((f) => f.id === image.userId) : user;
-  const { size, elapsed, percentage, download, cancel, error, isInProgress } =
-    useDownloader();
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
@@ -69,13 +64,15 @@ const ImageCommunityItem = ({
                       blurDataURL="/logo.png"
                       src={image.url}
                       fill
-                      priority
                       sizes="(max-width: 768px) 100vw,66vw"
                       style={{ objectFit: "cover" }}
                     />{" "}
                   </div>
                   <div className="flex items-center gap-2 mt-3 text-sm">
-                    <div className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500">
+                    <div
+                      onClick={() => window.open(image.url)}
+                      className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
+                    >
                       <Download className="w-4 h-4" />
                       Download
                     </div>
@@ -172,7 +169,24 @@ const ImageCommunityItem = ({
           </>
         </ModalContent>
       </Modal>
-      <div
+      <motion.div
+        whileInView="show"
+        initial="hidden"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {
+            opacity: 0,
+            translateY: 10,
+          },
+          show: {
+            opacity: 1,
+            translateY: 0,
+            transition: {
+              type: "spring",
+              duration: 2,
+            },
+          },
+        }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={onOpen}
@@ -242,7 +256,7 @@ const ImageCommunityItem = ({
           content="Download image"
         >
           <div
-            onClick={() => download(image.url, "hearsteal.png")}
+            onClick={() => window.open(image.url)}
             className={cn(
               " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
               hover
@@ -253,7 +267,7 @@ const ImageCommunityItem = ({
             <DownloadCloudIcon className="w-4 h-4" />
           </div>
         </Tooltip>
-      </div>
+      </motion.div>
     </>
   );
 };
