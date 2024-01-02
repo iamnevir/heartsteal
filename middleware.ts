@@ -9,7 +9,7 @@ export default authMiddleware({
   afterAuth(auth, req, evt) {
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({
-        returnBackUrl: "http://localhost:3000/sign-in",
+        returnBackUrl: process.env.NEXT_PUBLIC_APP_URL,
       });
     }
     createUser(auth.userId!);
