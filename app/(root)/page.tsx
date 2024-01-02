@@ -24,9 +24,9 @@ export default function Home() {
             <span className=" ml-9 text-sm">No credit card needed</span>
           </div>
         </div>
-        {/* <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
+        <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
           <BrainCanvas />
-        </div> */}
+        </div>
       </div>
     </>
   );
