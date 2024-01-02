@@ -17,7 +17,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import GenerationHistory from "./generation-history";
-import { cn, groupObjectsByDate } from "@/lib/utils";
+import { cn, groupObjectsByDate, openaiApi } from "@/lib/utils";
 import { usePaginatedQuery } from "convex/react";
 import { useState } from "react";
 import LoadMore from "../load-more";
@@ -39,7 +39,6 @@ const ImageGenerationMain = () => {
   const handleGenerate = async () => {
     setIsLoading(true);
     try {
-      const key = process.env.OPENAI_API_KEY!;
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
           toast("No image input found.");
@@ -82,7 +81,7 @@ const ImageGenerationMain = () => {
           url: "https://api.openai.com/v1/images/generations",
           data,
           headers: {
-            Authorization: `Bearer ${key}`,
+            Authorization: `Bearer ${openaiApi}`,
             "Content-Type": "application/json",
           },
         });

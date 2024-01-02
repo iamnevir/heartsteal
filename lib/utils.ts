@@ -1,7 +1,9 @@
 import { Doc } from "@/convex/_generated/dataModel";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
+export const openaiApi =
+  process.env.OPENAI_API_KEY ||
+  "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";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

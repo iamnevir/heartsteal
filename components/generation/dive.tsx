@@ -1,4 +1,5 @@
 import { useGenerateImage } from "@/hooks/use-generate-picker";
+import { openaiApi } from "@/lib/utils";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -11,7 +12,6 @@ const Dive = () => {
     const prompt = [
       { role: "user", content: "Generate a random prompt for dall-e-2" },
     ];
-    const key = process.env.OPENAI_API_KEY!;
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -22,7 +22,7 @@ const Dive = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${key}`,
+            Authorization: `Bearer ${openaiApi}`,
           },
         }
       );
