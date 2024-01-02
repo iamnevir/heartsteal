@@ -83,6 +83,9 @@ body,
     rgb(177, 75, 244) 49.9%,
     rgb(77, 145, 255) 100%
   );
+  box-shadow: rgba(161, 128, 255, 0.6) 0px 0px calc(0.5rem) 0px;
+  animation-timing-function: ease-out;
+  animation-duration: 200ms;
 }
 .bg-gr-hover:hover {
   background-image: linear-gradient(
@@ -91,6 +94,9 @@ body,
     rgb(177, 75, 244) 49.9%,
     rgb(77, 145, 255) 100%
   );
+  box-shadow: rgba(161, 128, 255, 0.6) 0px 0px calc(0.5rem) 0px;
+  animation-timing-function: ease-out;
+  animation-duration: 200ms;
 }
 .bg-gr-hover {
   background-color: #101622;
@@ -108,6 +114,8 @@ body,
     )
     1;
   border-style: solid;
+  animation-timing-function: ease-out;
+  animation-duration: 200ms;
 }
 
 .border-gr {
@@ -119,4 +127,16 @@ body,
       rgb(77, 145, 255) 100%
     )
     1;
+}
+.border-gr-image:hover {
+  border-width: 3px;
+  border-image: linear-gradient(
+      122deg,
+      rgb(250, 85, 96) 0.01%,
+      rgb(177, 75, 244) 49.9%,
+      rgb(77, 145, 255) 100%
+    )
+    1;
+  animation-timing-function: ease-out;
+  animation-duration: 200ms;
 }

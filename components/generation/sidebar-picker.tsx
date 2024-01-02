@@ -19,7 +19,7 @@ const SidebarPicker = () => {
   return (
     <div
       className={cn(
-        "fixed z-[60] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2"
+        "fixed z-[50] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2"
       )}
     >
       <Link href="/" className="flex items-center gap-1 p-5">

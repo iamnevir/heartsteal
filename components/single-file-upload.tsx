@@ -6,9 +6,15 @@ import Image from "next/image";
 import { useEdgeStore } from "@/lib/edgestore";
 import { cn } from "@/lib/utils";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 const SingleFileUpload = () => {
+  const { user } = useUser();
   const generation = useGenerateImage();
+  const update = useMutation(api.user.update);
   const { edgestore } = useEdgeStore();
+  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const imageInput = useRef<ElementRef<"input">>(null);
   const [isLoading, setIsLoading] = useState(false);
   return (
@@ -27,6 +33,7 @@ const SingleFileUpload = () => {
             imageInput.current?.click();
           }}
           fill
+          sizes="100vw"
           style={{ objectFit: "contain" }}
           alt="imageUpload"
         />
@@ -51,6 +58,7 @@ const SingleFileUpload = () => {
                 const res = await edgestore.publicFiles.upload({
                   file,
                 });
+                update({ id: u?._id!, upload: [...u?.upload!, res.url] });
                 generation.setInputUrl(res.url);
               }
               setIsLoading(false);
