@@ -5,7 +5,8 @@ import { NextUiProviders } from "@/components/provider/nextui-provider";
 import AuthProvider from "@/components/provider/auth-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import ConvexClientProvider from "@/components/provider/convex-provider";
-import { Toaster } from "@/components/toaster";
+import { Toaster } from "sonner";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,7 +26,20 @@ export default function RootLayout({
           <ConvexClientProvider>
             <EdgeStoreProvider>
               <NextUiProviders>
-                {children} <Toaster />
+                {children}{" "}
+                <Toaster
+                  toastOptions={{
+                    style: {
+                      backgroundImage: `linear-gradient(
+                                        122deg,
+                                        rgb(250, 85, 96) 0.01%,
+                                        rgb(177, 75, 244) 49.9%,
+                                        rgb(77, 145, 255) 100%
+                                      )`,
+                      border: "0px",
+                    },
+                  }}
+                />
               </NextUiProviders>
             </EdgeStoreProvider>
           </ConvexClientProvider>

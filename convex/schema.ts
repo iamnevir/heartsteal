@@ -13,4 +13,11 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_public", ["isPublish"]),
+  user: defineTable({
+    userId: v.string(),
+    username: v.optional(v.string()),
+    favorite: v.optional(v.array(v.string())),
+    like: v.array(v.id("image")),
+    upload: v.array(v.string()),
+  }).index("by_user", ["userId"]),
 });

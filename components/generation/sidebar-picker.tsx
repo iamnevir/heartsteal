@@ -10,23 +10,20 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
-import { BrainCog, ShieldAlert, TrainFront } from "lucide-react";
-import Image from "next/image";
+import { BrainCog, ShieldAlert, Snail } from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
+import Logo from "../logo";
 const SidebarPicker = () => {
   const sizes = ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"];
   const generation = useGenerateImage();
   return (
-    <div className="fixed z-[99999] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2">
+    <div
+      className={cn(
+        "fixed z-[60] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2"
+      )}
+    >
       <Link href="/" className="flex items-center gap-1 p-5">
-        <Image
-          src="/logo.png"
-          alt=""
-          priority
-          width={50}
-          height={20}
-          style={{ width: "auto", objectFit: "cover" }}
-        />
+        <Logo width={50} />
         <p className="font-bold sm:flex hidden gradient-text">HeartSteal.Ai</p>
       </Link>
       <Divider className="px-5" />
@@ -36,7 +33,7 @@ const SidebarPicker = () => {
         value={generation.model}
         startContent={
           generation.model === "dall-e-2" ? (
-            <TrainFront />
+            <Snail />
           ) : generation.model === "dall-e-3" ? (
             <BrainCog />
           ) : null
@@ -56,7 +53,7 @@ const SidebarPicker = () => {
         placeholder="Select Model"
       >
         <SelectItem
-          startContent={<TrainFront />}
+          startContent={<Snail />}
           key={"dall-e-2"}
           value={"Heart Steal"}
         >

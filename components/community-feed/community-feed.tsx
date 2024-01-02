@@ -3,17 +3,20 @@
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
 import ImageItem from "./image-item";
-import { User } from "@clerk/nextjs/server";
 import LoadMore from "../load-more";
 import { CircularProgress } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
+import ImageSkeleton from "../image-skeleton";
+import { useEffect } from "react";
+import { Doc } from "@/convex/_generated/dataModel";
 
-const CommunityFeed = ({ users }: { users: string }) => {
+const CommunityFeed = ({ search }: { search: string }) => {
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImages,
     {},
     { initialNumItems: 20 }
   );
+
   const isMobile = useMediaQuery("(max-width: 750px)");
   const sm = useMediaQuery("(min-width: 750px)");
   const md = useMediaQuery("(min-width: 1000px)");
@@ -33,8 +36,18 @@ const CommunityFeed = ({ users }: { users: string }) => {
     colNumber = 1;
   }
   function getColumns(colIndex: number) {
-    return results.filter((item, idx) => idx % colNumber === colIndex);
+    if (search !== "") {
+      return results
+        .filter((item) => item.prompt?.includes(search))
+        .filter((item, idx) => idx % colNumber === colIndex);
+    } else {
+      return results.filter((item, idx) => idx % colNumber === colIndex);
+    }
   }
+  if (status === "LoadingFirstPage") {
+    return <ImageSkeleton />;
+  }
+
   return (
     <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
       {[
@@ -46,7 +59,7 @@ const CommunityFeed = ({ users }: { users: string }) => {
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-4">
           {item.map((i, ind) => (
-            <ImageItem image={i} key={ind} users={JSON.parse(users)} />
+            <ImageItem image={i} key={ind} />
           ))}
         </div>
       ))}

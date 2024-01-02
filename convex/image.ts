@@ -11,7 +11,6 @@ export const getImages = query({
       .query("image")
       .withIndex("by_public", (q) => q.eq("isPublish", true))
       .order("desc")
-
       .paginate(args.paginationOpts);
     return images;
   },
@@ -29,6 +28,19 @@ export const getImageById = query({
     return image;
   },
 });
+export const getImageByIds = query({
+  args: {
+    imageIds: v.optional(v.array(v.id("image"))),
+  },
+  handler: async (ctx, args) => {
+    if (!args.imageIds) {
+      return null;
+    }
+    const images = args.imageIds?.map(async (item) => await ctx.db.get(item));
+
+    return Promise.all(images);
+  },
+});
 export const getImageByUser = query({
   args: {
     userId: v.string(),
@@ -41,31 +53,6 @@ export const getImageByUser = query({
       .order("desc")
       .paginate(args.paginationOpts);
     return image;
-  },
-});
-export const getImageByTime = query({
-  args: {
-    createTime: v.number(),
-    paginationOpts: paginationOptsValidator,
-  },
-  handler: async (ctx, args) => {
-    const image = await ctx.db
-      .query("image")
-      .withIndex("by_creation_time", (q) =>
-        q.eq("_creationTime", args.createTime)
-      )
-      .order("desc")
-      .paginate(args.paginationOpts);
-    return image;
-  },
-});
-export const getMoreImage = query({
-  args: { paginationOpts: paginationOptsValidator },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("image")
-      .order("desc")
-      .paginate(args.paginationOpts);
   },
 });
 export const create = mutation({

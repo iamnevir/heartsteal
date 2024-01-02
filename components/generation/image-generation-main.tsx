@@ -39,9 +39,7 @@ const ImageGenerationMain = () => {
   const handleGenerate = async () => {
     setIsLoading(true);
     try {
-      const key =
-        process.env.OPENAI_API_KEY! ||
-        "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";
+      const key = process.env.OPENAI_API_KEY!;
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
           toast("No image input found.");

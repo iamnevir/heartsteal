@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { motion } from "framer-motion";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import {
   Check,
   Copy,
@@ -29,20 +29,38 @@ import { toast } from "sonner";
 import { User as UserType } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
 import { useCopyToClipboard } from "usehooks-ts";
-const ImageCommunityItem = ({
-  image,
-  users,
-}: {
-  image: Doc<"image">;
-  users?: UserType[];
-}) => {
+const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
+  const { user } = useUser();
+  const users = useQuery(api.user.getUsers);
+  const userName = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const update = useMutation(api.image.update);
-  const { user } = useUser();
-  const imageAuthor = users ? users.find((f) => f.id === image.userId) : user;
+  const updateUser = useMutation(api.user.update);
+  const imageAuthor = users
+    ? users.find((f) => f.userId === image.userId)?.username
+    : userName?.username;
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
+  const handleLiked = () => {
+    try {
+      if (userName) {
+        if (userName?.like.includes(image._id)) {
+          update({ id: image._id, likes: image.likes - 1 });
+          updateUser({
+            id: userName._id,
+            like: [...userName?.like.filter((f) => f !== image._id)],
+          });
+        } else {
+          update({ id: image._id, likes: image.likes + 1 });
+          updateUser({
+            id: userName._id,
+            like: [...userName?.like, image._id],
+          });
+        }
+      }
+    } catch (error) {}
+  };
   return (
     <>
       <Modal size="2xl" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -94,19 +112,21 @@ const ImageCommunityItem = ({
                 <div className=" flex flex-col items-start gap-3 w-full max-w-xs">
                   <div className="flex items-center gap-2 w-full justify-between">
                     <User
-                      name={
-                        imageAuthor?.username
-                          ? imageAuthor.username
-                          : imageAuthor?.firstName
-                      }
+                      name={imageAuthor}
                       avatarProps={{
-                        name: imageAuthor?.username?.charAt(0)
-                          ? imageAuthor.username?.charAt(0)
-                          : imageAuthor?.firstName?.charAt(0),
+                        name: imageAuthor?.charAt(0),
                         className: "w-[30px] h-[30px] bg-gr",
                       }}
                     />
-                    <Heart className=" mr-3 hover:scale-105 duration-500 cursor-pointer" />
+                    <Heart
+                      onClick={handleLiked}
+                      className={cn(
+                        " mr-3 hover:scale-105 duration-500 cursor-pointer",
+                        userName?.like.includes(image._id)
+                          ? " fill-red-500 text-red-500"
+                          : ""
+                      )}
+                    />
                   </div>
 
                   {image.prompt !== "" && (
@@ -189,7 +209,6 @@ const ImageCommunityItem = ({
         }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={onOpen}
         className={cn(
           " relative  sm:w-[240px] sm:h-[390px] w-full h-[390px] cursor-pointer overflow-hidden",
           image.size === "512x512" ? "sm:h-[290px] h-[390px]" : ""
@@ -198,6 +217,7 @@ const ImageCommunityItem = ({
         <Image
           className={cn("rounded-md duration-300", hover ? "opacity-40" : "")}
           alt=""
+          onClick={onOpen}
           placeholder="blur"
           blurDataURL="/logo.png"
           src={image.url}
@@ -207,15 +227,23 @@ const ImageCommunityItem = ({
           style={{ objectFit: "cover" }}
         />
         <div
+          onClick={handleLiked}
           className={cn(
-            "text-sm absolute right-2 top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 flex items-center px-3 py-2 ",
+            "text-sm absolute z-[1] right-2 w-14 h-8 flex items-center justify-center top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0",
             hover
-              ? "translate-x-0 opacity-100"
+              ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-2 sm:pointer-events-none"
           )}
         >
           <div>{image.likes}</div>
-          <Heart className=" w-5 h-5 ml-2 hover:scale-125 duration-500" />
+          <Heart
+            className={cn(
+              " w-5 h-5 ml-2 hover:scale-125 duration-500",
+              userName?.like.includes(image._id)
+                ? " fill-red-500 text-red-500"
+                : ""
+            )}
+          />
         </div>
         <div
           className={cn(
@@ -226,22 +254,16 @@ const ImageCommunityItem = ({
           )}
         >
           <User
-            name={
-              imageAuthor?.username
-                ? imageAuthor.username
-                : imageAuthor?.firstName
-            }
+            name={imageAuthor}
             avatarProps={{
-              name: imageAuthor?.username?.charAt(0)
-                ? imageAuthor.username?.charAt(0)
-                : imageAuthor?.firstName?.charAt(0),
+              name: imageAuthor?.charAt(0),
               className: "w-[30px] h-[30px] bg-gr",
             }}
           />
         </div>
         <div
           className={cn(
-            " flex items-center duration-500 absolute bottom-2 left-2 cursor-pointer justify-start truncate max-h-40 max-w-[200px] whitespace-normal gap-3 rounded-md  text-xs",
+            "  duration-500 absolute bottom-2 left-2 cursor-pointer justify-start line-clamp-6 max-w-[200px] gap-3 rounded-md  text-xs",
             hover
               ? "translate-x-0 opacity-100"
               : "sm:opacity-0 sm:-translate-x-2 sm:pointer-events-none"
@@ -258,7 +280,7 @@ const ImageCommunityItem = ({
           <div
             onClick={() => window.open(image.url)}
             className={cn(
-              " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
+              " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center  bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
               hover
                 ? "opacity-100 translate-x-0"
                 : "sm:opacity-0 sm:translate-x-2 sm:pointer-events-none"

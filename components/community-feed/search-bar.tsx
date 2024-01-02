@@ -12,7 +12,13 @@ import {
   UsersRound,
 } from "lucide-react";
 
-const SearchBar = () => {
+const SearchBar = ({
+  search,
+  setSearch,
+}: {
+  search: string;
+  setSearch: (v: string) => void;
+}) => {
   const category = [
     {
       title: "All",
@@ -53,6 +59,7 @@ const SearchBar = () => {
         <Input
           isClearable
           radius="sm"
+          onValueChange={setSearch}
           labelPlacement="outside"
           placeholder="search by prompt..."
           startContent={
@@ -69,10 +76,14 @@ const SearchBar = () => {
       <div className=" flex items-center gap-2">
         {category.map((item, index) => (
           <div
+            onClick={() => setSearch(item.title === "All" ? "" : item.title)}
             key={index}
             className={cn(
               " cursor-pointer dark:bg-[#101622] bg-slate-300 hover:bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 rounded-full gap-2 flex items-center justify-center px-3 py-1",
-              item.title === "All"
+              item.title === "All" && search === ""
+                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4]"
+                : "",
+              search === item.title
                 ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4]"
                 : ""
             )}

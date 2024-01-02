@@ -64,7 +64,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       <Tooltip size="sm" delay={100} closeDelay={100} content="Public image">
         <div
           onClick={handlePublic}
-          className=" w-8 h-8 flex group hover:scale-105 items-center cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-2 top-2 rounded-full"
+          className=" w-8 h-8 flex group hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 top-2 rounded-full"
         >
           {image.isPublish ? (
             <EyeIcon className="w-4 h-4 group-hover:rotate-180 duration-300" />
@@ -77,7 +77,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         <div
           onClick={() => window.open(image.url)}
           className={cn(
-            " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-12 bottom-2 rounded-full",
+            " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-12 bottom-2 rounded-full",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
@@ -90,7 +90,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         <div
           onClick={handleDelete}
           className={cn(
-            " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
+            " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
@@ -107,7 +107,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       >
         <div
           className={cn(
-            " w-8 h-8 flex hover:scale-105 items-center duration-700 cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute right-20 mr-2 bottom-2 rounded-full",
+            " w-8 h-8 flex hover:scale-105 items-center duration-700 cursor-pointer justify-center backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-20 mr-2 bottom-2 rounded-full",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
@@ -119,7 +119,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       <Tooltip size="sm" delay={100} closeDelay={100} content="Select image">
         <div
           className={cn(
-            " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center bg-transparent backdrop-blur-lg absolute left-2 top-2 rounded-full",
+            " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute left-2 top-2 rounded-full",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
