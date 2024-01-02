@@ -10,7 +10,7 @@ import ImageItem from "../community-feed/image-item";
 import { useUser } from "@clerk/nextjs";
 import ImageSkeleton from "../image-skeleton";
 
-const PersonalFeed = () => {
+const PersonalFeed = ({ search }: { search: string }) => {
   const { user } = useUser();
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImageByUser,
@@ -36,7 +36,13 @@ const PersonalFeed = () => {
     colNumber = 1;
   }
   function getColumns(colIndex: number) {
-    return results.filter((item, idx) => idx % colNumber === colIndex);
+    if (search !== "") {
+      return results
+        .filter((item) => item.prompt?.includes(search))
+        .filter((item, idx) => idx % colNumber === colIndex);
+    } else {
+      return results.filter((item, idx) => idx % colNumber === colIndex);
+    }
   }
   if (status === "LoadingFirstPage") {
     return <ImageSkeleton />;
