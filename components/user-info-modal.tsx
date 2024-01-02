@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import isValidName from "@/actions/isValidName";
 import { toast } from "sonner";
-import { useUserInfo } from "@/hooks/use-user-info";
 const UserInfoModal = () => {
   const { user } = useUser();
   const update = useMutation(api.user.update);
