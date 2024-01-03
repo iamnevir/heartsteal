@@ -1,5 +1,6 @@
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
+import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@nextui-org/react";
 import axios from "axios";
@@ -18,7 +19,7 @@ import { toast } from "sonner";
 const ImageItem = ({ image }: { image: Doc<"image"> }) => {
   const remove = useMutation(api.image.remove);
   const update = useMutation(api.image.update);
-
+  const generation = useGenerateImage();
   const [hover, setHover] = useState(false);
   const handleDelete = async () => {
     try {
@@ -106,6 +107,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         content="Use this image like an input"
       >
         <div
+          onClick={() => generation.setInputUrl(image.url)}
           className={cn(
             " w-8 h-8 flex hover:scale-105 items-center duration-700 cursor-pointer justify-cente bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-20 mr-2 bottom-2 rounded-full",
             hover
@@ -113,7 +115,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
               : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
           )}
         >
-          <ArrowRightLeft className="w-4 h-4" />
+          <ArrowRightLeft className="w-4 h-4 ml-2" />
         </div>
       </Tooltip>
       <Tooltip size="sm" delay={100} closeDelay={100} content="Select image">

@@ -33,7 +33,7 @@ const SingleFileUpload = () => {
             imageInput.current?.click();
           }}
           fill
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw,66vw"
           style={{ objectFit: "contain" }}
           alt="imageUpload"
         />
