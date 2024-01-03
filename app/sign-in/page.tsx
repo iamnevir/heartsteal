@@ -18,7 +18,7 @@ export default function Home() {
           "absolute w-[100dvw] h-[100dvh] flex items-center justify-center"
         )}
       >
-        <div className={cn(isMobile ? "" : "ml-[350px]")}>
+        <div className={cn(isMobile ? "scale-110" : "ml-[300px]")}>
           <SignIn />
         </div>
       </div>

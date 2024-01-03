@@ -16,8 +16,10 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import isValidName from "@/actions/isValidName";
 import { Check, Flower, X } from "lucide-react";
+import { useMediaQuery } from "usehooks-ts";
 const Profile = () => {
   const { user } = useUser();
+  const isMobile = useMediaQuery("(max-width:768px)");
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const update = useMutation(api.user.update);
@@ -165,12 +167,15 @@ const Profile = () => {
         )}
       >
         <User
-          className="ml-5"
+          className={cn("ml-5 gradient-text")}
           name={name}
+          classNames={{ name: isMobile ? "text-xl" : "" }}
           avatarProps={{
             title: "",
             name: name?.charAt(0).toUpperCase(),
-            className: "w-[30px] h-[30px] bg-gr",
+            className: isMobile
+              ? "w-10 h-10 bg-gr"
+              : "w-[30px] h-[30px] bg-gr ",
           }}
         />
       </div>

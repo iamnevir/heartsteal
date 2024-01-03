@@ -63,11 +63,16 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
   };
   return (
     <>
-      <Modal size="2xl" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        scrollBehavior="inside"
+        size="2xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent className="w-full">
           <>
             <ModalBody>
-              <div className="flex item-start gap-4 py-2 w-full">
+              <div className="flex sm:flex-row flex-col item-start gap-4 py-2 w-full">
                 <div>
                   <div
                     className={cn(
@@ -135,7 +140,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                       <span className=" text-sm">Prompt details</span>
                       <Card>
                         <CardBody>
-                          <div className=" relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
+                          <div className="sm:line-clamp-none line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
                             {image.prompt}
                             <div
                               onClick={() => {

@@ -68,12 +68,12 @@ const SearchBar = ({
         />{" "}
         <Button
           variant="shadow"
-          className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-full px-10 font-semibold text-sm py-3"
+          className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-[40%] sm:px-10 font-semibold text-sm py-3"
         >
           Search
         </Button>
       </div>
-      <div className=" flex items-center gap-2">
+      <div className=" flex items-center flex-wrap gap-2">
         {category.map((item, index) => (
           <div
             onClick={() => setSearch(item.title === "All" ? "" : item.title)}
@@ -81,10 +81,10 @@ const SearchBar = ({
             className={cn(
               " cursor-pointer dark:bg-[#101622] bg-slate-300 hover:bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 rounded-full gap-2 flex items-center justify-center px-3 py-1",
               item.title === "All" && search === ""
-                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4]"
+                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]"
                 : "",
               search === item.title
-                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4]"
+                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]"
                 : ""
             )}
           >

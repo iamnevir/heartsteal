@@ -16,7 +16,13 @@ import UnderlineText from "./link-underline";
 import Logo from "./logo";
 
 const NavbarPage = () => {
-  const menuItems = ["Collections", "Contact", "API", "Github", "Discord"];
+  const menuItems = [
+    { title: "Collections", href: "/ai/community-feed" },
+    { title: "Contact", href: "https://www.facebook.com/iamnanhdz" },
+    { title: "API", href: "https://platform.openai.com/docs/guides/images" },
+    { title: "Github", href: "https://github.com/iamnevir/heartsteal" },
+    { title: "Discord", href: "#" },
+  ];
 
   return (
     <>
@@ -30,7 +36,7 @@ const NavbarPage = () => {
           <NavbarMenuToggle aria-label={"menu"} className="sm:hidden" />
           <NavbarBrand>
             <Link href="/" className="flex items-center gap-1 -ml-5 sm:-ml-10">
-              <Logo width={50} className="mb-1" />
+              <Logo width={50} className="ml-4 mt-2 sm:mt-0 sm:ml-0" />
               <p className="font-bold sm:flex hidden gradient-text">
                 HeartSteal.Ai
               </p>{" "}
@@ -105,13 +111,10 @@ const NavbarPage = () => {
         <NavbarMenu className="">
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`} className=" w-full">
-              <Link
-                href={`/${item.toLowerCase()}`}
-                className=" w-full flex flex-col px-1"
-              >
-                <div className="flex items-center h-full w-full ml-2 hover:border-l-1 hover:border-[#2670E9] border-l-0 hover:bg-gradient-to-r px-2 py-3 from-[#2670E9]/30 to-[2670E9]/0">
+              <Link href={item.href} className=" w-full flex flex-col px-1">
+                <div className="flex items-center h-full w-full ml-2 hover:border-l-1 hover:border-[#2670E9] border-l-0 hover:bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]/10 px-2 py-3 ">
                   <div className="text-foreground font-semibold text-xl">
-                    {item}
+                    {item.title}
                   </div>
                 </div>
                 <div className="bg-gradient-to-r w-[90%] from-slate-200 mt-2 via-slate-500 to-slate-200 dark:from-slate-950  dark:via-slate-400 dark:to-slate-950 h-[1px]" />

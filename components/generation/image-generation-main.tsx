@@ -140,7 +140,6 @@ const ImageGenerationMain = () => {
         </div>
 
         <Button
-          variant="shadow"
           onClick={handleGenerate}
           className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-full px-14 font-semibold text-lg text-white py-6"
         >
@@ -180,19 +179,21 @@ const ImageGenerationMain = () => {
         >
           <ImageInput />
         </Tab>
-        <Tab
-          key="image-edit"
-          title={
-            <div className=" flex gap-2 items-center">
-              <span>Image Edit</span>
-              <Chip className="bg-gr" size="sm">
-                Beta
-              </Chip>
-            </div>
-          }
-        >
-          <ImageEdit />
-        </Tab>
+        {!isMobile && (
+          <Tab
+            key="image-edit"
+            title={
+              <div className=" flex gap-2 items-center">
+                <span>Image Edit</span>
+                <Chip className="bg-gr" size="sm">
+                  Beta
+                </Chip>
+              </div>
+            }
+          >
+            <ImageEdit />
+          </Tab>
+        )}
       </Tabs>
     </div>
   );

@@ -17,7 +17,9 @@ import {
 import { usePathname } from "next/navigation";
 import Logo from "./logo";
 import Profile from "./settings/profile";
-const Sidebar = () => {
+import Image from "next/image";
+
+const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
   const { signOut } = useClerk();
   const pathname = usePathname();
 
@@ -42,95 +44,134 @@ const Sidebar = () => {
 
   return (
     <>
-      <div
-        className={cn(
-          " fixed z-[50] dark:bg-black bg-white w-56 h-full hidden sm:flex flex-col items-start overflow-y-auto border-r border-white/65"
-        )}
+      <Link
+        href="/"
+        className={cn("flex items-center gap-1 p-5", isMobile ? "p-3" : "")}
       >
-        <Link href="/" className="flex items-center gap-1 p-5">
+        {isMobile ? (
+          <Image src="/logo.png" width={50} height={50} alt="" />
+        ) : (
           <Logo width={50} />
-          <p className="font-bold sm:flex hidden gradient-text">
-            HeartSteal.Ai
-          </p>
-        </Link>
+        )}
 
-        <div className=" flex flex-col w-full gap-2">
-          {sidebarItems.map((item, index) => (
-            <Link
-              href={item.href}
-              key={index}
-              color="foreground"
-              className={cn(
-                " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
-                pathname.includes(item.href) && item.href !== "/ai"
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : "",
-                pathname === item.href
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : ""
-              )}
-            >
-              <item.icon className="color-gr ml-5" />
-              <span>{item.title}</span>
-            </Link>
-          ))}
-        </div>
-        <div className=" flex flex-col w-full gap-2">
-          <span className="p-3">User tools</span>
-          {toolItems.map((item, index) => (
-            <Link
-              href={item.href}
-              key={index}
-              color="foreground"
-              className={cn(
-                " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
-                pathname.includes(item.href) && item.href !== "/ai"
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : "",
-                pathname === item.href
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : ""
-              )}
-            >
-              <item.icon className="color-gr ml-5" />
-              <span>{item.title}</span>
-            </Link>
-          ))}
-        </div>
-        <div className=" flex flex-col w-full mt-auto gap-2">
-          {footerItems.map((item, index) => (
-            <Link
-              href={item.href}
-              key={index}
-              color="foreground"
-              className={cn(
-                " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
-                pathname.includes(item.href) && item.href !== "/ai"
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : "",
-                pathname === item.href
-                  ? "dark:text-white dark:bg-white/10 bg-black/10"
-                  : ""
-              )}
-            >
-              <item.icon className="color-gr ml-5" />
-              <span>{item.title}</span>
-            </Link>
-          ))}
-          <div
-            onClick={() => signOut()}
+        <p
+          className={cn("font-bold gradient-text", isMobile ? " text-xl" : "")}
+        >
+          HeartSteal.Ai
+        </p>
+      </Link>
+
+      <div className=" flex flex-col w-full gap-2">
+        {sidebarItems.map((item, index) => (
+          <Link
+            href={item.href}
+            key={index}
+            color="foreground"
             className={cn(
-              " flex items-center cursor-pointer text-xs justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65"
+              " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
+              pathname.includes(item.href) && item.href !== "/ai"
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              pathname === item.href
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              isMobile ? " text-xl" : ""
             )}
           >
-            <LogOut className="ml-5" />
-            <span>Logout</span>
-          </div>
+            <item.icon
+              className={cn(
+                "ml-5",
+                isMobile && "w-8 h-8",
+                pathname === item.href && " text-rose-500"
+              )}
+            />
+            <span className={cn(pathname === item.href ? "gradient-text" : "")}>
+              {item.title}
+            </span>
+          </Link>
+        ))}
+      </div>
+      <div className=" flex flex-col w-full gap-2">
+        <span className="p-3">User tools</span>
+        {toolItems.map((item, index) => (
+          <Link
+            href={item.href}
+            key={index}
+            color="foreground"
+            className={cn(
+              " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
+              pathname.includes(item.href) && item.href !== "/ai"
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              pathname === item.href
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              isMobile ? " text-xl" : ""
+            )}
+          >
+            <item.icon
+              className={cn(
+                "ml-5",
+                isMobile && "w-8 h-8",
+                pathname === item.href && " text-rose-500"
+              )}
+            />
+            <span className={cn(pathname === item.href ? "gradient-text" : "")}>
+              {item.title}
+            </span>
+          </Link>
+        ))}
+      </div>
+      <div className=" flex flex-col w-full gap-2 mt-auto">
+        {footerItems.map((item, index) => (
+          <Link
+            href={item.href}
+            key={index}
+            color="foreground"
+            className={cn(
+              " flex items-center justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65 text-xs",
+              pathname.includes(item.href) && item.href !== "/ai"
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              pathname === item.href
+                ? "dark:text-white dark:bg-white/10 bg-black/10"
+                : "",
+              isMobile ? " text-xl" : ""
+            )}
+          >
+            <item.icon
+              className={cn(
+                "ml-5",
+                isMobile && "w-8 h-8",
+                pathname === item.href && " text-rose-500"
+              )}
+            />
+            <span className={cn(pathname === item.href ? "gradient-text" : "")}>
+              {item.title}
+            </span>
+          </Link>
+        ))}
+        <div
+          onClick={() => signOut()}
+          className={cn(
+            " flex items-center cursor-pointer text-xs justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65",
+            isMobile ? " text-xl" : ""
+          )}
+        >
+          <LogOut
+            className={cn("ml-5 text-red-900", isMobile ? "w-8 h-8" : "")}
+          />
+          <span className="text-red-900">Logout</span>
+        </div>
 
-          <Profile />
-          <div className=" text-xs dark:text-white/65 ml-5 py-2">
-            © Nevir Studio
-          </div>
+        <Profile />
+        <div
+          className={cn(
+            " text-xs dark:text-white/65 ml-5 py-2",
+            isMobile ? " text-sm" : ""
+          )}
+        >
+          © Nevir Studio
         </div>
       </div>
     </>

@@ -49,7 +49,7 @@ const CommunityFeed = ({ search }: { search: string }) => {
   }
 
   return (
-    <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
+    <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 sm:pr-2 py-2 sm:py-10">
       {[
         getColumns(0),
         getColumns(1),
