@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { calcCoinGenerate, cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionItem,
@@ -10,15 +10,24 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
-import { BrainCog, ShieldAlert, Snail } from "lucide-react";
+import { BrainCog, LucideShieldQuestion, Snail } from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import Logo from "../logo";
 import { useMediaQuery } from "usehooks-ts";
 import Image from "next/image";
+import { useLanguage } from "@/hooks/use-language";
+import { useUser } from "@clerk/nextjs";
+import CoinControl from "../coin-control";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 const SidebarPicker = () => {
+  const { user } = useUser();
+  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const sizes = ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"];
   const generation = useGenerateImage();
   const isMobile = useMediaQuery("(max-width:768px)");
+  const language = useLanguage();
+
   return (
     <>
       <Link href="/" className="flex items-center gap-1 sm:p-5 p-3">
@@ -31,9 +40,12 @@ const SidebarPicker = () => {
           HeartSteal.Ai
         </p>
       </Link>
+      <CoinControl userId={user?.id!} />
       <Divider className="px-5" />
       <Select
-        label="Generate Model"
+        label={
+          language.language === "Vietnamese" ? "Mô hình" : "Generate Model"
+        }
         defaultSelectedKeys={["dall-e-2"]}
         value={generation.model}
         startContent={
@@ -43,7 +55,7 @@ const SidebarPicker = () => {
             <BrainCog className={isMobile ? "w-8 h-8" : ""} />
           ) : null
         }
-        className="max-w-xs "
+        className={cn("max-w-xs ")}
         variant="underlined"
         onChange={(v) => {
           generation.setModel(v.target.value);
@@ -60,7 +72,9 @@ const SidebarPicker = () => {
           value: "sm:text-base text-xl",
           selectorIcon: isMobile && "w-5 h-5",
         }}
-        placeholder="Select Model"
+        placeholder={
+          language.language === "Vietnamese" ? "bạn đã thích" : "Select Model"
+        }
       >
         <SelectItem
           startContent={<Snail className={isMobile ? "w-8 h-8" : ""} />}
@@ -75,6 +89,10 @@ const SidebarPicker = () => {
           startContent={<BrainCog className={isMobile ? "w-8 h-8" : ""} />}
           key={"dall-e-3"}
           value={"Heart Steal Pro"}
+          className={cn(
+            "max-w-xs ",
+            !u?.isPro && " opacity-50 pointer-events-none"
+          )}
         >
           Heart Steal Pro
         </SelectItem>
@@ -83,7 +101,11 @@ const SidebarPicker = () => {
         <AccordionItem
           key="1"
           aria-label="Accordion 1"
-          title="Number of Images"
+          title={
+            language.language === "Vietnamese"
+              ? "Số lượng ảnh"
+              : "Number of Images"
+          }
           className="sm:text-xs text-xl"
           classNames={{
             title: "sm:text-xs text-xl font-semibold",
@@ -101,7 +123,8 @@ const SidebarPicker = () => {
                     generation.model === "dall-e-3" && index > 1
                       ? "pointer-events-none opacity-50"
                       : "",
-                    generation.imageNumber === index ? "border-gr" : ""
+                    generation.imageNumber === index ? "border-gr" : "",
+                    !u?.isPro && index > 5 && "pointer-events-none opacity-50"
                   )}
                 >
                   {index}
@@ -115,15 +138,23 @@ const SidebarPicker = () => {
           aria-label="Accordion 2"
           title={
             <div className=" flex items-center gap-2 sm:text-xs text-xl">
-              Image Sizes
+              {language.language === "Vietnamese"
+                ? "Kích thước ảnh"
+                : "Image Sizes"}
               <Tooltip
                 placement="right"
                 size="sm"
                 delay={100}
                 closeDelay={100}
-                content={<div className="w-40">Final size of the images</div>}
+                content={
+                  <div className="w-40">
+                    {language.language === "Vietnamese"
+                      ? "Kích thước cuối cùng của ảnh"
+                      : "Final size of the images"}
+                  </div>
+                }
               >
-                <ShieldAlert className="sm:text-xs text-xl" />
+                <LucideShieldQuestion className="sm:text-xs text-xl" />
               </Tooltip>
             </div>
           }
@@ -159,7 +190,9 @@ const SidebarPicker = () => {
         )}
       >
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
-          <span>Natural</span>
+          <span>
+            {language.language === "Vietnamese" ? "Tự nhiên" : "Natural"}
+          </span>
           <Tooltip
             placement="right"
             size="sm"
@@ -167,12 +200,13 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                If it&apos;s on, your photo will look vibrant, otherwise it will
-                look more natural. This param is only supported for Dall-E-3.
+                {language.language === "Vietnamese"
+                  ? "Nếu bật, ảnh của bạn sẽ trông rực rỡ, nếu không ảnh sẽ trông tự nhiên hơn. Thông số này chỉ được hỗ trợ cho Dall-E-3."
+                  : " If it&apos;s on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Dall-E-3."}
               </div>
             }
           >
-            <ShieldAlert className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl" />
           </Tooltip>
         </div>
 
@@ -204,12 +238,13 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                HD creates images with finer details and greater consistency
-                across the image. This param is only supported for Dall-E-3.
+                {language.language === "Vietnamese"
+                  ? "HD tạo ra hình ảnh có độ chi tiết tốt hơn và tính nhất quán cao hơn trên toàn bộ hình ảnh. Thông số này chỉ được hỗ trợ cho Dall-E-3."
+                  : "HD creates images with finer details and greater consistency across the image. This param is only supported for Dall-E-3."}
               </div>
             }
           >
-            <ShieldAlert className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl" />
           </Tooltip>
         </div>
 
@@ -226,7 +261,11 @@ const SidebarPicker = () => {
       </div>
       <div className=" flex items-center gap-2 w-full pb-2">
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
-          <span>Public Images</span>
+          <span>
+            {language.language === "Vietnamese"
+              ? "Công khai ảnh"
+              : "Public Images"}
+          </span>
           <Tooltip
             placement="right"
             size="sm"
@@ -234,11 +273,13 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                Public your generation for our Comunity
+                {language.language === "Vietnamese"
+                  ? "Công khai sáng tạo của bạn cho Cộng đồng của chúng tôi"
+                  : "Public your generation for our Comunity"}
               </div>
             }
           >
-            <ShieldAlert className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl" />
           </Tooltip>
         </div>
 

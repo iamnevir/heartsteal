@@ -51,3 +51,46 @@ export function formatVietnameseDate(timespanInMilliseconds: number): string {
 
   return formattedDate;
 }
+export function timeResetCoin(): number {
+  // Lấy thời gian hiện tại
+  const currentTime: Date = new Date();
+
+  // Đặt giờ là 17:00:00 của ngày hôm sau
+  const targetTime: Date = new Date(currentTime);
+  targetTime.setHours(17, 0, 0, 0);
+  targetTime.setDate(targetTime.getDate() + 1);
+
+  // Tính số giờ chênh lệch
+  const timeDifferenceInMilliseconds: number =
+    targetTime.getTime() - currentTime.getTime();
+  const timeDifferenceInHours: number =
+    timeDifferenceInMilliseconds / (1000 * 60 * 60);
+
+  // Làm tròn xuống và chuyển đổi thành số nguyên
+  const roundedHourDifference: number = Math.floor(timeDifferenceInHours);
+
+  return roundedHourDifference;
+}
+export const calcCoinGenerate = (
+  imageSize: string,
+  imageNumber: number,
+  isInput: boolean
+) => {
+  if (!isInput) {
+    if (imageSize === "512x512") {
+      return imageNumber * 2;
+    } else if (imageSize === "1024x1024") {
+      return imageNumber * 3;
+    } else {
+      return imageNumber * 1;
+    }
+  } else {
+    if (imageSize === "512x512") {
+      return imageNumber * 3;
+    } else if (imageSize === "1024x1024") {
+      return imageNumber * 4;
+    } else {
+      return imageNumber * 2;
+    }
+  }
+};

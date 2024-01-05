@@ -17,15 +17,16 @@ import { api } from "@/convex/_generated/api";
 import isValidName from "@/actions/isValidName";
 import { Check, Flower, X } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
-const Profile = () => {
-  const { user } = useUser();
+import { useLanguage } from "@/hooks/use-language";
+const Profile = ({ userId }: { userId: string }) => {
   const isMobile = useMediaQuery("(max-width:768px)");
-  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
+  const u = useQuery(api.user.getUserByUser, { userId });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const update = useMutation(api.user.update);
   const [username, setUserName] = useState(u?.username);
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [fav, setFav] = useState<string[]>([]);
+  const language = useLanguage();
   useEffect(() => {
     if (u?.favorite) {
       setFav(u?.favorite);
@@ -44,28 +45,55 @@ const Profile = () => {
         id: u?._id!,
         favorite: fav,
       });
-      toast.success("Updated Profile.");
+      toast.success(
+        language.language === "Vietnamese"
+          ? "Đã cập nhật hồ sơ."
+          : "Updated Profile."
+      );
     } else {
-      toast.error("Please looking for your form again.");
+      toast.error(
+        language.language === "Vietnamese"
+          ? "Làm ơn xem lại lựa chọn."
+          : "Please looking for your form again."
+      );
     }
   }
-  const favorites = [
-    "Motion",
-    "Photography",
-    "Anime",
-    "Art",
-    "Character",
-    "Food",
-    "Alien",
-    "Fashion",
-    "Video Games",
-    "Games Design",
-    "Product Design",
-    "Marketing",
-    "Education",
-    "Orther",
-  ];
-  const name = u?.username ? u.username : user?.fullName;
+  const favorites =
+    language.language === "Vietnamese"
+      ? [
+          "Hoạt hình",
+          "Nhiếp ảnh",
+          "Anime",
+          "Vẽ",
+          "Nhân vật",
+          "Thức ăn",
+          "Alien",
+          "Thời trang",
+          "Trò chơi điện tử",
+          "Thiết kế game",
+          "Thiết kế sản phẩm",
+          "Thương mại",
+          "Giáo dục",
+          "Khác",
+        ]
+      : [
+          "Motion",
+          "Photography",
+          "Anime",
+          "Art",
+          "Character",
+          "Food",
+          "Alien",
+          "Fashion",
+          "Video Games",
+          "Games Design",
+          "Product Design",
+          "Marketing",
+          "Education",
+          "Orther",
+        ];
+  const name = u?.username ? u.username : "Unknown";
+
   if (!u) {
     return null;
   }
@@ -74,12 +102,19 @@ const Profile = () => {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            Your Profile
+            {language.language === "Vietnamese"
+              ? "Hồ sơ của bạn"
+              : "Your Profile"}
           </ModalHeader>
           <ModalBody>
             <div className=" flex items-center flex-col gap-2">
               <div className=" w-full flex-col gap-2 flex">
-                <span className="gradient-text"> @username</span>{" "}
+                <span className="gradient-text">
+                  {" "}
+                  {language.language === "Vietnamese"
+                    ? "@Biệt danh"
+                    : "@username"}
+                </span>{" "}
                 <Input
                   defaultValue={u?.username}
                   onChange={async (v) => {
@@ -115,8 +150,9 @@ const Profile = () => {
                   placeholder="someawesomeusername"
                 />
                 <span className=" text-slate-400 text-xs">
-                  Username must be between 4-15 characters and contain letters,
-                  number and underscores only.
+                  {language.language === "Vietnamese"
+                    ? "Hồ sơ của bạn"
+                    : "Biệt danh phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới."}
                 </span>
               </div>
 
@@ -155,7 +191,7 @@ const Profile = () => {
                 isValid === false ? "opacity-50 pointer-events-none" : ""
               )}
             >
-              Save
+              {language.language === "Vietnamese" ? "Lưu" : "Save"}
             </Button>
           </ModalFooter>
         </ModalContent>

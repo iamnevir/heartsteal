@@ -10,6 +10,12 @@ type GenerateImage = {
   publicImage: boolean;
   isImageInput: boolean;
   inputUrl: string;
+  isEdit: boolean;
+  maskUrl: string;
+  maskInput: string;
+  setMaskInput: (maskInput: string) => void;
+  setMaskUrl: (maskUrl: string) => void;
+  setEdit: (isEdit: boolean) => void;
   setInputUrl: (inputUrl: string) => void;
   setImageInput: (v: boolean) => void;
   setPrompt: (v: string) => void;
@@ -31,6 +37,12 @@ export const useGenerateImage = create<GenerateImage>((set, get) => ({
   publicImage: false,
   isImageInput: false,
   inputUrl: "",
+  isEdit: false,
+  maskUrl: "",
+  maskInput: "",
+  setMaskInput: (maskInput: string) => set({ maskInput }),
+  setMaskUrl: (maskUrl: string) => set({ maskUrl }),
+  setEdit: (isEdit: boolean) => set({ isEdit }),
   setInputUrl: (inputUrl: string) => set({ inputUrl }),
   setImageInput: (isImageInput: boolean) => set({ isImageInput }),
   setPrompt: (prompt: string) => set({ prompt }),

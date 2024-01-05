@@ -26,9 +26,9 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { User as UserType } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
 import { useCopyToClipboard } from "usehooks-ts";
+import { useLanguage } from "@/hooks/use-language";
 const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
   const { user } = useUser();
   const users = useQuery(api.user.getUsers);
@@ -42,6 +42,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
+  const language = useLanguage();
   const handleLiked = () => {
     try {
       if (userName) {
@@ -97,19 +98,26 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                       className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
                     >
                       <Download className="w-4 h-4" />
-                      Download
+                      {language.language === "Vietnamese"
+                        ? "Tải xuống"
+                        : "Download"}
                     </div>
                     <div
                       onClick={() => {
                         copy(image.url);
-                        toast.success("Copied Link to Clipboard.", {
-                          classNames: { toast: "bg-white" },
-                        });
+                        toast.success(
+                          language.language === "Vietnamese"
+                            ? "Đã sao chép."
+                            : "Copied Link to Clipboard.",
+                          {
+                            classNames: { toast: "bg-white" },
+                          }
+                        );
                       }}
                       className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
                     >
                       <ExternalLinkIcon className="w-4 h-4" />
-                      Share
+                      {language.language === "Vietnamese" ? "Chia sẻ" : "Share"}
                     </div>
                   </div>
                 </div>
@@ -137,7 +145,11 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                   {image.prompt !== "" && (
                     <>
                       <Divider />
-                      <span className=" text-sm">Prompt details</span>
+                      <span className=" text-sm">
+                        {language.language === "Vietnamese"
+                          ? "Chi tiết lệnh"
+                          : "Prompt details"}
+                      </span>
                       <Card>
                         <CardBody>
                           <div className="sm:line-clamp-none line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
@@ -145,7 +157,11 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                             <div
                               onClick={() => {
                                 copy(image.prompt!);
-                                toast.success("Copied to Clipboard.");
+                                toast.success(
+                                  language.language === "Vietnamese"
+                                    ? "Đã sao chép."
+                                    : "Copied to Clipboard."
+                                );
                                 setCopied(true);
                                 setTimeout(() => {
                                   setCopied(false);
@@ -169,22 +185,36 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
-                        Input Resolution
+                        {language.language === "Vietnamese"
+                          ? "Kích thước"
+                          : "Input Resolution"}
                       </span>
                       <span className="text-sm">{image.size}</span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">Created</span>
+                      <span className=" text-xs text-gray-600">
+                        {language.language === "Vietnamese"
+                          ? "Ngày tạo"
+                          : "CreatedAt"}
+                      </span>
                       <span className="text-sm whitespace-nowrap">
                         {formatVietnameseDate(image._creationTime)}
                       </span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">Model</span>
+                      <span className=" text-xs text-gray-600">
+                        {language.language === "Vietnamese"
+                          ? "Mô hình"
+                          : "Model"}
+                      </span>
                       <span className="text-sm">{image.model}</span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">Likes</span>
+                      <span className=" text-xs text-gray-600">
+                        {language.language === "Vietnamese"
+                          ? "Lượt thích"
+                          : "Likes"}
+                      </span>
                       <span className="text-sm">{image.likes}</span>
                     </div>
                   </div>
@@ -280,7 +310,9 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
           size="sm"
           delay={100}
           closeDelay={100}
-          content="Download image"
+          content={
+            language.language === "Vietnamese" ? "Tải xuống" : "Download image"
+          }
         >
           <div
             onClick={() => window.open(image.url)}

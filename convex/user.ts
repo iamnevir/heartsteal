@@ -52,6 +52,8 @@ export const create = mutation({
     favorite: v.optional(v.array(v.string())),
     like: v.array(v.id("image")),
     upload: v.array(v.string()),
+    coin: v.optional(v.number()),
+    isPro: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const current = await ctx.db
@@ -88,6 +90,8 @@ export const update = mutation({
     favorite: v.optional(v.array(v.string())),
     like: v.optional(v.array(v.id("image"))),
     upload: v.optional(v.array(v.string())),
+    coin: v.optional(v.number()),
+    isPro: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args;
@@ -95,5 +99,19 @@ export const update = mutation({
       ...rest,
     });
     return user;
+  },
+});
+export const resetCoin = mutation({
+  handler: async (ctx) => {
+    const users = await ctx.db.query("user").collect();
+    if (!users) {
+      return;
+    }
+
+    for (let i = 0; i < users.length; i++) {
+      await ctx.db.patch(users[i]._id, {
+        coin: 150,
+      });
+    }
   },
 });

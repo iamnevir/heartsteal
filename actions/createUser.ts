@@ -9,5 +9,7 @@ export async function createUser(userId: string) {
     userId,
     like: [],
     upload: [],
+    coin: 150,
+    isPro: false,
   });
 }

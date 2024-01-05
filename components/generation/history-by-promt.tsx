@@ -24,11 +24,13 @@ import {
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { Doc } from "@/convex/_generated/dataModel";
 import { toast } from "sonner";
+import { useLanguage } from "@/hooks/use-language";
 
 const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
   const generation = useGenerateImage();
   const removeAll = useMutation(api.image.removeAll);
   const updateAll = useMutation(api.image.updateAll);
+  const language = useLanguage();
   const handleDeleteAll = async () => {
     try {
       const ids = item.map((i) => i._id);
@@ -68,7 +70,11 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
             size="sm"
             delay={100}
             closeDelay={100}
-            content="Reuse Prompt"
+            content={
+              language.language === "Vietnamese"
+                ? "Dùng lại prompt"
+                : "Reuse Prompt"
+            }
           >
             <div
               className={cn(
@@ -89,12 +95,12 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
               <>
                 {" "}
                 <TrainFront className="w-4 h-4" />
-                <span>Dall-E-2</span>
+                <span>Heart Steal</span>
               </>
             ) : (
               <>
                 <BrainCog className="w-4 h-4" />
-                <span>Dall-E-3</span>
+                <span>Heart Steal Pro</span>
               </>
             )}
           </div>
@@ -116,14 +122,18 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
                 key="private-all"
                 startContent={<EyeOff className=" w-4 h-4" />}
               >
-                Private All
+                {language.language === "Vietnamese"
+                  ? "Hủy công khai tất cả"
+                  : "Private All"}
               </DropdownItem>
               <DropdownItem
                 key="public-all"
                 onPress={handlePublished}
                 startContent={<Eye className=" w-4 h-4" />}
               >
-                Public All
+                {language.language === "Vietnamese"
+                  ? "Công khai tất cả"
+                  : "Public All"}
               </DropdownItem>
               <DropdownItem
                 key="delete-all"
@@ -131,7 +141,9 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
                 onPress={handleDeleteAll}
                 color="danger"
               >
-                Delete All
+                {language.language === "Vietnamese"
+                  ? "Xóa tất cả"
+                  : "Delete All"}
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

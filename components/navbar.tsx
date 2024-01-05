@@ -9,18 +9,30 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Button,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
 import ModeToggle from "./theme-button";
 import UnderlineText from "./link-underline";
 import Logo from "./logo";
+import { useLanguage } from "@/hooks/use-language";
+import { useMediaQuery } from "usehooks-ts";
 
 const NavbarPage = () => {
+  const language = useLanguage();
+  const isMobile = useMediaQuery("(max-width:768px)");
   const menuItems = [
-    { title: "Collections", href: "/ai/community-feed" },
-    { title: "Contact", href: "https://www.facebook.com/iamnanhdz" },
+    {
+      title: language.language === "Vietnamese" ? "Bộ sưu tập" : "Collections",
+      href: "/ai/community-feed",
+    },
+    {
+      title: language.language === "Vietnamese" ? "Liên hệ" : "Contact",
+      href: "https://www.facebook.com/iamnanhdz",
+    },
     { title: "API", href: "https://platform.openai.com/docs/guides/images" },
-    { title: "Github", href: "https://github.com/iamnevir/heartsteal" },
+    { title: "Github", href: "https://github.com/iamnevir" },
     { title: "Discord", href: "#" },
   ];
 
@@ -45,11 +57,15 @@ const NavbarPage = () => {
         </NavbarContent>
         <NavbarContent justify="end" className="hidden sm:flex gap-8">
           <NavbarItem>
-            <UnderlineText href="/ai/community-feed">Collections</UnderlineText>
+            <UnderlineText href="/ai/community-feed">
+              {language.language === "Vietnamese"
+                ? "Bộ sưu tập"
+                : "Collections"}
+            </UnderlineText>
           </NavbarItem>
           <NavbarItem>
             <UnderlineText href="https://www.facebook.com/iamnanhdz">
-              Contact
+              {language.language === "Vietnamese" ? "Liên hệ" : "Contact"}
             </UnderlineText>
           </NavbarItem>
           <NavbarItem>
@@ -104,9 +120,36 @@ const NavbarPage = () => {
               href="/ai"
               variant="shadow"
             >
-              Try It Now
+              {language.language === "Vietnamese" ? "Thử ngay" : "Try It Now"}
             </Button>
           </NavbarItem>
+          {!isMobile && (
+            <Select
+              labelPlacement="outside"
+              selectedKeys={
+                language.language === "Vietnamese" ? ["vi"] : ["en"]
+              }
+              size="sm"
+              variant="bordered"
+              aria-labelledby="language"
+              className="max-w-[70px]"
+            >
+              <SelectItem
+                onPress={() => language.setLanguage("Vietnamese")}
+                key="vi"
+                value="Vietnamese"
+              >
+                Vi
+              </SelectItem>
+              <SelectItem
+                onPress={() => language.setLanguage("English")}
+                key="en"
+                value="English"
+              >
+                En
+              </SelectItem>
+            </Select>
+          )}
         </NavbarContent>
         <NavbarMenu className="">
           {menuItems.map((item, index) => (
@@ -121,6 +164,33 @@ const NavbarPage = () => {
               </Link>
             </NavbarMenuItem>
           ))}
+          <NavbarMenuItem className="w-full">
+            <Select
+              labelPlacement="outside"
+              selectedKeys={
+                language.language === "Vietnamese" ? ["vi"] : ["en"]
+              }
+              size="lg"
+              variant="bordered"
+              aria-labelledby="language"
+              className=""
+            >
+              <SelectItem
+                onPress={() => language.setLanguage("Vietnamese")}
+                key="vi"
+                value="Vietnamese"
+              >
+                Vi
+              </SelectItem>
+              <SelectItem
+                onPress={() => language.setLanguage("English")}
+                key="en"
+                value="English"
+              >
+                En
+              </SelectItem>
+            </Select>
+          </NavbarMenuItem>
         </NavbarMenu>
       </Navbar>
     </>

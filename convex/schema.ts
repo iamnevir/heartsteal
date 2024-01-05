@@ -19,5 +19,7 @@ export default defineSchema({
     favorite: v.optional(v.array(v.string())),
     like: v.array(v.id("image")),
     upload: v.array(v.string()),
+    coin: v.optional(v.number()),
+    isPro: v.optional(v.boolean()),
   }).index("by_user", ["userId"]),
 });

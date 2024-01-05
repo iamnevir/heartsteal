@@ -1,4 +1,5 @@
 import { useGenerateImage } from "@/hooks/use-generate-picker";
+import { useLanguage } from "@/hooks/use-language";
 import { openaiApi } from "@/lib/utils";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -7,6 +8,7 @@ import { toast } from "sonner";
 const Dive = () => {
   const [loading, setLoading] = useState(false);
   const generation = useGenerateImage();
+  const language = useLanguage();
   const handleRandomPrompt = async () => {
     setLoading(true);
     const prompt = [
@@ -31,9 +33,17 @@ const Dive = () => {
       generation.setPrompt(
         generatedPrompt.substring(1, generatedPrompt.length - 1)
       );
-      toast.success("Generate random prompt successfully.");
+      toast.success(
+        language.language === "Vietnamese"
+          ? "Tạo lệnh ngẫu nhiên thành công."
+          : "Generate random prompt successfully."
+      );
     } catch (error) {
-      console.error("Error generating prompt:", error);
+      toast.success(
+        language.language === "Vietnamese"
+          ? "Tạo lệnh ngẫu nhiên không thành công."
+          : "Generate random prompt failed."
+      );
     } finally {
       setLoading(false);
     }
