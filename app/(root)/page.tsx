@@ -11,9 +11,9 @@ export default function Home() {
         <div className="md:w-[50dvw] w-[100dvw] h-full md:h-[100dvh] md:mt-0 mt-20 flex items-center justify-center flex-col">
           <HeroSection />
         </div>
-        {/* <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
+        <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
           <BrainCanvas />
-        </div> */}
+        </div>
       </div>
     </>
   );
