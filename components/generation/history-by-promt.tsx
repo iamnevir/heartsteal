@@ -11,7 +11,9 @@ import {
 } from "@nextui-org/react";
 import { cn, formatVietnameseDate } from "@/lib/utils";
 import {
+  Aperture,
   ArrowUpCircle,
+  Atom,
   BrainCog,
   Eye,
   EyeOff,
@@ -94,13 +96,18 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
             {item[0].model === "dall-e-2" ? (
               <>
                 {" "}
-                <TrainFront className="w-4 h-4" />
+                <Atom className="w-4 h-4" />
                 <span>Heart Steal</span>
               </>
-            ) : (
+            ) : item[0].model === "dall-e-3" ? (
               <>
                 <BrainCog className="w-4 h-4" />
                 <span>Heart Steal Pro</span>
+              </>
+            ) : (
+              <>
+                <Aperture className="w-4 h-4" />
+                <span>Heart Steal V2</span>
               </>
             )}
           </div>

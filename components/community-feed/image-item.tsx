@@ -85,7 +85,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                       className={cn("rounded-md", hover ? "opacity-40" : "")}
                       alt=""
                       placeholder="blur"
-                      blurDataURL="/logo.png"
+                      blurDataURL="/placeholder.png"
                       src={image.url}
                       fill
                       sizes="(max-width: 768px) 100vw,66vw"
@@ -255,8 +255,8 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
           onClick={onOpen}
           placeholder="blur"
           blurDataURL="/logo.png"
-          src={image.url}
           fill
+          src={image.url}
           priority
           sizes="(max-width: 768px) 100vw,66vw"
           style={{ objectFit: "cover" }}

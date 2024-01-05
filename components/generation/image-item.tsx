@@ -2,9 +2,9 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { useLanguage } from "@/hooks/use-language";
-import { cn } from "@/lib/utils";
+import { cn, openaiApi } from "@/lib/utils";
 import { Tooltip } from "@nextui-org/react";
-import axios from "axios";
+import { saveAs } from "file-saver";
 import { useMutation } from "convex/react";
 import {
   ArrowRightLeft,
@@ -17,6 +17,7 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import axios from "axios";
 const ImageItem = ({ image }: { image: Doc<"image"> }) => {
   const remove = useMutation(api.image.remove);
   const update = useMutation(api.image.update);
@@ -52,7 +53,12 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       );
     }
   };
-
+  const downloadImage = async () => {
+    if (image.model === "bimg") {
+      saveAs(image.url, "heartsteal.png");
+    } else {
+    }
+  };
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -66,7 +72,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         className="rounded-md"
         alt=""
         placeholder="blur"
-        blurDataURL="/logo.png"
+        blurDataURL="/placeholder.png"
         src={image.url}
         fill
         sizes="(max-width: 768px) 100vw,66vw"
@@ -106,7 +112,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         }
       >
         <div
-          onClick={() => window.open(image.url)}
+          onClick={downloadImage}
           className={cn(
             " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-12 bottom-2 rounded-full",
             hover

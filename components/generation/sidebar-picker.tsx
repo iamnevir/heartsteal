@@ -1,8 +1,9 @@
 "use client";
-import { calcCoinGenerate, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionItem,
+  Badge,
   Link,
   Select,
   SelectItem,
@@ -10,7 +11,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
-import { BrainCog, LucideShieldQuestion, Snail } from "lucide-react";
+import { Aperture, Atom, BrainCog, LucideShieldQuestion } from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import Logo from "../logo";
 import { useMediaQuery } from "usehooks-ts";
@@ -50,10 +51,12 @@ const SidebarPicker = () => {
         value={generation.model}
         startContent={
           generation.model === "dall-e-2" ? (
-            <Snail className={isMobile ? "w-8 h-8" : ""} />
+            <Atom className={isMobile ? "w-8 h-8" : ""} />
           ) : generation.model === "dall-e-3" ? (
             <BrainCog className={isMobile ? "w-8 h-8" : ""} />
-          ) : null
+          ) : (
+            <Aperture className={isMobile ? "w-8 h-8" : ""} />
+          )
         }
         className={cn("max-w-xs ")}
         variant="underlined"
@@ -64,6 +67,10 @@ const SidebarPicker = () => {
             generation.setHd(false);
             generation.setNatural(false);
             generation.setImageInput(false);
+          } else if (v.target.value === "bimg") {
+            generation.setImageInput(false);
+            generation.setImageNumber(4);
+            generation.setImageSize("1024x1024");
           }
         }}
         selectionMode="single"
@@ -77,7 +84,7 @@ const SidebarPicker = () => {
         }
       >
         <SelectItem
-          startContent={<Snail className={isMobile ? "w-8 h-8" : ""} />}
+          startContent={<Atom className={isMobile ? "w-8 h-8" : ""} />}
           key={"dall-e-2"}
           value={"Heart Steal"}
           classNames={{ title: "sm:text-base text-xl" }}
@@ -86,7 +93,31 @@ const SidebarPicker = () => {
         </SelectItem>
         <SelectItem
           classNames={{ title: "sm:text-base text-xl" }}
-          startContent={<BrainCog className={isMobile ? "w-8 h-8" : ""} />}
+          startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
+          key={"bimg"}
+          value={"Heart Bimg"}
+          className={cn(
+            "max-w-xs ",
+            !u?.isPro && " opacity-50 pointer-events-none"
+          )}
+        >
+          Heart Steal V2
+        </SelectItem>
+
+        <SelectItem
+          classNames={{ title: "sm:text-base text-xl" }}
+          startContent={
+            <Tooltip
+              placement="right"
+              size="sm"
+              delay={100}
+              closeDelay={100}
+              classNames={{ content: "bg-gr" }}
+              content="Premium"
+            >
+              <BrainCog className={isMobile ? "w-8 h-8" : ""} />
+            </Tooltip>
+          }
           key={"dall-e-3"}
           value={"Heart Steal Pro"}
           className={cn(
@@ -120,11 +151,14 @@ const SidebarPicker = () => {
                   key={index}
                   className={cn(
                     "sm:w-10 sm:h-7 w-16 h-10 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
-                    generation.model === "dall-e-3" && index > 1
-                      ? "pointer-events-none opacity-50"
-                      : "",
+                    generation.model === "dall-e-3" &&
+                      index > 1 &&
+                      "pointer-events-none opacity-50",
                     generation.imageNumber === index ? "border-gr" : "",
-                    !u?.isPro && index > 5 && "pointer-events-none opacity-50"
+                    !u?.isPro && index > 5 && "pointer-events-none opacity-50",
+                    generation.model === "bimg" &&
+                      index !== 4 &&
+                      "pointer-events-none opacity-50"
                   )}
                 >
                   {index}
@@ -172,7 +206,10 @@ const SidebarPicker = () => {
                   generation.model !== "dall-e-3" && index > 2
                     ? "pointer-events-none opacity-50"
                     : "",
-                  generation.imageSize === item ? "border-gr" : ""
+                  generation.imageSize === item ? "border-gr" : "",
+                  generation.model === "bimg" &&
+                    item !== "1024x1024" &&
+                    "pointer-events-none opacity-50"
                 )}
               >
                 {item}

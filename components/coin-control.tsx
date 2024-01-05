@@ -1,9 +1,9 @@
 import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
-import { timeResetCoin } from "@/lib/utils";
-import { Button, Tooltip } from "@nextui-org/react";
+import { cn, timeResetCoin } from "@/lib/utils";
+import { Button, Chip, Tooltip } from "@nextui-org/react";
 import { useQuery } from "convex/react";
-import { Gem, LucideShieldQuestion } from "lucide-react";
+import { Gem, Infinity as Infi, LucideShieldQuestion } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -15,7 +15,23 @@ const CoinControl = ({ userId }: { userId: string }) => {
   return (
     <div className=" w-full justify-center flex items-center mb-3">
       <div className=" rounded-full bg-[#0B0F17] sm:w-44 w-[80%] sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
-        <span className=" sm:text-xs text-lg font-semibold">{user?.coin}</span>
+        {user?.isPro ? (
+          <div className="w-6 h-6">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z"
+                stroke="url(#radialGradient)"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        ) : (
+          <span className={cn(" sm:text-xs text-lg font-semibold")}>
+            {user?.coin}
+          </span>
+        )}
         {isMobile ? (
           <Gem className=" w-5 h-5 sm:hidden text-red-400" />
         ) : (
@@ -56,9 +72,13 @@ const CoinControl = ({ userId }: { userId: string }) => {
           delay={100}
           closeDelay={100}
           content={
-            language.language === "Vietnamese"
-              ? `Sẽ được đặt lại vào ${timeResetCoin()} giờ nữa`
-              : `Resets in ${timeResetCoin()} hrs`
+            !user?.isPro
+              ? language.language === "Vietnamese"
+                ? `Sẽ được đặt lại vào ${timeResetCoin()} giờ nữa`
+                : `Resets in ${timeResetCoin()} hrs`
+              : language.language === "Vietnamese"
+              ? `Không giới hạn tokens`
+              : `Unlimited Tokens`
           }
         >
           <LucideShieldQuestion
@@ -66,13 +86,19 @@ const CoinControl = ({ userId }: { userId: string }) => {
             className=" text-slate-400/70"
           />
         </Tooltip>
-        <Button
-          onPress={() => router.push("/pay")}
-          className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-5"
-          size="sm"
-        >
-          {language.language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}
-        </Button>
+        {user?.isPro ? (
+          <Chip className="bg-gr sm:text-[10px] text-sm font-semibold">
+            Premium
+          </Chip>
+        ) : (
+          <Button
+            onPress={() => router.push("/pay")}
+            className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-5"
+            size="sm"
+          >
+            {language.language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}
+          </Button>
+        )}
       </div>
     </div>
   );
