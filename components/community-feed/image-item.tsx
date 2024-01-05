@@ -23,6 +23,7 @@ import {
   ExternalLinkIcon,
   Heart,
 } from "lucide-react";
+import { saveAs } from "file-saver";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -62,6 +63,12 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
       }
     } catch (error) {}
   };
+  const downloadImage = async () => {
+    if (image.model === "bimg") {
+      saveAs(image.url, "heartsteal.png");
+    } else {
+    }
+  };
   return (
     <>
       <Modal
@@ -94,7 +101,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                   </div>
                   <div className="flex items-center gap-2 mt-3 text-sm">
                     <div
-                      onClick={() => window.open(image.url)}
+                      onClick={downloadImage}
                       className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
                     >
                       <Download className="w-4 h-4" />

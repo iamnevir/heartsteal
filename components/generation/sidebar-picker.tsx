@@ -96,10 +96,7 @@ const SidebarPicker = () => {
           startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
           key={"bimg"}
           value={"Heart Bimg"}
-          className={cn(
-            "max-w-xs ",
-            !u?.isPro && " opacity-50 pointer-events-none"
-          )}
+          className={cn("max-w-xs ")}
         >
           Heart Steal V2
         </SelectItem>
