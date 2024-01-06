@@ -1,5 +1,6 @@
 import BrainCanvas from "@/components/brain/brain-canvas";
 import HeroSection from "@/components/hero-section";
+import { Copyright } from "lucide-react";
 import dynamic from "next/dynamic";
 const NavbarPage = dynamic(() => import("@/components/navbar"), { ssr: false });
 export default function Home() {
@@ -14,6 +15,9 @@ export default function Home() {
         <div className=" md:w-[50dvw] w-[100dvw] relative z-10 h-[50dvh] md:h-[100dvh]">
           <BrainCanvas />
         </div>
+        <span className=" absolute right-5 gradient-text bottom-5 font-semibold flex items-center">
+          2023
+        </span>
       </div>
     </>
   );

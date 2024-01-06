@@ -64,19 +64,24 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className={cn(
-        " relative  sm:w-[290px] sm:h-[390px] w-full h-[390px] cursor-pointer",
-        image.size === "512x512" ? "sm:h-[290px] h-[390px]" : ""
+        " relative  sm:w-[290px] sm:h-[290px] w-full cursor-pointer overflow-hidden",
+        image.size === "1024x1792" ? "sm:h-[450px]" : "h-[370px]"
       )}
     >
       <Image
-        className="rounded-md"
+        className={"rounded-md"}
         alt=""
         placeholder="blur"
         blurDataURL="/placeholder.png"
         src={image.url}
-        fill
         sizes="(max-width: 768px) 100vw,66vw"
-        style={{ objectFit: "cover" }}
+        width={512}
+        height={512}
+        style={{
+          width: "100%",
+          height: "auto",
+          objectFit: "cover",
+        }}
       />
       <Tooltip
         size="sm"

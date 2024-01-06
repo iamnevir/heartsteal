@@ -1,10 +1,7 @@
 "use client";
-
 import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
 import {
   Button,
-  CircularProgress,
   Divider,
   Input,
   Modal,
@@ -22,10 +19,9 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import isValidName from "@/actions/isValidName";
 import { toast } from "sonner";
-const UserInfoModal = () => {
-  const { user } = useUser();
+const UserInfoModal = ({ userId }: { userId: string }) => {
   const update = useMutation(api.user.update);
-  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
+  const u = useQuery(api.user.getUserByUser, { userId });
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState<boolean | null>(null);

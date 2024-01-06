@@ -30,10 +30,15 @@ import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { useCopyToClipboard } from "usehooks-ts";
 import { useLanguage } from "@/hooks/use-language";
-const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
-  const { user } = useUser();
+const ImageCommunityItem = ({
+  image,
+  userId,
+}: {
+  image: Doc<"image">;
+  userId: string;
+}) => {
   const users = useQuery(api.user.getUsers);
-  const userName = useQuery(api.user.getUserByUser, { userId: user?.id! });
+  const userName = useQuery(api.user.getUserByUser, { userId });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const update = useMutation(api.image.update);
   const updateUser = useMutation(api.user.update);
@@ -84,8 +89,10 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                 <div>
                   <div
                     className={cn(
-                      " relative  sm:w-[290px] sm:h-[390px] w-full h-[390px] cursor-pointer overflow-hidden",
-                      image.size === "512x512" ? "sm:h-[290px] h-[390px]" : ""
+                      " relative  sm:w-[290px] sm:h-[390px] w-full cursor-pointer overflow-hidden",
+                      image.size === "512x512"
+                        ? "sm:h-[290px] h-[370px]"
+                        : "h-[370px]"
                     )}
                   >
                     <Image
@@ -94,9 +101,14 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                       placeholder="blur"
                       blurDataURL="/placeholder.png"
                       src={image.url}
-                      fill
                       sizes="(max-width: 768px) 100vw,66vw"
-                      style={{ objectFit: "cover" }}
+                      width={512}
+                      height={512}
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
                     />{" "}
                   </div>
                   <div className="flex items-center gap-2 mt-3 text-sm">
@@ -159,7 +171,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
                       </span>
                       <Card>
                         <CardBody>
-                          <div className="sm:line-clamp-none line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
+                          <div className="sm:line-clamp-[10] line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
                             {image.prompt}
                             <div
                               onClick={() => {

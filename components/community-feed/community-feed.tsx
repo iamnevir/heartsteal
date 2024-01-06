@@ -7,8 +7,10 @@ import LoadMore from "../load-more";
 import { CircularProgress } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
 import ImageSkeleton from "../image-skeleton";
+import { useUser } from "@clerk/nextjs";
 
 const CommunityFeed = ({ search }: { search: string }) => {
+  const { user } = useUser();
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImages,
     {},
@@ -45,7 +47,9 @@ const CommunityFeed = ({ search }: { search: string }) => {
   if (status === "LoadingFirstPage") {
     return <ImageSkeleton />;
   }
-
+  if (!user?.id) {
+    return null;
+  }
   return (
     <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 sm:pr-2 py-2 sm:py-10">
       {[
@@ -57,7 +61,7 @@ const CommunityFeed = ({ search }: { search: string }) => {
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-4">
           {item.map((i, ind) => (
-            <ImageItem image={i} key={ind} />
+            <ImageItem image={i} userId={user.id} key={ind} />
           ))}
         </div>
       ))}

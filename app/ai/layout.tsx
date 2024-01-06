@@ -5,6 +5,7 @@ const SideMenu = dynamic(() => import("@/components/side-menu"), {
   ssr: false,
 });
 import { cn } from "@/lib/utils";
+import UserInfoProvider from "@/components/provider/user-info-provider";
 const AILayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
@@ -18,7 +19,7 @@ const AILayout = ({ children }: { children: React.ReactNode }) => {
 
       <SideMenu />
       {children}
-      <UserInfoModal />
+      <UserInfoProvider />
     </>
   );
 };

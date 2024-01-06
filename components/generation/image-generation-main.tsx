@@ -343,11 +343,7 @@ const ImageGenerationMain = () => {
                   : "Image Edit"}
               </span>
               <Chip className="bg-gr" size="sm">
-                {!isMobile
-                  ? language.language === "Vietnamese"
-                    ? "Thử nghiệm."
-                    : "Beta"
-                  : "Beta"}
+                Pro
               </Chip>
             </div>
           }

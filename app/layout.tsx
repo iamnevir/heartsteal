@@ -6,6 +6,7 @@ import AuthProvider from "@/components/provider/auth-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import ConvexClientProvider from "@/components/provider/convex-provider";
 import { Toaster } from "sonner";
+import { Lenify } from "@/components/lenis";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <ConvexClientProvider>
             <EdgeStoreProvider>
               <NextUiProviders>
+                <Lenify />
                 {children}{" "}
                 <Toaster
                   toastOptions={{

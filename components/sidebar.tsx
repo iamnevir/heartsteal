@@ -81,7 +81,9 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
   if (pathname === "/ai/generation") {
     return null;
   }
-
+  if (!user?.id) {
+    return null;
+  }
   return (
     <>
       <Link
