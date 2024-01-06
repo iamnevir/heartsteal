@@ -1,12 +1,24 @@
 "use client";
 
+import CheckOutButton from "@/components/payment/check-out";
+import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { useMutation, useQuery } from "convex/react";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 const PayPage = () => {
+  const searchParams = useSearchParams();
+  const { user } = useUser();
+  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
+  const order = useQuery(api.order.getorderByorder, { userId: u?._id! });
+  const updateOrder = useMutation(api.order.update);
+  const updateUser = useMutation(api.user.update);
   const router = useRouter();
   const language = useLanguage();
   const payCard =
@@ -71,8 +83,8 @@ const PayPage = () => {
           },
           {
             title: "Pro",
-            price: "799k",
-            salePrice: "999k",
+            price: "9k",
+            salePrice: "10k",
             subPrice: "Vĩnh viễn",
             sub: {
               title: "Tokens không giới hạn",
@@ -90,6 +102,39 @@ const PayPage = () => {
             },
           },
         ];
+  useEffect(() => {
+    if (searchParams) {
+      if (order) {
+        try {
+          const isPay = searchParams.get("vnp_ResponseCode") === "00";
+          const bank = searchParams.get("vnp_BankCode");
+          let amount = 10000;
+          if (searchParams.get("vnp_Amount")) {
+            amount = parseInt(searchParams.get("vnp_Amount")!) / 100;
+          }
+
+          if (isPay) {
+            updateOrder({
+              id: order._id,
+              isPay,
+              amount,
+              bank: bank ? bank[0] : "",
+            });
+            updateUser({ id: u?._id!, isPro: true });
+            toast.success("Thanh toán thành công!");
+          } else {
+            toast.success("Thanh toán không thành công!");
+          }
+
+          router.push("/ai");
+        } catch (error) {}
+      }
+    }
+  }, [searchParams, order]);
+  if (order?.isPay) {
+    return null;
+    router.push("/ai");
+  }
   return (
     <div className=" w-full h-full flex items-center flex-col">
       <div
@@ -128,7 +173,9 @@ const PayPage = () => {
                       (item.title === "Pro" && "gradient-text")
                   )}
                 >
-                  {" "}
+                  <span className=" line-through text-slate-500">
+                    {item.salePrice}
+                  </span>{" "}
                   {item.price}
                 </span>{" "}
                 /month
@@ -136,11 +183,7 @@ const PayPage = () => {
               <span className=" sm:text-sm text-lg text-slate-500">
                 {item.subPrice}
               </span>
-              {item.price == "0đ" || item.price === "0$" ? null : (
-                <Button className="bg-gr sm:text-sm text-2xl sm:py-5 py-7 px-10 rounded-md">
-                  {language.language === "Vietnamese" ? "Đăng ký" : "Subscribe"}
-                </Button>
-              )}
+              <CheckOutButton item={item} userId={u?._id!} />
 
               <Card className=" mt-auto">
                 <CardHeader>{item.sub.title}</CardHeader>

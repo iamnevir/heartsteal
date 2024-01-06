@@ -22,4 +22,11 @@ export default defineSchema({
     coin: v.optional(v.number()),
     isPro: v.optional(v.boolean()),
   }).index("by_user", ["userId"]),
+  order: defineTable({
+    userId: v.id("user"),
+    isPay: v.boolean(),
+    amount: v.optional(v.number()),
+    cardType: v.optional(v.string()),
+    bank: v.optional(v.string()),
+  }).index("by_user", ["userId"]),
 });

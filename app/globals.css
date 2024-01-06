@@ -140,3 +140,15 @@ body,
   animation-timing-function: ease-out;
   animation-duration: 200ms;
 }
+.rotating-element {
+  animation: rotate 2.5s linear infinite; /* Chỉnh thời gian, chế độ xoay và vô hạn nếu muốn */
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

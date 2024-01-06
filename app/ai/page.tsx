@@ -4,6 +4,8 @@ import CommunityFeedPage from "./(routes)/community-feed/page";
 import { PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/hooks/use-language";
+import { Suspense } from "react";
+import Loading from "../loading";
 
 const AIPage = () => {
   const language = useLanguage();
@@ -29,7 +31,6 @@ const AIPage = () => {
               : "Create New Image"}
           </Button>
         </div>
-
         <CommunityFeedPage />
       </div>
     </>

@@ -92,7 +92,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
           </Chip>
         ) : (
           <Button
-            onPress={() => router.push("/pay")}
+            onPress={() => router.push("/payment")}
             className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-5"
             size="sm"
           >

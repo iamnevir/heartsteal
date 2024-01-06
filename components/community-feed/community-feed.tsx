@@ -7,8 +7,6 @@ import LoadMore from "../load-more";
 import { CircularProgress } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
 import ImageSkeleton from "../image-skeleton";
-import { useEffect } from "react";
-import { Doc } from "@/convex/_generated/dataModel";
 
 const CommunityFeed = ({ search }: { search: string }) => {
   const { results, status, loadMore } = usePaginatedQuery(

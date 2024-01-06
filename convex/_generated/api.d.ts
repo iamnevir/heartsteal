@@ -16,6 +16,7 @@ import type {
 } from "convex/server";
 import type * as crons from "../crons.js";
 import type * as image from "../image.js";
+import type * as order from "../order.js";
 import type * as user from "../user.js";
 
 /**
@@ -29,6 +30,7 @@ import type * as user from "../user.js";
 declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   image: typeof image;
+  order: typeof order;
   user: typeof user;
 }>;
 export declare const api: FilterApi<
