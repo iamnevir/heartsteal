@@ -1,4 +1,3 @@
-import { createBingText } from "@/actions/createBingText";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { useLanguage } from "@/hooks/use-language";
 import { openaiApi } from "@/lib/utils";
@@ -16,34 +15,31 @@ const Dive = () => {
       { role: "user", content: "Generate a random prompt for dall-e-2" },
     ];
     try {
-      // const response = await axios.post(
-      //   "https://api.openai.com/v1/chat/completions",
-      //   {
-      //     messages: prompt,
-      //     model: "gpt-3.5-turbo",
-      //   },
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${openaiApi}`,
-      //     },
-      //   }
-      // );
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          messages: prompt,
+          model: "gpt-3.5-turbo",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${openaiApi}`,
+          },
+        }
+      );
 
-      // const generatedPrompt = response.data.choices[0].message.content;
-      await createBingText("Generate a random prompt for generation image");
-      // console.log(text.text);
-      // generation.setPrompt(
-      //   // generatedPrompt.substring(1, generatedPrompt.length - 1)
-      //   text.text
-      // );
+      const generatedPrompt = response.data.choices[0].message.content;
+      generation.setPrompt(
+        generatedPrompt.substring(1, generatedPrompt.length - 1)
+      );
       toast.success(
         language.language === "Vietnamese"
           ? "Tạo lệnh ngẫu nhiên thành công."
           : "Generate random prompt successfully."
       );
     } catch (error) {
-      toast.success(
+      toast.error(
         language.language === "Vietnamese"
           ? "Tạo lệnh ngẫu nhiên không thành công."
           : "Generate random prompt failed."

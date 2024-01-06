@@ -134,7 +134,6 @@ const ImageGenerationMain = () => {
           });
         }
       } else if (generation.model === "bimg") {
-        console.log(generation.prompt);
         const images = await createBingImage(generation.prompt);
         const urls = images.slice(0, -1);
         for (let index = 0; index < urls?.length!; index++) {

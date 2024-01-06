@@ -123,11 +123,12 @@ const PayPage = () => {
             updateUser({ id: u?._id!, isPro: true });
             toast.success("Thanh toán thành công!");
           } else {
-            toast.success("Thanh toán không thành công!");
           }
 
           router.push("/ai");
-        } catch (error) {}
+        } catch (error) {
+          toast.success("Thanh toán không thành công!");
+        }
       }
     }
   }, [searchParams, order]);
