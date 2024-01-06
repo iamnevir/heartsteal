@@ -16,7 +16,7 @@ export const createVNPay = async (userId: Id<"user">) => {
   let tmnCode = process.env.NEXT_PUBLIC_VNP_TMNCODE;
   let secretKey = process.env.NEXT_PUBLIC_VNP_HASHSECRET!;
   let vnpUrl = process.env.NEXT_PUBLIC_VNP_URL;
-  let returnUrl = "http://localhost:3000/payment";
+  let returnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/payment`;
   let vnp_Params: any = {};
   vnp_Params["vnp_Version"] = "2.1.0";
   vnp_Params["vnp_Command"] = "pay";
