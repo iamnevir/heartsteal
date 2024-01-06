@@ -69,6 +69,8 @@ export const create = mutation({
         favorite: args.favorite,
         like: args.like,
         upload: args.upload,
+        coin: args.coin,
+        isPro: args.isPro,
       });
       return user;
     }

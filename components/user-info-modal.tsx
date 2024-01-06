@@ -45,11 +45,21 @@ const UserInfoModal = () => {
 
   async function onSubmit() {
     if (isValid && confirm) {
-      await update({
-        id: u?._id!,
-        username: name?.replace(/\s/g, ""),
-        favorite: fav,
-      });
+      if (!u?.coin) {
+        await update({
+          id: u?._id!,
+          username: name?.replace(/\s/g, ""),
+          favorite: fav,
+          coin: 150,
+        });
+      } else {
+        await update({
+          id: u?._id!,
+          username: name?.replace(/\s/g, ""),
+          favorite: fav,
+        });
+      }
+
       onClose();
       toast.success("Created Profile.");
     } else {

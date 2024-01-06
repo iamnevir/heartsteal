@@ -135,23 +135,25 @@ const ImageGenerationMain = () => {
         }
       } else if (generation.model === "bimg") {
         const images = await createBingImage(generation.prompt);
-        const urls = images.slice(0, -1);
-        for (let index = 0; index < urls?.length!; index++) {
-          create({
-            prompt: generation.prompt,
-            url: urls![index],
-            userId: user?.id!,
-            isPublish: generation.publicImage,
-            likes: 0,
-            model: generation.model,
-            size: generation.imageSize,
-          });
-        }
-        if (!u?.isPro) {
-          update({
-            id: u?._id!,
-            coin: u?.coin! - price,
-          });
+        if (images.length > 0) {
+          const urls = images.slice(0, -1);
+          for (let index = 0; index < urls?.length!; index++) {
+            create({
+              prompt: generation.prompt,
+              url: urls![index],
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: 0,
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
+          if (!u?.isPro) {
+            update({
+              id: u?._id!,
+              coin: u?.coin! - price,
+            });
+          }
         }
       } else {
         const data = {

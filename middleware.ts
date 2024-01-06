@@ -14,8 +14,9 @@ export default authMiddleware({
         returnBackUrl: `${url}/sign-in`,
       });
     }
-    createUser(auth.userId!);
+
     if (auth.userId && !auth.isPublicRoute) {
+      createUser(auth.userId);
       return NextResponse.next();
     }
   },
