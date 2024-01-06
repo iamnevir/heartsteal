@@ -322,7 +322,7 @@ const ImageCommunityItem = ({ image }: { image: Doc<"image"> }) => {
           }
         >
           <div
-            onClick={() => window.open(image.url)}
+            onClick={downloadImage}
             className={cn(
               " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center  bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
               hover
