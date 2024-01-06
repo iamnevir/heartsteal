@@ -37,27 +37,27 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
     try {
       const ids = item.map((i) => i._id);
       await removeAll({ id: ids });
-      toast("Removed All Successfully.");
+      toast.success("Removed All Successfully.");
     } catch (error) {
-      toast("Remove Failed.");
+      toast.error("Remove Failed.");
     }
   };
   const handlePublished = async () => {
     try {
       const ids = item.map((i) => i._id);
       await updateAll({ id: ids, isPublish: true });
-      toast("Published All Successfully.");
+      toast.success("Published All Successfully.");
     } catch (error) {
-      toast("Publish Failed.");
+      toast.error("Publish Failed.");
     }
   };
   const handleUnPublished = async () => {
     try {
       const ids = item.map((i) => i._id);
       await updateAll({ id: ids, isPublish: false });
-      toast("UnPublished All Successfully.");
+      toast.success("UnPublished All Successfully.");
     } catch (error) {
-      toast("UnPublish Failed.");
+      toast.error("UnPublish Failed.");
     }
   };
   return (

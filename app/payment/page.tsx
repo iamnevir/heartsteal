@@ -5,7 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useMutation, useQuery } from "convex/react";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -118,13 +118,11 @@ const PayPage = () => {
               id: order._id,
               isPay,
               amount,
-              bank: bank ? bank[0] : "",
+              bank: bank ? bank : "",
             });
             updateUser({ id: u?._id!, isPro: true });
             toast.success("Thanh toán thành công!");
-          } else {
           }
-
           router.push("/ai");
         } catch (error) {
           toast.success("Thanh toán không thành công!");
@@ -179,7 +177,7 @@ const PayPage = () => {
                   </span>{" "}
                   {item.price}
                 </span>{" "}
-                /month
+                {language.language === "Vietnamese" ? "/tháng" : "/month"}
               </span>
               <span className=" sm:text-sm text-lg text-slate-500">
                 {item.subPrice}
