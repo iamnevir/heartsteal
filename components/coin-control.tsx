@@ -74,8 +74,8 @@ const CoinControl = ({ userId }: { userId: string }) => {
           content={
             !user?.isPro
               ? language === "Vietnamese"
-                ? `Sẽ được đặt lại vào ${timeResetCoin()} giờ nữa`
-                : `Resets in ${timeResetCoin()} hrs`
+                ? `Sẽ được đặt lại vào 17h giờ hàng ngày`
+                : `Resets in 17h per days`
               : language === "Vietnamese"
               ? `Không giới hạn tokens`
               : `Unlimited Tokens`

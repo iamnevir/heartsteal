@@ -11,7 +11,13 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
-import { Aperture, Atom, BrainCog, LucideShieldQuestion } from "lucide-react";
+import {
+  Aperture,
+  ArrowLeftFromLine,
+  Atom,
+  BrainCog,
+  LucideShieldQuestion,
+} from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import Logo from "../logo";
 import { useMediaQuery } from "usehooks-ts";
@@ -21,6 +27,7 @@ import { useUser } from "@clerk/nextjs";
 import CoinControl from "../coin-control";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
 const SidebarPicker = () => {
   const { user } = useUser();
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
@@ -28,19 +35,29 @@ const SidebarPicker = () => {
   const generation = useGenerateImage();
   const isMobile = useMediaQuery("(max-width:768px)");
   const { language } = useLanguage();
-
+  const router = useRouter();
   return (
     <>
-      <Link href="/" className="flex items-center gap-1 sm:p-5 p-3">
-        {isMobile ? (
-          <Image src="/logo.png" width={50} height={50} alt="" />
-        ) : (
-          <Logo width={50} />
-        )}
-        <p className="font-bold sm:text-base text-xl gradient-text">
-          HeartSteal.Ai
-        </p>
-      </Link>
+      <div className=" flex items-center gap-3 py-3 pl-2">
+        <Link href="/" className="flex items-center gap-1 ">
+          {isMobile ? (
+            <Image src="/logo.png" width={50} height={50} alt="" />
+          ) : (
+            <>
+              <Logo width={50} />
+            </>
+          )}
+          <p className="font-bold sm:text-base text-xl gradient-text">
+            HeartSteal.Ai
+          </p>
+        </Link>
+        <ArrowLeftFromLine
+          size={20}
+          onClick={() => router.push("/ai")}
+          className=" text-white/40 cursor-pointer"
+        />
+      </div>
+
       <CoinControl userId={user?.id!} />
       <Divider className="px-5" />
       <Select
