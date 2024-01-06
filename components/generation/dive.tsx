@@ -8,7 +8,7 @@ import { toast } from "sonner";
 const Dive = () => {
   const [loading, setLoading] = useState(false);
   const generation = useGenerateImage();
-  const language = useLanguage();
+  const { language } = useLanguage();
   const handleRandomPrompt = async () => {
     setLoading(true);
     const prompt = [
@@ -34,13 +34,13 @@ const Dive = () => {
         generatedPrompt.substring(1, generatedPrompt.length - 1)
       );
       toast.success(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Tạo lệnh ngẫu nhiên thành công."
           : "Generate random prompt successfully."
       );
     } catch (error) {
       toast.error(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Tạo lệnh ngẫu nhiên không thành công."
           : "Generate random prompt failed."
       );

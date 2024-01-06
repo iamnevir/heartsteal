@@ -20,15 +20,15 @@ import { useLanguage } from "@/hooks/use-language";
 import { useMediaQuery } from "usehooks-ts";
 
 const NavbarPage = () => {
-  const language = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const isMobile = useMediaQuery("(max-width:768px)");
   const menuItems = [
     {
-      title: language.language === "Vietnamese" ? "Bộ sưu tập" : "Collections",
+      title: language === "Vietnamese" ? "Bộ sưu tập" : "Collections",
       href: "/ai/community-feed",
     },
     {
-      title: language.language === "Vietnamese" ? "Liên hệ" : "Contact",
+      title: language === "Vietnamese" ? "Liên hệ" : "Contact",
       href: "https://www.facebook.com/iamnanhdz",
     },
     { title: "API", href: "https://platform.openai.com/docs/guides/images" },
@@ -58,14 +58,12 @@ const NavbarPage = () => {
         <NavbarContent justify="end" className="hidden sm:flex gap-8">
           <NavbarItem>
             <UnderlineText href="/ai/community-feed">
-              {language.language === "Vietnamese"
-                ? "Bộ sưu tập"
-                : "Collections"}
+              {language === "Vietnamese" ? "Bộ sưu tập" : "Collections"}
             </UnderlineText>
           </NavbarItem>
           <NavbarItem>
             <UnderlineText href="https://www.facebook.com/iamnanhdz">
-              {language.language === "Vietnamese" ? "Liên hệ" : "Contact"}
+              {language === "Vietnamese" ? "Liên hệ" : "Contact"}
             </UnderlineText>
           </NavbarItem>
           <NavbarItem>
@@ -120,29 +118,27 @@ const NavbarPage = () => {
               href="/ai"
               variant="shadow"
             >
-              {language.language === "Vietnamese" ? "Thử ngay" : "Try It Now"}
+              {language === "Vietnamese" ? "Thử ngay" : "Try It Now"}
             </Button>
           </NavbarItem>
           {!isMobile && (
             <Select
               labelPlacement="outside"
-              selectedKeys={
-                language.language === "Vietnamese" ? ["vi"] : ["en"]
-              }
+              selectedKeys={language === "Vietnamese" ? ["vi"] : ["en"]}
               size="sm"
               variant="bordered"
               aria-labelledby="language"
               className="max-w-[70px]"
             >
               <SelectItem
-                onPress={() => language.setLanguage("Vietnamese")}
+                onPress={() => setLanguage("Vietnamese")}
                 key="vi"
                 value="Vietnamese"
               >
                 Vi
               </SelectItem>
               <SelectItem
-                onPress={() => language.setLanguage("English")}
+                onPress={() => setLanguage("English")}
                 key="en"
                 value="English"
               >
@@ -167,23 +163,21 @@ const NavbarPage = () => {
           <NavbarMenuItem className="w-full">
             <Select
               labelPlacement="outside"
-              selectedKeys={
-                language.language === "Vietnamese" ? ["vi"] : ["en"]
-              }
+              selectedKeys={language === "Vietnamese" ? ["vi"] : ["en"]}
               size="lg"
               variant="bordered"
               aria-labelledby="language"
               className=""
             >
               <SelectItem
-                onPress={() => language.setLanguage("Vietnamese")}
+                onPress={() => setLanguage("Vietnamese")}
                 key="vi"
                 value="Vietnamese"
               >
                 Vi
               </SelectItem>
               <SelectItem
-                onPress={() => language.setLanguage("English")}
+                onPress={() => setLanguage("English")}
                 key="en"
                 value="English"
               >

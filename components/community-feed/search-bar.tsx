@@ -20,18 +20,18 @@ const SearchBar = ({
   search: string;
   setSearch: (v: string) => void;
 }) => {
-  const language = useLanguage();
+  const { language } = useLanguage();
   const category = [
     {
-      title: language.language === "Vietnamese" ? "Tất cả" : "All",
+      title: language === "Vietnamese" ? "Tất cả" : "All",
       icon: LayoutList,
     },
     {
-      title: language.language === "Vietnamese" ? "Hoạt hình" : "Motion",
+      title: language === "Vietnamese" ? "Hoạt hình" : "Motion",
       icon: Film,
     },
     {
-      title: language.language === "Vietnamese" ? "Nhiếp ảnh" : "Photography",
+      title: language === "Vietnamese" ? "Nhiếp ảnh" : "Photography",
       icon: Instagram,
     },
     {
@@ -39,15 +39,15 @@ const SearchBar = ({
       icon: Snail,
     },
     {
-      title: language.language === "Vietnamese" ? "Vẽ" : "Art",
+      title: language === "Vietnamese" ? "Vẽ" : "Art",
       icon: Palette,
     },
     {
-      title: language.language === "Vietnamese" ? "Nhân vật" : "Character",
+      title: language === "Vietnamese" ? "Nhân vật" : "Character",
       icon: UsersRound,
     },
     {
-      title: language.language === "Vietnamese" ? "Thức ăn" : "Food",
+      title: language === "Vietnamese" ? "Thức ăn" : "Food",
       icon: Cake,
     },
     {
@@ -64,7 +64,7 @@ const SearchBar = ({
           onValueChange={setSearch}
           labelPlacement="outside"
           placeholder={
-            language.language === "Vietnamese"
+            language === "Vietnamese"
               ? "Tìm kiếm bằng lệnh..."
               : "search by prompt..."
           }
@@ -76,7 +76,7 @@ const SearchBar = ({
           variant="shadow"
           className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-[40%] sm:px-10 font-semibold text-sm py-3"
         >
-          {language.language === "Vietnamese" ? "Tìm kiếm" : "Search"}
+          {language === "Vietnamese" ? "Tìm kiếm" : "Search"}
         </Button>
       </div>
       <div className=" flex items-center flex-wrap gap-2">

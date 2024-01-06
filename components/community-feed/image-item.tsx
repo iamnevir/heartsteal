@@ -2,7 +2,6 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { cn, formatVietnameseDate } from "@/lib/utils";
 import {
-  Button,
   Card,
   CardBody,
   Divider,
@@ -27,7 +26,6 @@ import { saveAs } from "file-saver";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
 import { useCopyToClipboard } from "usehooks-ts";
 import { useLanguage } from "@/hooks/use-language";
 const ImageCommunityItem = ({
@@ -48,7 +46,7 @@ const ImageCommunityItem = ({
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
-  const language = useLanguage();
+  const { language } = useLanguage();
   const handleLiked = () => {
     try {
       if (userName) {
@@ -96,7 +94,7 @@ const ImageCommunityItem = ({
                     )}
                   >
                     <Image
-                      className={cn("rounded-md", hover ? "opacity-40" : "")}
+                      className="rounded-md"
                       alt=""
                       placeholder="blur"
                       blurDataURL="/placeholder.png"
@@ -106,7 +104,7 @@ const ImageCommunityItem = ({
                       height={512}
                       style={{
                         width: "100%",
-                        height: "auto",
+                        height: "100%",
                         objectFit: "cover",
                       }}
                     />{" "}
@@ -117,15 +115,13 @@ const ImageCommunityItem = ({
                       className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
                     >
                       <Download className="w-4 h-4" />
-                      {language.language === "Vietnamese"
-                        ? "Tải xuống"
-                        : "Download"}
+                      {language === "Vietnamese" ? "Tải xuống" : "Download"}
                     </div>
                     <div
                       onClick={() => {
                         copy(image.url);
                         toast.success(
-                          language.language === "Vietnamese"
+                          language === "Vietnamese"
                             ? "Đã sao chép."
                             : "Copied Link to Clipboard.",
                           {
@@ -136,7 +132,7 @@ const ImageCommunityItem = ({
                       className="px-4 py-1 flex items-center gap-1 bg-black/10 dark:bg-black/50 rounded-lg cursor-pointer hover:bg-black/20 dark:hover:bg-slate-900 duration-500"
                     >
                       <ExternalLinkIcon className="w-4 h-4" />
-                      {language.language === "Vietnamese" ? "Chia sẻ" : "Share"}
+                      {language === "Vietnamese" ? "Chia sẻ" : "Share"}
                     </div>
                   </div>
                 </div>
@@ -165,7 +161,7 @@ const ImageCommunityItem = ({
                     <>
                       <Divider />
                       <span className=" text-sm">
-                        {language.language === "Vietnamese"
+                        {language === "Vietnamese"
                           ? "Chi tiết lệnh"
                           : "Prompt details"}
                       </span>
@@ -177,7 +173,7 @@ const ImageCommunityItem = ({
                               onClick={() => {
                                 copy(image.prompt!);
                                 toast.success(
-                                  language.language === "Vietnamese"
+                                  language === "Vietnamese"
                                     ? "Đã sao chép."
                                     : "Copied to Clipboard."
                                 );
@@ -204,7 +200,7 @@ const ImageCommunityItem = ({
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
-                        {language.language === "Vietnamese"
+                        {language === "Vietnamese"
                           ? "Kích thước"
                           : "Input Resolution"}
                       </span>
@@ -212,9 +208,7 @@ const ImageCommunityItem = ({
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
-                        {language.language === "Vietnamese"
-                          ? "Ngày tạo"
-                          : "CreatedAt"}
+                        {language === "Vietnamese" ? "Ngày tạo" : "CreatedAt"}
                       </span>
                       <span className="text-sm whitespace-nowrap">
                         {formatVietnameseDate(image._creationTime)}
@@ -222,17 +216,13 @@ const ImageCommunityItem = ({
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
-                        {language.language === "Vietnamese"
-                          ? "Mô hình"
-                          : "Model"}
+                        {language === "Vietnamese" ? "Mô hình" : "Model"}
                       </span>
                       <span className="text-sm">{image.model}</span>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
-                        {language.language === "Vietnamese"
-                          ? "Lượt thích"
-                          : "Likes"}
+                        {language === "Vietnamese" ? "Lượt thích" : "Likes"}
                       </span>
                       <span className="text-sm">{image.likes}</span>
                     </div>
@@ -264,21 +254,26 @@ const ImageCommunityItem = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         className={cn(
-          " relative  sm:w-[240px] sm:h-[390px] w-full h-[390px] cursor-pointer overflow-hidden",
-          image.size === "512x512" ? "sm:h-[290px] h-[390px]" : ""
+          " relative  sm:w-[240px] sm:h-[390px] w-full  cursor-pointer overflow-hidden",
+          image.size === "512x512" ? "sm:h-[290px] h-[370px]" : "h-[370px]"
         )}
       >
         <Image
-          className={cn("rounded-md duration-300", hover ? "opacity-40" : "")}
+          className={cn("rounded-md duration-300 ", hover ? "opacity-40" : "")}
           alt=""
           onClick={onOpen}
           placeholder="blur"
           blurDataURL="/logo.png"
-          fill
           src={image.url}
           priority
           sizes="(max-width: 768px) 100vw,66vw"
-          style={{ objectFit: "cover" }}
+          width={512}
+          height={512}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
         />
         <div
           onClick={handleLiked}
@@ -317,7 +312,7 @@ const ImageCommunityItem = ({
         </div>
         <div
           className={cn(
-            "  duration-500 absolute bottom-2 left-2 cursor-pointer justify-start line-clamp-6 max-w-[200px] gap-3 rounded-md  text-xs",
+            "  duration-500 absolute text-slate-500 bottom-2 left-2 cursor-pointer justify-start line-clamp-6 max-w-[200px] gap-3 rounded-md  text-xs",
             hover
               ? "translate-x-0 opacity-100"
               : "sm:opacity-0 sm:-translate-x-2 sm:pointer-events-none"
@@ -329,9 +324,7 @@ const ImageCommunityItem = ({
           size="sm"
           delay={100}
           closeDelay={100}
-          content={
-            language.language === "Vietnamese" ? "Tải xuống" : "Download image"
-          }
+          content={language === "Vietnamese" ? "Tải xuống" : "Download image"}
         >
           <div
             onClick={downloadImage}

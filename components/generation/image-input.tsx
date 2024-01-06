@@ -26,7 +26,7 @@ const ImageInput = () => {
   const { user } = useUser();
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
-  const language = useLanguage();
+  const { language } = useLanguage();
   return (
     <>
       <Modal
@@ -40,13 +40,13 @@ const ImageInput = () => {
       >
         <ModalContent>
           <ModalHeader>
-            {language.language === "Vietnamese"
+            {language === "Vietnamese"
               ? "Chọn ảnh làm đầu vào"
               : "Select Image Input"}
           </ModalHeader>
           <ModalBody>
             <span>
-              {language.language === "Vietnamese"
+              {language === "Vietnamese"
                 ? "Ảnh tải lên của bạn"
                 : "Your Uploads"}
             </span>
@@ -76,9 +76,7 @@ const ImageInput = () => {
           <CardHeader>
             <span className="flex items-center gap-1">
               <ImageIcon className="w-5 h-5" />
-              {language.language === "Vietnamese"
-                ? "Ảnh đầu vào"
-                : "Image Input"}
+              {language === "Vietnamese" ? "Ảnh đầu vào" : "Image Input"}
               <Tooltip
                 placement="right"
                 size="sm"
@@ -86,7 +84,7 @@ const ImageInput = () => {
                 closeDelay={100}
                 content={
                   <div className=" w-40">
-                    {language.language === "Vietnamese"
+                    {language === "Vietnamese"
                       ? "Hiện tại chỉ hỗ trợ cho mô hình Heart Steal."
                       : "Only Heart Steal Model is supported at this time."}
                   </div>
@@ -97,7 +95,7 @@ const ImageInput = () => {
             </span>
             <div className="ml-auto gap-2 flex items-center">
               <span>
-                {language.language === "Vietnamese"
+                {language === "Vietnamese"
                   ? "Sử dụng ảnh đầu vào"
                   : "Use Image Input"}
               </span>
@@ -122,7 +120,7 @@ const ImageInput = () => {
               <div className="flex items-center gap-2">
                 {" "}
                 <span>
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Thêm ảnh để bắt đầu"
                     : "Add an image to get started"}
                 </span>
@@ -133,7 +131,7 @@ const ImageInput = () => {
                   closeDelay={100}
                   content={
                     <div className=" w-40">
-                      {language.language === "Vietnamese"
+                      {language === "Vietnamese"
                         ? "Chọn một hình ảnh làm đầu vào cho thế hệ của bạn. Phải là tệp PNG hợp lệ, nhỏ hơn 4MB và có hình vuông."
                         : "Select an image like an input for your generation. Must be a valid PNG file, less than 4MB, and square."}
                     </div>
@@ -148,7 +146,7 @@ const ImageInput = () => {
                 className="bg-gr text-xs"
                 variant="shadow"
               >
-                {language.language === "Vietnamese"
+                {language === "Vietnamese"
                   ? "Ảnh tải lên của bạn"
                   : "Your Uploads"}
               </Button>

@@ -23,7 +23,7 @@ const SingleFileUpload = ({
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const imageInput = useRef<ElementRef<"input">>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const language = useLanguage();
+  const { language } = useLanguage();
   return (
     <div
       onClick={() => imageInput.current?.click()}
@@ -51,10 +51,10 @@ const SingleFileUpload = ({
           </div>
           <Chip className=" bg-blue-500 mt-5" variant="shadow">
             {isLoading
-              ? language.language === "Vietnamese"
+              ? language === "Vietnamese"
                 ? "Đang tải lên"
                 : "UpLoading..."
-              : language.language === "Vietnamese"
+              : language === "Vietnamese"
               ? "Tải lên"
               : "Upload"}
           </Chip>

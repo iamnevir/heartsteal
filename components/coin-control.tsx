@@ -3,14 +3,14 @@ import { useLanguage } from "@/hooks/use-language";
 import { cn, timeResetCoin } from "@/lib/utils";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import { useQuery } from "convex/react";
-import { Gem, Infinity as Infi, LucideShieldQuestion } from "lucide-react";
+import { Gem, LucideShieldQuestion } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 
 const CoinControl = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
   const router = useRouter();
-  const language = useLanguage();
+  const { language } = useLanguage();
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
     <div className=" w-full justify-center flex items-center mb-3">
@@ -73,10 +73,10 @@ const CoinControl = ({ userId }: { userId: string }) => {
           closeDelay={100}
           content={
             !user?.isPro
-              ? language.language === "Vietnamese"
+              ? language === "Vietnamese"
                 ? `Sẽ được đặt lại vào ${timeResetCoin()} giờ nữa`
                 : `Resets in ${timeResetCoin()} hrs`
-              : language.language === "Vietnamese"
+              : language === "Vietnamese"
               ? `Không giới hạn tokens`
               : `Unlimited Tokens`
           }
@@ -96,7 +96,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
             className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-5"
             size="sm"
           >
-            {language.language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}
+            {language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}
           </Button>
         )}
       </div>

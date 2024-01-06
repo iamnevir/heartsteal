@@ -45,7 +45,7 @@ const ImageGenerationMain = () => {
     { initialNumItems: 8 }
   );
   const [isLoading, setIsLoading] = useState(false);
-  const language = useLanguage();
+  const { language } = useLanguage();
   const images = groupObjectsByDate(results);
   const price = calcCoinGenerate(
     generation.imageSize,
@@ -58,7 +58,7 @@ const ImageGenerationMain = () => {
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
           toast(
-            language.language === "Vietnamese"
+            language === "Vietnamese"
               ? "Không có ảnh đầu vào."
               : "No image input found."
           );
@@ -97,7 +97,7 @@ const ImageGenerationMain = () => {
       } else if (generation.isEdit) {
         if (!generation.maskUrl || !generation.maskInput) {
           toast.error(
-            language.language === "Vietnamese"
+            language === "Vietnamese"
               ? "Không thấy ảnh đầu vào."
               : "No image input found."
           );
@@ -191,14 +191,14 @@ const ImageGenerationMain = () => {
         }
       }
       toast.success(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Tạo ảnh thành công."
           : "Generated successfully."
       );
     } catch (error) {
       console.log(error);
       toast.error(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Tạo ảnh không thành công."
           : "Generation Failed."
       );
@@ -209,7 +209,7 @@ const ImageGenerationMain = () => {
   return (
     <div className="sm:pl-64 px-2 pt-6">
       <span className=" font-semibold gradient-text text-lg">
-        {language.language === "Vietnamese"
+        {language === "Vietnamese"
           ? "Mô hình tạo ảnh bằng trí trệ nhân tạo."
           : "AI Image Generation"}
       </span>
@@ -237,7 +237,7 @@ const ImageGenerationMain = () => {
             }}
             value={generation.prompt}
             placeholder={
-              language.language === "Vietnamese"
+              language === "Vietnamese"
                 ? "Nhập một lệnh..."
                 : "Type a prompt..."
             }
@@ -258,7 +258,7 @@ const ImageGenerationMain = () => {
           <div className="flex items-center justify-center gap-3">
             {isLoading ? (
               <CircularProgress size="sm" aria-label="Loading..." />
-            ) : language.language === "Vietnamese" ? (
+            ) : language === "Vietnamese" ? (
               "Tạo ảnh"
             ) : (
               "Generate"
@@ -289,10 +289,10 @@ const ImageGenerationMain = () => {
           key="history"
           title={
             isMobile
-              ? language.language === "Vietnamese"
+              ? language === "Vietnamese"
                 ? "Lịch sử"
                 : "History"
-              : language.language === "Vietnamese"
+              : language === "Vietnamese"
               ? "Lịch sử tạo ảnh"
               : "Generation History"
           }
@@ -313,15 +313,15 @@ const ImageGenerationMain = () => {
             <div className=" flex gap-2 items-center">
               <span>
                 {!isMobile
-                  ? language.language === "Vietnamese"
+                  ? language === "Vietnamese"
                     ? "Ảnh từ ảnh."
                     : "Image Input"
-                  : language.language === "Vietnamese"
+                  : language === "Vietnamese"
                   ? "Biến thể"
                   : "Image Input"}
               </span>
               <Chip className="bg-gr" size="sm">
-                {language.language === "Vietnamese" ? "Mới" : "New"}
+                {language === "Vietnamese" ? "Mới" : "New"}
               </Chip>
             </div>
           }
@@ -335,10 +335,10 @@ const ImageGenerationMain = () => {
             <div className=" flex gap-2 items-center">
               <span>
                 {isMobile
-                  ? language.language === "Vietnamese"
+                  ? language === "Vietnamese"
                     ? "Sửa ảnh."
                     : "Image Edit"
-                  : language.language === "Vietnamese"
+                  : language === "Vietnamese"
                   ? "Sửa ảnh"
                   : "Image Edit"}
               </span>

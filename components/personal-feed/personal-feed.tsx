@@ -47,6 +47,9 @@ const PersonalFeed = ({ search }: { search: string }) => {
   if (status === "LoadingFirstPage") {
     return <ImageSkeleton />;
   }
+  if (!user?.id) {
+    return null;
+  }
   return (
     <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
       {[
@@ -58,7 +61,7 @@ const PersonalFeed = ({ search }: { search: string }) => {
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-4">
           {item.map((i, ind) => (
-            <ImageItem image={i} key={ind} />
+            <ImageItem image={i} key={ind} userId={user?.id} />
           ))}
         </div>
       ))}

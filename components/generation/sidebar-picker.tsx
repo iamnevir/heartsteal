@@ -27,7 +27,7 @@ const SidebarPicker = () => {
   const sizes = ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"];
   const generation = useGenerateImage();
   const isMobile = useMediaQuery("(max-width:768px)");
-  const language = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <>
@@ -44,9 +44,7 @@ const SidebarPicker = () => {
       <CoinControl userId={user?.id!} />
       <Divider className="px-5" />
       <Select
-        label={
-          language.language === "Vietnamese" ? "Mô hình" : "Generate Model"
-        }
+        label={language === "Vietnamese" ? "Mô hình" : "Generate Model"}
         defaultSelectedKeys={["dall-e-2"]}
         value={generation.model}
         startContent={
@@ -80,7 +78,7 @@ const SidebarPicker = () => {
           selectorIcon: isMobile && "w-5 h-5",
         }}
         placeholder={
-          language.language === "Vietnamese" ? "bạn đã thích" : "Select Model"
+          language === "Vietnamese" ? "bạn đã thích" : "Select Model"
         }
       >
         <SelectItem
@@ -130,9 +128,7 @@ const SidebarPicker = () => {
           key="1"
           aria-label="Accordion 1"
           title={
-            language.language === "Vietnamese"
-              ? "Số lượng ảnh"
-              : "Number of Images"
+            language === "Vietnamese" ? "Số lượng ảnh" : "Number of Images"
           }
           className="sm:text-xs text-xl"
           classNames={{
@@ -169,9 +165,7 @@ const SidebarPicker = () => {
           aria-label="Accordion 2"
           title={
             <div className=" flex items-center gap-2 sm:text-xs text-xl">
-              {language.language === "Vietnamese"
-                ? "Kích thước ảnh"
-                : "Image Sizes"}
+              {language === "Vietnamese" ? "Kích thước ảnh" : "Image Sizes"}
               <Tooltip
                 placement="right"
                 size="sm"
@@ -179,7 +173,7 @@ const SidebarPicker = () => {
                 closeDelay={100}
                 content={
                   <div className="w-40">
-                    {language.language === "Vietnamese"
+                    {language === "Vietnamese"
                       ? "Kích thước cuối cùng của ảnh"
                       : "Final size of the images"}
                   </div>
@@ -224,9 +218,7 @@ const SidebarPicker = () => {
         )}
       >
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
-          <span>
-            {language.language === "Vietnamese" ? "Tự nhiên" : "Natural"}
-          </span>
+          <span>{language === "Vietnamese" ? "Tự nhiên" : "Natural"}</span>
           <Tooltip
             placement="right"
             size="sm"
@@ -234,7 +226,7 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                {language.language === "Vietnamese"
+                {language === "Vietnamese"
                   ? "Nếu bật, ảnh của bạn sẽ trông rực rỡ, nếu không ảnh sẽ trông tự nhiên hơn. Thông số này chỉ được hỗ trợ cho Dall-E-3."
                   : " If it&apos;s on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Dall-E-3."}
               </div>
@@ -272,7 +264,7 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                {language.language === "Vietnamese"
+                {language === "Vietnamese"
                   ? "HD tạo ra hình ảnh có độ chi tiết tốt hơn và tính nhất quán cao hơn trên toàn bộ hình ảnh. Thông số này chỉ được hỗ trợ cho Dall-E-3."
                   : "HD creates images with finer details and greater consistency across the image. This param is only supported for Dall-E-3."}
               </div>
@@ -296,9 +288,7 @@ const SidebarPicker = () => {
       <div className=" flex items-center gap-2 w-full pb-2">
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
           <span>
-            {language.language === "Vietnamese"
-              ? "Công khai ảnh"
-              : "Public Images"}
+            {language === "Vietnamese" ? "Công khai ảnh" : "Public Images"}
           </span>
           <Tooltip
             placement="right"
@@ -307,7 +297,7 @@ const SidebarPicker = () => {
             closeDelay={100}
             content={
               <div className=" w-40">
-                {language.language === "Vietnamese"
+                {language === "Vietnamese"
                   ? "Công khai sáng tạo của bạn cho Cộng đồng của chúng tôi"
                   : "Public your generation for our Comunity"}
               </div>

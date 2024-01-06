@@ -7,15 +7,15 @@ import { useState } from "react";
 
 const LikedPosts = () => {
   const [search, setSearch] = useState("");
-  const language = useLanguage();
+  const { language } = useLanguage();
   return (
     <div className="sm:pl-64 px-3 pt-5">
       <span className="font-semibold text-lg">
         <span className="gradient-text">
           {" "}
-          {language.language === "Vietnamese" ? "Bài đăng" : "Your"}
+          {language === "Vietnamese" ? "Bài đăng" : "Your"}
         </span>{" "}
-        {language.language === "Vietnamese" ? "bạn đã thích" : "Liked Post"}
+        {language === "Vietnamese" ? "bạn đã thích" : "Liked Post"}
       </span>
       <SearchBar setSearch={setSearch} search={search} />
       <Divider className="mt-3" />

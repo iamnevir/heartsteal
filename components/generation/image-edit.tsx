@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 const ImageInput = ({ isPro }: { isPro: boolean }) => {
   const generation = useGenerateImage();
-  const language = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <div
@@ -27,7 +27,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
         <CardHeader>
           <span className="flex items-center gap-1">
             <Image className="w-5 h-5" />
-            {language.language === "Vietnamese" ? "Ảnh đầu vào" : "Image Input"}
+            {language === "Vietnamese" ? "Ảnh đầu vào" : "Image Input"}
             <Tooltip
               placement="right"
               size="sm"
@@ -35,7 +35,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
               closeDelay={100}
               content={
                 <div className=" w-40">
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Hiện tại chỉ có mô hình Heart Steal hỗ trợ điều này."
                     : "Only Heart Steal model is supported at this time."}
                 </div>
@@ -46,9 +46,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
           </span>
           <div className="ml-auto gap-2 flex items-center">
             <span>
-              {language.language === "Vietnamese"
-                ? "Sử dụng sửa ảnh"
-                : "Use Image Edit"}
+              {language === "Vietnamese" ? "Sử dụng sửa ảnh" : "Use Image Edit"}
             </span>
             <Switch
               isSelected={generation.isEdit}
@@ -71,7 +69,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
             <div className="flex flex-col items-center gap-3 w-full justify-between">
               <div className="ml-2 flex items-center gap-2 font-semibold text-xs ">
                 <span>
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Thêm một ảnh đầu vào"
                     : "Add an image input"}
                 </span>
@@ -82,7 +80,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
                   closeDelay={100}
                   content={
                     <div className=" w-40">
-                      {language.language === "Vietnamese"
+                      {language === "Vietnamese"
                         ? "Hình ảnh cần chỉnh sửa. Phải là tệp PNG hợp lệ, nhỏ hơn 4MB và có hình vuông. Nếu mặt nạ không được cung cấp, hình ảnh phải có độ trong suốt sẽ được sử dụng làm mặt nạ."
                         : "The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask."}
                     </div>
@@ -99,7 +97,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
             <div className="flex flex-col items-center gap-3 w-full justify-between">
               <div className="ml-2 flex  items-center gap-2 font-semibold text-xs ">
                 <span>
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Thêm một ảnh mặt nạ"
                     : "Add an mask"}
                 </span>
@@ -110,7 +108,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
                   closeDelay={100}
                   content={
                     <div className=" w-40">
-                      {language.language === "Vietnamese"
+                      {language === "Vietnamese"
                         ? "Một hình ảnh bổ sung có các vùng trong suốt hoàn toàn (ví dụ: nơi alpha bằng 0) cho biết nơi cần chỉnh sửa hình ảnh. Phải là tệp PNG hợp lệ, nhỏ hơn 4 MB và có cùng kích thước với hình ảnh."
                         : "An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as image."}
                     </div>

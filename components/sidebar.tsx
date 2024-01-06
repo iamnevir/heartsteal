@@ -24,56 +24,50 @@ import CoinControl from "./coin-control";
 const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
   const { signOut, user } = useClerk();
   const pathname = usePathname();
-  const language = useLanguage();
+  const { language } = useLanguage();
   const sidebarItems = [
     {
       icon: HeartPulseIcon,
-      title: language.language === "Vietnamese" ? "Trang chủ" : "Home",
+      title: language === "Vietnamese" ? "Trang chủ" : "Home",
       href: "/ai",
     },
     {
       icon: Drama,
-      title:
-        language.language === "Vietnamese" ? "Tin cộng đồng" : "Community Feed",
+      title: language === "Vietnamese" ? "Tin cộng đồng" : "Community Feed",
       href: "/ai/community-feed",
     },
     {
       icon: VenetianMask,
-      title:
-        language.language === "Vietnamese" ? "Tin cá nhân" : "Personal Feed",
+      title: language === "Vietnamese" ? "Tin cá nhân" : "Personal Feed",
       href: "/ai/personal-feed",
     },
     {
       icon: Flame,
-      title:
-        language.language === "Vietnamese" ? "Tin đã thích" : "Liked Posts",
+      title: language === "Vietnamese" ? "Tin đã thích" : "Liked Posts",
       href: "/ai/like-posts",
     },
   ];
   const toolItems = [
     {
       icon: Dna,
-      title:
-        language.language === "Vietnamese" ? "Tạo ảnh" : "Image Generation",
+      title: language === "Vietnamese" ? "Tạo ảnh" : "Image Generation",
       href: "/ai/generation",
     },
     {
       icon: CandyCane,
-      title:
-        language.language === "Vietnamese" ? "Chỉnh sửa ảnh" : "Image Editor",
+      title: language === "Vietnamese" ? "Chỉnh sửa ảnh" : "Image Editor",
       href: "/ai/generation",
     },
     {
       icon: Codesandbox,
-      title:
-        language.language === "Vietnamese" ? "Ảnh từ ảnh" : "Image Variation",
+      title: language === "Vietnamese" ? "Ảnh từ ảnh" : "Image Variation",
       href: "/ai/generation",
     },
   ];
   const footerItems = [
     {
       icon: Settings,
-      title: language.language === "Vietnamese" ? "Cài đặt" : "Settings",
+      title: language === "Vietnamese" ? "Cài đặt" : "Settings",
       href: "/ai/settings",
     },
   ];
@@ -138,9 +132,7 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
       </div>
       <div className=" flex flex-col w-full gap-2">
         <span className="p-3">
-          {language.language === "Vietnamese"
-            ? "Công cụ của bạn"
-            : "User tools"}
+          {language === "Vietnamese" ? "Công cụ của bạn" : "User tools"}
         </span>
         {toolItems.map((item, index) => (
           <Link
@@ -211,7 +203,7 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
             className={cn("ml-5 text-red-900", isMobile ? "w-8 h-8" : "")}
           />
           <span className="text-red-900">
-            {language.language === "Vietnamese" ? "Đăng xuất" : "Logout"}
+            {language === "Vietnamese" ? "Đăng xuất" : "Logout"}
           </span>
         </div>
 

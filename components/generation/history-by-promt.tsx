@@ -8,6 +8,7 @@ import {
   DropdownTrigger,
   Snippet,
   Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
 import { cn, formatVietnameseDate } from "@/lib/utils";
 import {
@@ -27,46 +28,78 @@ import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { Doc } from "@/convex/_generated/dataModel";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
+import ConfirmModal from "../confirm-modal";
 
 const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
   const generation = useGenerateImage();
   const removeAll = useMutation(api.image.removeAll);
   const updateAll = useMutation(api.image.updateAll);
-  const language = useLanguage();
+  const { language } = useLanguage();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDeleteAll = async () => {
     try {
       const ids = item.map((i) => i._id);
       await removeAll({ id: ids });
-      toast.success("Removed All Successfully.");
+      toast.success(
+        language === "Vietnamese"
+          ? "Xóa tất cả thành công."
+          : "Removed All Successfully."
+      );
     } catch (error) {
-      toast.error("Remove Failed.");
+      toast.error(
+        language === "Vietnamese"
+          ? "Xóa tất cả không thành công."
+          : "Remove Failed."
+      );
     }
+    onClose();
   };
   const handlePublished = async () => {
     try {
       const ids = item.map((i) => i._id);
       await updateAll({ id: ids, isPublish: true });
-      toast.success("Published All Successfully.");
+      toast.success(
+        language === "Vietnamese"
+          ? "Đã công khai tất cả."
+          : "Published All Successfully."
+      );
     } catch (error) {
-      toast.error("Publish Failed.");
+      toast.error(
+        language === "Vietnamese"
+          ? "Công khai không thành công."
+          : "Publish Failed."
+      );
     }
   };
   const handleUnPublished = async () => {
     try {
       const ids = item.map((i) => i._id);
       await updateAll({ id: ids, isPublish: false });
-      toast.success("UnPublished All Successfully.");
+      toast.success(
+        language === "Vietnamese"
+          ? "Đã hủy công khai tất cả."
+          : "UnPublished All Successfully."
+      );
     } catch (error) {
-      toast.error("UnPublish Failed.");
+      toast.error(
+        language === "Vietnamese"
+          ? "Hủy công khai không thành công."
+          : "UnPublish Failed."
+      );
     }
   };
   return (
     <>
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={onClose}
+        handleDelete={handleDeleteAll}
+      />
       <div className=" flex py-2 items-center sm:justify-between text-xs">
         <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
           {item[0].prompt}
         </div>
-        <div className=" flex items-center gap-5 sm:justify-normal justify-between w-full">
+        <div className=" flex items-center gap-5 sm:justify-normal justify-between sm:w-fit w-full">
           <span>{formatVietnameseDate(item[0]._creationTime)}</span>
           <>
             <Tooltip
@@ -74,9 +107,7 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
               delay={100}
               closeDelay={100}
               content={
-                language.language === "Vietnamese"
-                  ? "Dùng lại prompt"
-                  : "Reuse Prompt"
+                language === "Vietnamese" ? "Dùng lại prompt" : "Reuse Prompt"
               }
             >
               <div
@@ -130,7 +161,7 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
                   key="private-all"
                   startContent={<EyeOff className=" w-4 h-4" />}
                 >
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Hủy công khai tất cả"
                     : "Private All"}
                 </DropdownItem>
@@ -139,19 +170,17 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
                   onPress={handlePublished}
                   startContent={<Eye className=" w-4 h-4" />}
                 >
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Công khai tất cả"
                     : "Public All"}
                 </DropdownItem>
                 <DropdownItem
                   key="delete-all"
                   startContent={<Trash2 className=" w-4 h-4" />}
-                  onPress={handleDeleteAll}
+                  onPress={onOpen}
                   color="danger"
                 >
-                  {language.language === "Vietnamese"
-                    ? "Xóa tất cả"
-                    : "Delete All"}
+                  {language === "Vietnamese" ? "Xóa tất cả" : "Delete All"}
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

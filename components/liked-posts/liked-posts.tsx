@@ -46,6 +46,9 @@ const LikedPost = ({ search }: { search: string }) => {
   if (!posts) {
     return null;
   }
+  if (!user?.id) {
+    return null;
+  }
   return (
     <div className=" grid  xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
       {[
@@ -60,7 +63,7 @@ const LikedPost = ({ search }: { search: string }) => {
             if (!i) {
               return null;
             }
-            return <ImageItem image={i} key={ind} />;
+            return <ImageItem image={i} key={ind} userId={user?.id} />;
           })}
         </div>
       ))}

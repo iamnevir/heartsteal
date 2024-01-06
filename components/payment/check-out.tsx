@@ -22,7 +22,7 @@ const CheckOutButton = ({
     subPrice: string;
   };
 }) => {
-  const language = useLanguage();
+  const { language } = useLanguage();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
@@ -31,14 +31,14 @@ const CheckOutButton = ({
           onPress={onOpen}
           className="bg-gr sm:text-sm text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"
         >
-          {language.language === "Vietnamese" ? "Đăng ký" : "Subscribe"}
+          {language === "Vietnamese" ? "Đăng ký" : "Subscribe"}
         </Button>
       )}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             {" "}
-            {language.language === "Vietnamese"
+            {language === "Vietnamese"
               ? "Chọn phương thức thanh toán"
               : "Choose your payment"}
           </ModalHeader>
@@ -47,7 +47,7 @@ const CheckOutButton = ({
               onClick={() => {}}
               className="bg-gr sm:text-lg font-semibold text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"
             >
-              {language.language === "Vietnamese" ? "Momo" : "Momo Payment"}
+              {language === "Vietnamese" ? "Momo" : "Momo Payment"}
             </Button>
             <Button
               onClick={async () => {
@@ -56,7 +56,7 @@ const CheckOutButton = ({
               }}
               className="bg-gr sm:text-lg font-semibold text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"
             >
-              {language.language === "Vietnamese" ? "VNPay" : "VNPay Payment"}
+              {language === "Vietnamese" ? "VNPay" : "VNPay Payment"}
             </Button>
           </ModalBody>
         </ModalContent>

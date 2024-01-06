@@ -7,14 +7,14 @@ import { useState } from "react";
 
 const CommunityFeedPage = () => {
   const [search, setSearch] = useState("");
-  const language = useLanguage();
+  const { language } = useLanguage();
   return (
     <div className="sm:pl-64 px-3 pt-5">
       <span className="font-semibold text-lg">
         <span className="gradient-text">
-          {language.language === "Vietnamese" ? "Sáng tạo" : "Recent"}
+          {language === "Vietnamese" ? "Sáng tạo" : "Recent"}
         </span>{" "}
-        {language.language === "Vietnamese" ? "Gần đây" : "Creations"}
+        {language === "Vietnamese" ? "Gần đây" : "Creations"}
       </span>
       <SearchBar setSearch={setSearch} search={search} />
       <Divider className="mt-3" />
