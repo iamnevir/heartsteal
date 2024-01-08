@@ -89,8 +89,8 @@ const ImageCommunityItem = ({
                     className={cn(
                       " relative  sm:w-[290px] sm:h-[390px] w-full cursor-pointer overflow-hidden",
                       image.size === "512x512"
-                        ? "sm:h-[290px] h-[370px]"
-                        : "h-[370px]"
+                        ? "sm:h-[290px] h-[320px]"
+                        : "h-[320px]"
                     )}
                   >
                     <Image
@@ -259,7 +259,10 @@ const ImageCommunityItem = ({
         )}
       >
         <Image
-          className={cn("rounded-md duration-300 ", hover ? "opacity-40" : "")}
+          className={cn(
+            "rounded-md duration-300 ",
+            hover ? "sm:smopacity-40" : ""
+          )}
           alt=""
           onClick={onOpen}
           placeholder="blur"
@@ -312,7 +315,7 @@ const ImageCommunityItem = ({
         </div>
         <div
           className={cn(
-            "  duration-500 absolute text-slate-500 bottom-2 left-2 cursor-pointer justify-start line-clamp-6 max-w-[200px] gap-3 rounded-md  text-xs",
+            "  duration-500 absolute bottom-2 left-2 cursor-pointer justify-start sm:line-clamp-6 line-clamp-4 max-w-[200px] gap-3 rounded-md  text-xs",
             hover
               ? "translate-x-0 opacity-100"
               : "sm:opacity-0 sm:-translate-x-2 sm:pointer-events-none"

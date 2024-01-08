@@ -4,6 +4,7 @@ import {
   Accordion,
   AccordionItem,
   Badge,
+  Chip,
   Link,
   Select,
   SelectItem,
@@ -15,7 +16,9 @@ import {
   Aperture,
   ArrowLeftFromLine,
   Atom,
+  Biohazard,
   BrainCog,
+  CandyCane,
   LucideShieldQuestion,
 } from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
@@ -69,6 +72,10 @@ const SidebarPicker = () => {
             <Atom className={isMobile ? "w-8 h-8" : ""} />
           ) : generation.model === "dall-e-3" ? (
             <BrainCog className={isMobile ? "w-8 h-8" : ""} />
+          ) : generation.model === "dream" ? (
+            <CandyCane className={isMobile ? "w-8 h-8" : ""} />
+          ) : generation.model === "imagine" ? (
+            <Biohazard className={isMobile ? "w-8 h-8" : ""} />
           ) : (
             <Aperture className={isMobile ? "w-8 h-8" : ""} />
           )
@@ -86,6 +93,10 @@ const SidebarPicker = () => {
             generation.setImageInput(false);
             generation.setImageNumber(4);
             generation.setImageSize("1024x1024");
+          } else if (v.target.value === "imagine") {
+            generation.setImageInput(false);
+            generation.setImageNumber(1);
+            generation.setImageSize("512x512");
           }
         }}
         selectionMode="single"
@@ -95,7 +106,7 @@ const SidebarPicker = () => {
           selectorIcon: isMobile && "w-5 h-5",
         }}
         placeholder={
-          language === "Vietnamese" ? "bạn đã thích" : "Select Model"
+          language === "Vietnamese" ? "Chọn mô hình" : "Select Model"
         }
       >
         <SelectItem
@@ -110,12 +121,35 @@ const SidebarPicker = () => {
           classNames={{ title: "sm:text-base text-xl" }}
           startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
           key={"bimg"}
-          value={"Heart Bimg"}
+          value={"Heart Steal V2"}
           className={cn("max-w-xs ")}
         >
           Heart Steal V2
         </SelectItem>
-
+        <SelectItem
+          classNames={{ title: "sm:text-base text-xl" }}
+          startContent={<CandyCane className={isMobile ? "w-8 h-8" : ""} />}
+          key={"dream"}
+          value={"Dream"}
+          className={cn("max-w-xs ")}
+        >
+          Dream
+        </SelectItem>
+        <SelectItem
+          classNames={{ title: "sm:text-base text-xl" }}
+          startContent={<Biohazard className={isMobile ? "w-8 h-8" : ""} />}
+          key={"imagine"}
+          value={"Imagine"}
+          className={cn(
+            "max-w-xs",
+            !u?.isPro && " opacity-50 pointer-events-none"
+          )}
+        >
+          <div className=" flex gap-2 items-center">
+            Imagine
+            <Chip className="bg-gr">Pro</Chip>
+          </div>
+        </SelectItem>
         <SelectItem
           classNames={{ title: "sm:text-base text-xl" }}
           startContent={
@@ -133,13 +167,53 @@ const SidebarPicker = () => {
           key={"dall-e-3"}
           value={"Heart Steal Pro"}
           className={cn(
-            "max-w-xs ",
+            "max-w-xs overflow-auto",
             !u?.isPro && " opacity-50 pointer-events-none"
           )}
         >
-          Heart Steal Pro
+          Heart Steal
+          <span className="gradient-text"> Pro</span>
         </SelectItem>
       </Select>
+      {generation.model === "imagine" && (
+        <Select
+          variant="underlined"
+          label={
+            <div className="flex items-center gap-1">
+              <span>
+                {language === "Vietnamese" ? "Phong cách" : "Imagine Style"}
+              </span>
+              <Tooltip
+                placement="right"
+                size="sm"
+                delay={100}
+                closeDelay={100}
+                content={
+                  <div className="w-40">
+                    {language === "Vietnamese"
+                      ? "Bằng cách chọn phong cách, bạn hướng dẫn AI tạo hình ảnh có tính thẩm mỹ thị giác cụ thể, mặc định là Anime."
+                      : "By choosing a style, you instruct the AI to create images with a specific visual aesthetic, defaulting to Anime."}
+                  </div>
+                }
+              >
+                <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+              </Tooltip>
+            </div>
+          }
+          className="max-w-xs"
+        >
+          <SelectItem key="21" value="Anime">
+            Anime
+          </SelectItem>
+
+          <SelectItem
+            key="29"
+            value={language === "Vietnamese" ? "Chân thực" : "Realistic"}
+          >
+            {language === "Vietnamese" ? "Chân thực" : "Realistic"}
+          </SelectItem>
+        </Select>
+      )}
       <Accordion selectionMode="multiple" defaultExpandedKeys={["2", "1"]}>
         <AccordionItem
           key="1"
@@ -160,7 +234,7 @@ const SidebarPicker = () => {
                   onClick={() => generation.setImageNumber(index)}
                   key={index}
                   className={cn(
-                    "sm:w-10 sm:h-7 w-16 h-10 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
+                    "sm:w-10 sm:h-7 w-14 h-9 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
                     generation.model === "dall-e-3" &&
                       index > 1 &&
                       "pointer-events-none opacity-50",
@@ -168,6 +242,9 @@ const SidebarPicker = () => {
                     !u?.isPro && index > 5 && "pointer-events-none opacity-50",
                     generation.model === "bimg" &&
                       index !== 4 &&
+                      "pointer-events-none opacity-50",
+                    generation.model === "imagine" &&
+                      index !== 1 &&
                       "pointer-events-none opacity-50"
                   )}
                 >
@@ -196,7 +273,7 @@ const SidebarPicker = () => {
                   </div>
                 }
               >
-                <LucideShieldQuestion className="sm:text-xs text-xl" />
+                <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
               </Tooltip>
             </div>
           }
@@ -210,13 +287,16 @@ const SidebarPicker = () => {
                 key={index}
                 onClick={() => generation.setImageSize(item)}
                 className={cn(
-                  "sm:w-20 sm:h-8 w-32 h-10 sm:text-xs text-lg rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
-                  generation.model !== "dall-e-3" && index > 2
-                    ? "pointer-events-none opacity-50"
-                    : "",
-                  generation.imageSize === item ? "border-gr" : "",
+                  "sm:w-20 sm:h-8 w-28 h-9 sm:text-xs text-lg rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
+                  generation.imageSize === item && "border-gr",
+                  generation.model === "dall-e-2" &&
+                    index > 2 &&
+                    "pointer-events-none opacity-50",
                   generation.model === "bimg" &&
                     item !== "1024x1024" &&
+                    "pointer-events-none opacity-50",
+                  generation.model === "imagine" &&
+                    item !== "512x512" &&
                     "pointer-events-none opacity-50"
                 )}
               >
@@ -249,7 +329,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
           </Tooltip>
         </div>
 
@@ -287,7 +367,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
           </Tooltip>
         </div>
 
@@ -320,7 +400,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
           </Tooltip>
         </div>
 

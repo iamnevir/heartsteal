@@ -21,7 +21,6 @@ const ImageGenerationPage = () => {
           "fixed z-[50] w-56 h-full hidden sm:flex flex-col gap-1 items-start overflow-y-auto border-r border-white/65 px-2"
         )}
       >
-        {" "}
         <SidebarPicker />
       </div>
       <SideMenuPicker />

@@ -4,6 +4,7 @@ import CommunityFeedPage from "./(routes)/community-feed/page";
 import { PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/hooks/use-language";
+import ModelDetail from "@/components/model-detail";
 const AIPage = () => {
   const { language } = useLanguage();
   return (
@@ -26,6 +27,7 @@ const AIPage = () => {
             {language === "Vietnamese" ? "Tạo ảnh mới" : "Create New Image"}
           </Button>
         </div>
+        <ModelDetail />
         <CommunityFeedPage />
       </div>
     </>

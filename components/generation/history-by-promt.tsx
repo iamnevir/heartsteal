@@ -21,7 +21,6 @@ import {
   Image,
   MoreHorizontal,
   Move,
-  TrainFront,
   Trash2,
 } from "lucide-react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
@@ -29,13 +28,21 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import ConfirmModal from "../confirm-modal";
+import ImageModal from "./image-modal";
+import { useState } from "react";
 
-const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
+const HistoryByPrompt = ({
+  item,
+  user,
+}: {
+  item: Doc<"image">[];
+  user: Doc<"user">;
+}) => {
   const generation = useGenerateImage();
   const removeAll = useMutation(api.image.removeAll);
   const updateAll = useMutation(api.image.updateAll);
   const { language } = useLanguage();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleDeleteAll = async () => {
     try {
       const ids = item.map((i) => i._id);
@@ -52,8 +59,12 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
           : "Remove Failed."
       );
     }
-    onClose();
   };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [open, setIsOpen] = useState<{
+    open: boolean;
+    index: number;
+  }>({ open: false, index: 0 });
   const handlePublished = async () => {
     try {
       const ids = item.map((i) => i._id);
@@ -88,17 +99,36 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
       );
     }
   };
+
   return (
     <>
+      <ImageModal
+        index={open.index}
+        isPro={user.isPro}
+        onCloseModal={() => setIsOpen({ open: false, index: 0 })}
+        isOpenModal={open.open}
+        items={item}
+      />
       <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}
-        handleDelete={handleDeleteAll}
+        handleDelete={() => {
+          handleDeleteAll();
+          onClose();
+        }}
       />
       <div className=" flex py-2 items-center sm:justify-between text-xs">
-        <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
-          {item[0].prompt}
-        </div>
+        <Tooltip
+          size="sm"
+          delay={100}
+          closeDelay={100}
+          content={<div className=" w-60">{item[0].prompt}</div>}
+        >
+          <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
+            {item[0].prompt}
+          </div>
+        </Tooltip>
+
         <div className=" flex items-center gap-5 sm:justify-normal justify-between sm:w-fit w-full">
           <span>{formatVietnameseDate(item[0]._creationTime)}</span>
           <>
@@ -189,7 +219,13 @@ const HistoryByPrompt = ({ item }: { item: Doc<"image">[] }) => {
       </div>
       <div className=" grid xl:grid-cols-4 lg:grid-cols-3 gap-4 md:grid-cols-2">
         {item.map((i, index) => (
-          <ImageItem image={i} key={index} />
+          <ImageItem
+            isPro={user.isPro}
+            openModal={({ o, i }) => setIsOpen({ open: o, index: i })}
+            index={index}
+            image={i}
+            key={index}
+          />
         ))}
       </div>
     </>

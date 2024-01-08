@@ -23,6 +23,9 @@ const nextConfig = {
       {
         hostname: "files.edgestore.dev",
       },
+      {
+        hostname: "app.leonardo.ai",
+      },
     ],
   },
 };

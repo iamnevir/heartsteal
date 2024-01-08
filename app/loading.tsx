@@ -9,7 +9,6 @@ export default function Loading() {
           src="/logo.png"
           width={200}
           height={200}
-          priority
           alt=""
           className=" rounded-full shadow-md absolute shadow-black z-10"
         />

@@ -36,11 +36,6 @@ const HeroSection = () => {
           ? "Tạo ảnh ngay"
           : "Generation Now"}
       </Button>
-      <span className="text-sm">
-        {language === "Vietnamese"
-          ? "Không yêu cầu thẻ"
-          : "No credit card needed"}
-      </span>
     </div>
   );
 };

@@ -18,9 +18,11 @@ import Image from "next/image";
 const GenerationHistory = ({
   images,
   isLoading,
+  user,
 }: {
   images: Doc<"image">[][];
   isLoading: boolean;
+  user: Doc<"user">;
 }) => {
   const generation = useGenerateImage();
   const date = new Date();
@@ -99,10 +101,10 @@ const GenerationHistory = ({
                 <div
                   key={ind}
                   className={cn(
-                    " rounded-lg relative",
+                    " rounded-lg relative sm:w-[290px] w-[370px]",
                     generation.imageSize === "512x512"
-                      ? "w-[290px] h-[290px]"
-                      : "w-[290px] h-[390px]"
+                      ? "sm:h-[290px] h-[370px]"
+                      : "h-[390px]"
                   )}
                 >
                   <CircularProgress
@@ -116,10 +118,10 @@ const GenerationHistory = ({
                   </span>
                   <Skeleton
                     className={cn(
-                      " rounded-lg absolute",
+                      " rounded-lg absolute sm:w-[290px] w-[370px]",
                       generation.imageSize === "512x512"
-                        ? "w-[290px] h-[290px]"
-                        : "w-[290px] h-[390px]"
+                        ? "sm:h-[290px] h-[370px]"
+                        : "h-[390px]"
                     )}
                   />
                   <Image
@@ -135,7 +137,7 @@ const GenerationHistory = ({
         </>
       )}
       {images.map((item, index) => (
-        <HistoryByPrompt key={index} item={item} />
+        <HistoryByPrompt user={user} key={index} item={item} />
       ))}
     </div>
   );

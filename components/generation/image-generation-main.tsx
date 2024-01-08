@@ -5,6 +5,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Switch,
   Tab,
   Tabs,
   Textarea,
@@ -19,9 +20,10 @@ import { toast } from "sonner";
 import GenerationHistory from "./generation-history";
 import {
   backEndUrl,
+  base64toFile,
   calcCoinGenerate,
   cn,
-  groupObjectsByDate,
+  groupObjectsByPrompt,
   openaiApi,
 } from "@/lib/utils";
 import { usePaginatedQuery } from "convex/react";
@@ -31,6 +33,10 @@ import { useMediaQuery } from "usehooks-ts";
 import ImageEdit from "./image-edit";
 import { useLanguage } from "@/hooks/use-language";
 import { createBingImage } from "@/actions/createBingImage";
+import { useEdgeStore } from "@/lib/edgestore";
+import { dreamGeneration } from "@/actions/dreamGeneration";
+import { imagineGeneration } from "@/actions/imagineGeneration";
+import { saveAs } from "file-saver";
 
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
@@ -44,16 +50,16 @@ const ImageGenerationMain = () => {
     { userId: user?.id! },
     { initialNumItems: 8 }
   );
-  const [isLoading, setIsLoading] = useState(false);
   const { language } = useLanguage();
-  const images = groupObjectsByDate(results);
+  const images = groupObjectsByPrompt(results);
+  const { edgestore } = useEdgeStore();
   const price = calcCoinGenerate(
     generation.imageSize,
     generation.imageNumber,
     generation.isImageInput
   );
   const handleGenerate = async () => {
-    setIsLoading(true);
+    generation.setIsLoading(true);
     try {
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
@@ -155,6 +161,62 @@ const ImageGenerationMain = () => {
             });
           }
         }
+      } else if (generation.model === "dream") {
+        const res = await dreamGeneration(
+          generation.prompt,
+          generation.imageSize,
+          generation.imageNumber
+        );
+        if (res?.artifacts) {
+          for (let i = 0; i < res.artifacts.length; i++) {
+            const file = base64toFile(
+              res?.artifacts ? res?.artifacts[i].base64 : ""
+            );
+            if (file) {
+              const res = await edgestore.publicFiles.upload({
+                file,
+              });
+              if (res.url) {
+                create({
+                  prompt: generation.prompt,
+                  url: res.url,
+                  userId: user?.id!,
+                  isPublish: generation.publicImage,
+                  likes: 0,
+                  model: generation.model,
+                  size: generation.imageSize,
+                });
+              }
+            }
+          }
+        }
+      } else if (generation.model === "imagine") {
+        const res = await axios({
+          method: "post",
+          url: `${backEndUrl}/generate_imagine`,
+          maxBodyLength: Infinity,
+          headers: { "Content-Type": "application/json" },
+          data: {
+            prompt: generation.prompt,
+          },
+        });
+        const file = base64toFile(res.data.image_base64);
+        if (file) {
+          const res = await edgestore.publicFiles.upload({
+            file,
+          });
+          if (res.url) {
+            create({
+              prompt: generation.prompt,
+              url: res.url,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: 0,
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
+        }
       } else {
         const data = {
           model: generation.model,
@@ -203,7 +265,7 @@ const ImageGenerationMain = () => {
           : "Generation Failed."
       );
     } finally {
-      setIsLoading(false);
+      generation.setIsLoading(false);
     }
   };
   return (
@@ -216,7 +278,7 @@ const ImageGenerationMain = () => {
       <div
         className={cn(
           "flex sm:flex-row flex-col items-start gap-3 py-5 sm:pr-10",
-          isLoading ? "pointer-events-none" : ""
+          generation.isLoading ? "pointer-events-none" : ""
         )}
       >
         <div
@@ -227,7 +289,7 @@ const ImageGenerationMain = () => {
         >
           <Dive />
           <Textarea
-            disabled={isLoading}
+            disabled={generation.isLoading}
             className=" w-full"
             classNames={{
               inputWrapper:
@@ -256,7 +318,7 @@ const ImageGenerationMain = () => {
           )}
         >
           <div className="flex items-center justify-center gap-3">
-            {isLoading ? (
+            {generation.isLoading ? (
               <CircularProgress size="sm" aria-label="Loading..." />
             ) : language === "Vietnamese" ? (
               "Tạo ảnh"
@@ -280,6 +342,7 @@ const ImageGenerationMain = () => {
           </div>
         </Button>
       </div>
+
       <Tabs
         variant="underlined"
         classNames={{ cursor: "bg-gr" }}
@@ -297,7 +360,11 @@ const ImageGenerationMain = () => {
               : "Generation History"
           }
         >
-          <GenerationHistory isLoading={isLoading} images={images} />
+          <GenerationHistory
+            user={u!}
+            isLoading={generation.isLoading}
+            images={images}
+          />
           {status === "CanLoadMore" ? (
             <LoadMore loadMore={() => loadMore(isMobile ? 3 : 4)} />
           ) : null}

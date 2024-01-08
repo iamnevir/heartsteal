@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
 import { Link } from "@nextui-org/react";
 import {
+  Biohazard,
   CandyCane,
   Codesandbox,
   Dna,
@@ -61,6 +62,12 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
     {
       icon: Codesandbox,
       title: language === "Vietnamese" ? "Ảnh từ ảnh" : "Image Variation",
+      href: "/ai/generation",
+    },
+    {
+      icon: Biohazard,
+      title:
+        language === "Vietnamese" ? "Tăng chất lượng ảnh" : "Image Upscale",
       href: "/ai/generation",
     },
   ];

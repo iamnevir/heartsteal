@@ -25,6 +25,7 @@
     "bing-chat": "^0.2.3",
     "class-variance-authority": "^0.7.0",
     "convex": "^1.7.1",
+    "embla-carousel-react": "^8.0.0-rc18",
     "file-saver": "^2.0.5",
     "framer-motion": "^10.16.16",
     "lottie-react": "^2.4.0",

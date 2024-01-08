@@ -2,7 +2,7 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { useLanguage } from "@/hooks/use-language";
-import { cn, openaiApi } from "@/lib/utils";
+import { backEndUrl, base64toFile, cn } from "@/lib/utils";
 import { Tooltip, useDisclosure } from "@nextui-org/react";
 import { saveAs } from "file-saver";
 import { useMutation } from "convex/react";
@@ -10,6 +10,7 @@ import {
   ArrowRightLeft,
   Check,
   DownloadCloudIcon,
+  Expand,
   EyeIcon,
   EyeOff,
   Trash2,
@@ -17,15 +18,30 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import axios from "axios";
 import ConfirmModal from "../confirm-modal";
-const ImageItem = ({ image }: { image: Doc<"image"> }) => {
+import axios from "axios";
+import { useEdgeStore } from "@/lib/edgestore";
+import { useUser } from "@clerk/nextjs";
+const ImageItem = ({
+  index,
+  image,
+  openModal,
+  isPro,
+}: {
+  index: number;
+  image: Doc<"image">;
+  openModal: ({ o, i }: { o: boolean; i: number }) => void;
+  isPro?: boolean;
+}) => {
+  const { user } = useUser();
   const remove = useMutation(api.image.remove);
+  const create = useMutation(api.image.create);
   const update = useMutation(api.image.update);
   const generation = useGenerateImage();
   const [hover, setHover] = useState(false);
   const { language } = useLanguage();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { edgestore } = useEdgeStore();
   const handleDelete = async () => {
     try {
       await remove({ id: image._id });
@@ -64,6 +80,51 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
     } else {
     }
   };
+  const handleUpscale = async (image: Doc<"image">) => {
+    if (!isPro) {
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy nâng cấp Premium để sử dụng."
+          : "Upgrade to Professor to use."
+      );
+
+      return;
+    }
+    generation.setIsLoading(true);
+
+    try {
+      const res = await axios({
+        method: "post",
+        url: `${backEndUrl}/imagine_upscale`,
+        maxBodyLength: Infinity,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          url: image.url,
+        },
+      });
+      const file = base64toFile(res.data.image_base64);
+      if (file) {
+        const imageRes = await edgestore.publicFiles.upload({
+          file,
+        });
+        if (imageRes.url) {
+          create({
+            prompt: `${image._id}-upscale`,
+            url: imageRes.url,
+            userId: user?.id!,
+            isPublish: image.isPublish,
+            likes: 0,
+            model: "imagine",
+            size: image.size === "512x512" ? "1024x1024" : "2048x2048",
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      generation.setIsLoading(false);
+    }
+  };
   return (
     <>
       <ConfirmModal
@@ -71,6 +132,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
         onClose={onClose}
         handleDelete={handleDelete}
       />
+
       <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -85,6 +147,7 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
           placeholder="blur"
           blurDataURL="/placeholder.png"
           src={image.url}
+          onClick={() => openModal({ o: true, i: index })}
           sizes="(max-width: 768px) 100vw,66vw"
           width={512}
           height={512}
@@ -117,6 +180,24 @@ const ImageItem = ({ image }: { image: Doc<"image"> }) => {
             ) : (
               <EyeOff className="w-4 h-4 group-hover:rotate-180 duration-300" />
             )}
+          </div>
+        </Tooltip>
+        <Tooltip
+          size="sm"
+          delay={100}
+          closeDelay={100}
+          content={language === "Vietnamese" ? "Tăng độ phân giải" : "Upscale"}
+        >
+          <div
+            onClick={() => handleUpscale(image)}
+            className={cn(
+              " absolute bottom-2 right-28 mr-4 w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full",
+              hover
+                ? "opacity-100 translate-x-0"
+                : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
+            )}
+          >
+            <Expand className="w-4 h-4" />
           </div>
         </Tooltip>
         <Tooltip

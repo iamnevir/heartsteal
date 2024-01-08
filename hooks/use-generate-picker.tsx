@@ -13,6 +13,8 @@ type GenerateImage = {
   isEdit: boolean;
   maskUrl: string;
   maskInput: string;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   setMaskInput: (maskInput: string) => void;
   setMaskUrl: (maskUrl: string) => void;
   setEdit: (isEdit: boolean) => void;
@@ -40,6 +42,8 @@ export const useGenerateImage = create<GenerateImage>((set, get) => ({
   isEdit: false,
   maskUrl: "",
   maskInput: "",
+  isLoading: false,
+  setIsLoading: (isLoading: boolean) => set({ isLoading }),
   setMaskInput: (maskInput: string) => set({ maskInput }),
   setMaskUrl: (maskUrl: string) => set({ maskUrl }),
   setEdit: (isEdit: boolean) => set({ isEdit }),
