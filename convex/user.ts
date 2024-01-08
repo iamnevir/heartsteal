@@ -109,7 +109,6 @@ export const resetCoin = mutation({
     if (!users) {
       return;
     }
-
     for (let i = 0; i < users.length; i++) {
       await ctx.db.patch(users[i]._id, {
         coin: 150,

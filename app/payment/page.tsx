@@ -20,13 +20,13 @@ const PayPage = () => {
   const updateOrder = useMutation(api.order.update);
   const updateUser = useMutation(api.user.update);
   const router = useRouter();
-  const language = useLanguage();
+  const { language } = useLanguage();
   const payCard =
-    language.language !== "Vietnamese"
+    language !== "Vietnamese"
       ? [
           {
             title: "Free",
-            price: "0$",
+            price: 0,
             subPrice: "Forever",
             sub: {
               title: "150 daily tokens",
@@ -41,9 +41,26 @@ const PayPage = () => {
             },
           },
           {
+            title: "Month",
+            price: 99,
+            salePrice: 199,
+            subPrice: "Month",
+            sub: {
+              title: "8500 tokens",
+              benefits: [
+                { b: true, t: "8500 fast tokens" },
+                { b: true, t: "8500 rate image generation jobs" },
+                { b: true, t: "8500 additional pending jobs" },
+                { b: true, t: "8500 model training" },
+                { b: true, t: "8500 model retention" },
+                { b: true, t: "8500 Concurrency" },
+              ],
+            },
+          },
+          {
             title: "Professor",
-            price: "799$",
-            salePrice: "999$",
+            price: 799,
+            salePrice: 999,
             subPrice: "Forever",
             sub: {
               title: "Unlimied tokens",
@@ -61,7 +78,7 @@ const PayPage = () => {
       : [
           {
             title: "Miễn phí",
-            price: "0đ",
+            price: 0,
             subPrice: "Vĩnh viễn",
             sub: {
               title: "150 tokens một ngày",
@@ -82,9 +99,29 @@ const PayPage = () => {
             },
           },
           {
+            title: "Pro Tháng",
+            price: 10,
+            salePrice: 19,
+            subPrice: "Tháng",
+            sub: {
+              title: "Tokens không giới hạn",
+              benefits: [
+                { b: true, t: "Tokens nhanh không giới hạn" },
+                { b: true, t: "Công việc tạo hình ảnh hiếm không giới hạn" },
+                {
+                  b: true,
+                  t: "Công việc đang chờ xử lý bổ sung không giới hạn",
+                },
+                { b: true, t: "Đào tạo mô hình không giới hạn" },
+                { b: true, t: "Lưu giữ mô hình không giới hạn" },
+                { b: true, t: "Đồng thời không giới hạn" },
+              ],
+            },
+          },
+          {
             title: "Pro",
-            price: "9k",
-            salePrice: "10k",
+            price: 49,
+            salePrice: 59,
             subPrice: "Vĩnh viễn",
             sub: {
               title: "Tokens không giới hạn",
@@ -108,11 +145,10 @@ const PayPage = () => {
         try {
           const isPay = searchParams.get("vnp_ResponseCode") === "00";
           const bank = searchParams.get("vnp_BankCode");
-          let amount = 10000;
+          let amount = 0;
           if (searchParams.get("vnp_Amount")) {
             amount = parseInt(searchParams.get("vnp_Amount")!) / 100;
           }
-
           if (isPay) {
             updateOrder({
               id: order._id,
@@ -121,8 +157,8 @@ const PayPage = () => {
               bank: bank ? bank : "",
             });
             updateUser({ id: u?._id!, isPro: true });
-            toast.success("Thanh toán thành công!");
           }
+          toast.success("Thanh toán thành công!");
           router.push("/ai");
         } catch (error) {
           toast.success("Thanh toán không thành công!");
@@ -131,8 +167,8 @@ const PayPage = () => {
     }
   }, [searchParams, order]);
   if (order?.isPay) {
-    return null;
     router.push("/ai");
+    return null;
   }
   return (
     <div className=" w-full h-full flex items-center flex-col">
@@ -141,23 +177,21 @@ const PayPage = () => {
         className=" text-sm font-semibold absolute left-7 cursor-pointer top-7 flex items-center gap-3"
       >
         <ArrowLeft size="17" className=" text-slate-400" />
-        {language.language === "Vietnamese"
-          ? "Trở về HeartSteal"
-          : "Back to HeartSteal"}
+        {language === "Vietnamese" ? "Trở về HeartSteal" : "Back to HeartSteal"}
       </div>
       <span className=" text-2xl font-semibold sm:mt-7 mt-14 text-center">
-        {language.language === "Vietnamese"
+        {language === "Vietnamese"
           ? "Mở khóa sức mạnh của HeartSteal.Ai"
           : "Unlock the power of HeartSteal.Ai"}
       </span>
       <span className=" text-sm text-slate-400 mt-2">
-        {language.language === "Vietnamese"
+        {language === "Vietnamese"
           ? "Chọn một kế hoạch phù hợp với nhu cầu của bạn"
           : "Choose a plan tailored to your needs"}
       </span>
       <div className="flex sm:flex-row flex-col items-start gap-10 mt-10 justify-center sm:px-0 px-3">
         {payCard.map((item, index) => (
-          <Card key={index} classNames={{ base: "sm:h-[70dvh]" }}>
+          <Card key={index} classNames={{ base: "sm:h-[75dvh]" }}>
             <CardBody className=" items-center sm:max-w-60  p-5 h-full gap-2">
               <span className=" sm:text-xl text-3xl gradient-text">
                 {item.title}
@@ -172,18 +206,24 @@ const PayPage = () => {
                       (item.title === "Pro" && "gradient-text")
                   )}
                 >
-                  <span className=" line-through text-slate-500">
-                    {item.salePrice}
-                  </span>{" "}
-                  {item.price}
+                  {item.salePrice && (
+                    <span className=" line-through text-slate-500">
+                      {item.salePrice}
+                      {language === "Vietnamese" ? "k" : "$"}{" "}
+                    </span>
+                  )}
+                  {item.price}k
                 </span>{" "}
-                {language.language === "Vietnamese" ? "/tháng" : "/month"}
+                {item.title !== "Pro"
+                  ? language === "Vietnamese"
+                    ? "/tháng"
+                    : "/month"
+                  : ""}
               </span>
               <span className=" sm:text-sm text-lg text-slate-500">
                 {item.subPrice}
               </span>
               <CheckOutButton item={item} userId={u?._id!} />
-
               <Card className=" mt-auto">
                 <CardHeader>{item.sub.title}</CardHeader>
                 <CardBody className=" gap-4">

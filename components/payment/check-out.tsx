@@ -9,7 +9,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 
 const CheckOutButton = ({
   userId,
@@ -18,7 +17,7 @@ const CheckOutButton = ({
   userId: Id<"user">;
   item: {
     title: string;
-    price: string;
+    price: number;
     subPrice: string;
   };
 }) => {
@@ -26,7 +25,7 @@ const CheckOutButton = ({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      {item.price == "0đ" || item.price === "0$" ? null : (
+      {item.price === 0 ? null : (
         <Button
           onPress={onOpen}
           className="bg-gr sm:text-sm text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"
@@ -51,7 +50,7 @@ const CheckOutButton = ({
             </Button>
             <Button
               onClick={async () => {
-                const url = await createVNPay(userId);
+                const url = await createVNPay(userId, item.price * 1000);
                 window.location.href = url!;
               }}
               className="bg-gr sm:text-lg font-semibold text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"

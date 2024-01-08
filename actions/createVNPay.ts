@@ -5,7 +5,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import querystring from "qs";
 import crypto from "crypto";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-export const createVNPay = async (userId: Id<"user">) => {
+export const createVNPay = async (userId: Id<"user">, price: number) => {
   const order = await convex.mutation(api.order.create, {
     userId,
     isPay: false,
@@ -24,10 +24,9 @@ export const createVNPay = async (userId: Id<"user">) => {
   vnp_Params["vnp_Locale"] = "vn";
   vnp_Params["vnp_CurrCode"] = "VND";
   vnp_Params["vnp_TxnRef"] = order;
-  vnp_Params["vnp_OrderInfo"] =
-    "Thanh toán cho HeartSteal Professor 10.000 VND";
+  vnp_Params["vnp_OrderInfo"] = "Thanh toán cho HeartSteal Professor";
   vnp_Params["vnp_OrderType"] = "other";
-  vnp_Params["vnp_Amount"] = 1000000;
+  vnp_Params["vnp_Amount"] = price * 100;
   vnp_Params["vnp_ReturnUrl"] = returnUrl;
   vnp_Params["vnp_IpAddr"] = "127.0.0.1";
   vnp_Params["vnp_CreateDate"] = createDate;

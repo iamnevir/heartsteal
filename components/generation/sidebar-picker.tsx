@@ -177,6 +177,7 @@ const SidebarPicker = () => {
       </Select>
       {generation.model === "imagine" && (
         <Select
+          onChange={(v) => generation.setStyle(v.target.value)}
           variant="underlined"
           label={
             <div className="flex items-center gap-1">

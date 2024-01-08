@@ -194,6 +194,7 @@ const ImageGenerationMain = () => {
           headers: { "Content-Type": "application/json" },
           data: {
             prompt: generation.prompt,
+            style_id: generation.style,
           },
         });
         const file = base64toFile(res.data.image_base64);
