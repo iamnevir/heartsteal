@@ -5,7 +5,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Switch,
   Tab,
   Tabs,
   Textarea,
@@ -27,7 +26,6 @@ import {
   openaiApi,
 } from "@/lib/utils";
 import { usePaginatedQuery } from "convex/react";
-import { useState } from "react";
 import LoadMore from "../load-more";
 import { useMediaQuery } from "usehooks-ts";
 import ImageEdit from "./image-edit";
@@ -35,8 +33,6 @@ import { useLanguage } from "@/hooks/use-language";
 import { createBingImage } from "@/actions/createBingImage";
 import { useEdgeStore } from "@/lib/edgestore";
 import { dreamGeneration } from "@/actions/dreamGeneration";
-import { imagineGeneration } from "@/actions/imagineGeneration";
-import { saveAs } from "file-saver";
 
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
