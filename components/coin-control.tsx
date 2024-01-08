@@ -1,6 +1,6 @@
 import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
-import { cn, timeResetCoin } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import { useQuery } from "convex/react";
 import { Gem, LucideShieldQuestion } from "lucide-react";
