@@ -30,7 +30,6 @@ import LoadMore from "../load-more";
 import { useMediaQuery } from "usehooks-ts";
 import ImageEdit from "./image-edit";
 import { useLanguage } from "@/hooks/use-language";
-import { createBingImage } from "@/actions/createBingImage";
 import { useEdgeStore } from "@/lib/edgestore";
 import { dreamGeneration } from "@/actions/dreamGeneration";
 
@@ -136,26 +135,34 @@ const ImageGenerationMain = () => {
           });
         }
       } else if (generation.model === "bimg") {
-        const images = await createBingImage(generation.prompt);
-        if (images.length > 0) {
-          const urls = images.slice(0, -1);
-          for (let index = 0; index < urls?.length!; index++) {
-            create({
-              prompt: generation.prompt,
-              url: urls![index],
-              userId: user?.id!,
-              isPublish: generation.publicImage,
-              likes: 0,
-              model: generation.model,
-              size: generation.imageSize,
-            });
-          }
-          if (!u?.isPro) {
-            update({
-              id: u?._id!,
-              coin: u?.coin! - price,
-            });
-          }
+        const res = await axios({
+          method: "post",
+          url: `${backEndUrl}/bing_gen`,
+          maxBodyLength: Infinity,
+          headers: { "Content-Type": "application/json" },
+          data: {
+            prompt: generation.prompt,
+          },
+        });
+        const urls: any[] = res.data.images.filter(
+          (url: string) => !url.includes(".svg")
+        );
+        for (let index = 0; index < urls?.length!; index++) {
+          create({
+            prompt: generation.prompt,
+            url: urls![index],
+            userId: user?.id!,
+            isPublish: generation.publicImage,
+            likes: 0,
+            model: generation.model,
+            size: generation.imageSize,
+          });
+        }
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
         }
       } else if (generation.model === "dream") {
         const res = await dreamGeneration(

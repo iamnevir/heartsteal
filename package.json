@@ -21,7 +21,6 @@
     "@react-three/fiber": "^8.15.12",
     "@studio-freight/lenis": "^1.0.33",
     "axios": "^1.6.3",
-    "bimg-new": "^0.3.0",
     "bing-chat": "^0.2.3",
     "class-variance-authority": "^0.7.0",
     "convex": "^1.7.1",
