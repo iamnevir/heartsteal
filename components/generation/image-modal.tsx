@@ -23,6 +23,7 @@ import {
   Expand,
   EyeIcon,
   EyeOff,
+  ImageOff,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
@@ -33,12 +34,7 @@ import { toast } from "sonner";
 import saveAs from "file-saver";
 import ConfirmModal from "../confirm-modal";
 import { useState } from "react";
-import {
-  arrayBufferToFile,
-  backEndUrl,
-  base64toFile,
-  urlToFile,
-} from "@/lib/utils";
+import { backEndUrl, base64toFile } from "@/lib/utils";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
@@ -103,10 +99,7 @@ const ImageModal = ({
     }
   };
   const downloadImage = async (image: Doc<"image">) => {
-    if (image.model === "bimg") {
-      saveAs(image.url, "heartsteal.png");
-    } else {
-    }
+    saveAs(image.url, "heartsteal.png");
   };
   const handleUpscale = async (image: Doc<"image">) => {
     onCloseModal();
@@ -144,6 +137,50 @@ const ImageModal = ({
             likes: 0,
             model: "imagine",
             size: image.size === "512x512" ? "1024x1024" : "2048x2048",
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      generation.setIsLoading(false);
+    }
+  };
+  const handleRemoveBG = async (image: Doc<"image">) => {
+    if (!isPro) {
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy nâng cấp Premium để sử dụng."
+          : "Upgrade to Professor to use."
+      );
+
+      return;
+    }
+    generation.setIsLoading(true);
+    try {
+      const res = await axios({
+        method: "post",
+        url: `${backEndUrl}/rm_bg`,
+        maxBodyLength: Infinity,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          url: image.url,
+        },
+      });
+      const file = base64toFile(res.data.image_base64);
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+        });
+        if (res.url) {
+          create({
+            prompt: `${image._id} remove background`,
+            url: res.url,
+            userId: user?.id!,
+            isPublish: image.isPublish,
+            likes: 0,
+            model: image.model,
+            size: image.size,
           });
         }
       }
@@ -200,6 +237,25 @@ const ImageModal = ({
                         />
                       </CardBody>
                       <CardFooter className=" gap-3 justify-end">
+                        <Tooltip
+                          size="sm"
+                          delay={100}
+                          closeDelay={100}
+                          content={
+                            language === "Vietnamese"
+                              ? "Xóa nền"
+                              : "Remove Background"
+                          }
+                        >
+                          <div
+                            onClick={() => handleRemoveBG(item)}
+                            className={cn(
+                              " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full"
+                            )}
+                          >
+                            <ImageOff className="w-4 h-4" />
+                          </div>
+                        </Tooltip>
                         <Tooltip
                           size="sm"
                           delay={100}
@@ -276,7 +332,7 @@ const ImageModal = ({
                               setIsOpen({ open: true, id: item._id })
                             }
                             className={cn(
-                              " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg  rounded-full"
+                              " w-8 h-8 flex hover:scale-105 items-center duration-500 cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg  rounded-full"
                             )}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -295,7 +351,7 @@ const ImageModal = ({
                           <div
                             onClick={() => generation.setInputUrl(item.url)}
                             className={cn(
-                              " w-8 h-8 flex hover:scale-105 items-center duration-700 cursor-pointer justify-cente bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full"
+                              " w-8 h-8 flex hover:scale-105 items-center duration-500 cursor-pointer justify-cente bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full"
                             )}
                           >
                             <ArrowRightLeft className="w-4 h-4 ml-2" />

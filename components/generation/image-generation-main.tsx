@@ -186,6 +186,12 @@ const ImageGenerationMain = () => {
             }
           }
         }
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
+        }
       } else if (generation.model === "imagine") {
         const res = await axios({
           method: "post",
@@ -213,6 +219,63 @@ const ImageGenerationMain = () => {
               size: generation.imageSize,
             });
           }
+        }
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
+        }
+      } else if (generation.model === "pro") {
+        generation.setIsLoading(true);
+        try {
+          const generateI = async (model: number) => {
+            const response = await axios({
+              method: "post",
+              url: `${backEndUrl}/img_gen`,
+              maxBodyLength: Infinity,
+              headers: { "Content-Type": "application/json" },
+              data: {
+                prompt: generation.prompt,
+                model,
+              },
+            });
+            const file = base64toFile(response.data.image_base64);
+            if (!file) {
+              return null;
+            }
+            const res = await edgestore.publicFiles.upload({
+              file,
+            });
+            if (!res.url) {
+              return null;
+            }
+            return res.url;
+          };
+          const promises = [];
+          for (let index = 0; index < generation.imageNumber; index++) {
+            promises.push(generateI(Math.round(Math.random())));
+          }
+          const results = await Promise.all(promises);
+          results.forEach((result) => {
+            if (result !== null) {
+              create({
+                prompt: generation.prompt,
+                url: result,
+                userId: user?.id!,
+                isPublish: generation.publicImage,
+                likes: 0,
+                model: generation.model,
+                size: generation.imageSize,
+              });
+            } else {
+              console.error("One or more calls to generateI failed.");
+            }
+          });
+        } catch (error) {
+          console.log(error);
+        } finally {
+          generation.setIsLoading(false);
         }
       } else {
         const data = {

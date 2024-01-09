@@ -67,10 +67,7 @@ const ImageCommunityItem = ({
     } catch (error) {}
   };
   const downloadImage = async () => {
-    if (image.model === "bimg") {
-      saveAs(image.url, "heartsteal.png");
-    } else {
-    }
+    saveAs(image.url, "heartsteal.png");
   };
   return (
     <>

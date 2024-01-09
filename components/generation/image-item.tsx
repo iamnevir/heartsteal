@@ -13,6 +13,7 @@ import {
   Expand,
   EyeIcon,
   EyeOff,
+  ImageOff,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
@@ -75,10 +76,7 @@ const ImageItem = ({
     }
   };
   const downloadImage = async () => {
-    if (image.model === "bimg") {
-      saveAs(image.url, "heartsteal.png");
-    } else {
-    }
+    saveAs(image.url, "heartsteal.png");
   };
   const handleUpscale = async (image: Doc<"image">) => {
     if (!isPro) {
@@ -116,6 +114,50 @@ const ImageItem = ({
             likes: 0,
             model: "imagine",
             size: image.size === "512x512" ? "1024x1024" : "2048x2048",
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      generation.setIsLoading(false);
+    }
+  };
+  const handleRemoveBG = async (image: Doc<"image">) => {
+    if (!isPro) {
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy nâng cấp Premium để sử dụng."
+          : "Upgrade to Professor to use."
+      );
+
+      return;
+    }
+    generation.setIsLoading(true);
+    try {
+      const res = await axios({
+        method: "post",
+        url: `${backEndUrl}/rm_bg`,
+        maxBodyLength: Infinity,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          url: image.url,
+        },
+      });
+      const file = base64toFile(res.data.image_base64);
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+        });
+        if (res.url) {
+          create({
+            prompt: `${image._id} remove background`,
+            url: res.url,
+            userId: user?.id!,
+            isPublish: image.isPublish,
+            likes: 0,
+            model: image.model,
+            size: image.size,
           });
         }
       }
@@ -186,6 +228,24 @@ const ImageItem = ({
           size="sm"
           delay={100}
           closeDelay={100}
+          content={language === "Vietnamese" ? "Xóa nền" : "Remove Background"}
+        >
+          <div
+            onClick={() => handleRemoveBG(image)}
+            className={cn(
+              " absolute bottom-2 right-36 mr-5 w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full",
+              hover
+                ? "opacity-100 translate-x-0"
+                : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
+            )}
+          >
+            <ImageOff className="w-4 h-4" />
+          </div>
+        </Tooltip>
+        <Tooltip
+          size="sm"
+          delay={100}
+          closeDelay={100}
           content={language === "Vietnamese" ? "Tăng độ phân giải" : "Upscale"}
         >
           <div
@@ -227,7 +287,7 @@ const ImageItem = ({
           <div
             onClick={onOpen}
             className={cn(
-              " w-8 h-8 flex hover:scale-105 items-center duration-300 cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
+              " w-8 h-8 flex hover:scale-105 items-center duration-500 cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 bottom-2 rounded-full",
               hover
                 ? "opacity-100 translate-x-0"
                 : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"
@@ -249,7 +309,7 @@ const ImageItem = ({
           <div
             onClick={() => generation.setInputUrl(image.url)}
             className={cn(
-              " w-8 h-8 flex hover:scale-105 items-center duration-700 cursor-pointer justify-cente bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-20 mr-2 bottom-2 rounded-full",
+              " w-8 h-8 flex hover:scale-105 items-center duration-500 cursor-pointer justify-cente bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-20 mr-2 bottom-2 rounded-full",
               hover
                 ? "opacity-100 translate-x-0"
                 : "sm:opacity-0 sm:translate-x-5 sm:pointer-events-none"

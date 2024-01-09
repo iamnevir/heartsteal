@@ -11,33 +11,33 @@ const Dive = () => {
   const { language } = useLanguage();
   const handleRandomPrompt = async () => {
     setLoading(true);
-    const prompt = [
-      { role: "user", content: "Generate a random prompt for dall-e-2" },
-    ];
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          messages: prompt,
-          model: "gpt-3.5-turbo",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${openaiApi}`,
-          },
-        }
-      );
-
-      const generatedPrompt = response.data.choices[0].message.content;
-      generation.setPrompt(
-        generatedPrompt.substring(1, generatedPrompt.length - 1)
-      );
-      toast.success(
-        language === "Vietnamese"
-          ? "Tạo lệnh ngẫu nhiên thành công."
-          : "Generate random prompt successfully."
-      );
+      if (generation.prompt === "") {
+        toast.error(
+          language === "Vietnamese" ? "Nhập gì đó..." : "Type somethings..."
+        );
+      } else {
+        const response = await fetch(
+          "https://api-inference.huggingface.co/models/Ar4ikov/gpt2-650k-stable-diffusion-prompt-generator",
+          {
+            headers: {
+              Authorization: `Bearer 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`,
+            },
+            method: "POST",
+            body: JSON.stringify({
+              inputs: generation.prompt,
+            }),
+          }
+        );
+        const result = await response.json();
+        generation.setPrompt(result[0].generated_text);
+        console.log(result[0].generated_text);
+        toast.success(
+          language === "Vietnamese"
+            ? "Tạo lệnh ngẫu nhiên thành công."
+            : "Generate random prompt successfully."
+        );
+      }
     } catch (error) {
       toast.error(
         language === "Vietnamese"

@@ -108,13 +108,3 @@ export function base64toFile(base64: string): File {
 
   return new File([blob], "hearsteal.png", { type: "image/png" });
 }
-export async function urlToFile(url: string): Promise<File> {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  const file = new File([blob], "heart.png", { type: blob.type });
-  return file;
-}
-export function arrayBufferToFile(arrayBuffer: ArrayBuffer) {
-  const blob = new Blob([arrayBuffer], { type: "image/jpeg" });
-  return new File([blob], "hearsteal.png", { type: "image/png" });
-}

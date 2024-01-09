@@ -70,7 +70,7 @@ const SidebarPicker = () => {
         startContent={
           generation.model === "dall-e-2" ? (
             <Atom className={isMobile ? "w-8 h-8" : ""} />
-          ) : generation.model === "dall-e-3" ? (
+          ) : generation.model === "pro" ? (
             <BrainCog className={isMobile ? "w-8 h-8" : ""} />
           ) : generation.model === "dream" ? (
             <CandyCane className={isMobile ? "w-8 h-8" : ""} />
@@ -84,7 +84,7 @@ const SidebarPicker = () => {
         variant="underlined"
         onChange={(v) => {
           generation.setModel(v.target.value);
-          if (v.target.value === "dall-e-3") {
+          if (v.target.value === "pro") {
             generation.setImageNumber(1);
             generation.setHd(false);
             generation.setNatural(false);
@@ -145,10 +145,7 @@ const SidebarPicker = () => {
             !u?.isPro && " opacity-50 pointer-events-none"
           )}
         >
-          <div className=" flex gap-2 items-center">
-            Imagine
-            <Chip className="bg-gr">Pro</Chip>
-          </div>
+          Imagine
         </SelectItem>
         <SelectItem
           classNames={{ title: "sm:text-base text-xl" }}
@@ -164,15 +161,14 @@ const SidebarPicker = () => {
               <BrainCog className={isMobile ? "w-8 h-8" : ""} />
             </Tooltip>
           }
-          key={"dall-e-3"}
+          key={"pro"}
           value={"Heart Steal Pro"}
           className={cn(
             "max-w-xs overflow-auto",
             !u?.isPro && " opacity-50 pointer-events-none"
           )}
         >
-          Heart Steal
-          <span className="gradient-text"> Pro</span>
+          Heart Steal Pro
         </SelectItem>
       </Select>
       {generation.model === "imagine" && (
@@ -236,9 +232,7 @@ const SidebarPicker = () => {
                   key={index}
                   className={cn(
                     "sm:w-10 sm:h-7 w-14 h-9 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
-                    generation.model === "dall-e-3" &&
-                      index > 1 &&
-                      "pointer-events-none opacity-50",
+
                     generation.imageNumber === index ? "border-gr" : "",
                     !u?.isPro && index > 5 && "pointer-events-none opacity-50",
                     generation.model === "bimg" &&
@@ -310,9 +304,7 @@ const SidebarPicker = () => {
       <div
         className={cn(
           " flex items-center gap-2 w-full pb-2",
-          generation.model !== "dall-e-3"
-            ? "opacity-50 pointer-events-none"
-            : ""
+          generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
         )}
       >
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
@@ -325,8 +317,8 @@ const SidebarPicker = () => {
             content={
               <div className=" w-40">
                 {language === "Vietnamese"
-                  ? "Nếu bật, ảnh của bạn sẽ trông rực rỡ, nếu không ảnh sẽ trông tự nhiên hơn. Thông số này chỉ được hỗ trợ cho Dall-E-3."
-                  : " If it&apos;s on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Dall-E-3."}
+                  ? "Nếu bật, ảnh của bạn sẽ trông rực rỡ, nếu không ảnh sẽ trông tự nhiên hơn. Thông số này chỉ được hỗ trợ cho Heart Steal Pro."
+                  : " If it&apos;s on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Heart Steal Pro."}
               </div>
             }
           >
@@ -348,9 +340,7 @@ const SidebarPicker = () => {
       <div
         className={cn(
           " flex items-center gap-2 w-full pb-2 ",
-          generation.model !== "dall-e-3"
-            ? "opacity-50 pointer-events-none"
-            : ""
+          generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
         )}
       >
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
@@ -363,8 +353,8 @@ const SidebarPicker = () => {
             content={
               <div className=" w-40">
                 {language === "Vietnamese"
-                  ? "HD tạo ra hình ảnh có độ chi tiết tốt hơn và tính nhất quán cao hơn trên toàn bộ hình ảnh. Thông số này chỉ được hỗ trợ cho Dall-E-3."
-                  : "HD creates images with finer details and greater consistency across the image. This param is only supported for Dall-E-3."}
+                  ? "HD tạo ra hình ảnh có độ chi tiết tốt hơn và tính nhất quán cao hơn trên toàn bộ hình ảnh. Thông số này chỉ được hỗ trợ cho Heart Steal Pro."
+                  : "HD creates images with finer details and greater consistency across the image. This param is only supported for Heart Steal Pro."}
               </div>
             }
           >
