@@ -177,10 +177,20 @@ const HistoryByPrompt = ({
                   <Atom className="w-4 h-4" />
                   <span>Heart Steal</span>
                 </>
-              ) : item[0].model === "dall-e-3" ? (
+              ) : item[0].model === "pro" ? (
                 <>
                   <BrainCog className="w-4 h-4" />
                   <span>Heart Steal Pro</span>
+                </>
+              ) : item[0].model === "imagine" ? (
+                <>
+                  <BrainCog className="w-4 h-4" />
+                  <span>Imagine</span>
+                </>
+              ) : item[0].model === "dream" ? (
+                <>
+                  <BrainCog className="w-4 h-4" />
+                  <span>Dream</span>
                 </>
               ) : (
                 <>
