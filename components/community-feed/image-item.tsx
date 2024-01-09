@@ -15,6 +15,9 @@ import {
 import { motion } from "framer-motion";
 import { useMutation, useQuery } from "convex/react";
 import {
+  Aperture,
+  Atom,
+  BrainCog,
   Check,
   Copy,
   Download,
@@ -215,7 +218,36 @@ const ImageCommunityItem = ({
                       <span className=" text-xs text-gray-600">
                         {language === "Vietnamese" ? "Mô hình" : "Model"}
                       </span>
-                      <span className="text-sm">{image.model}</span>
+                      <span className="text-sm flex items-center gap-1">
+                        {" "}
+                        {image.model === "dall-e-2" ? (
+                          <>
+                            {" "}
+                            <Atom className="w-4 h-4" />
+                            <span>Heart Steal</span>
+                          </>
+                        ) : image.model === "pro" ? (
+                          <>
+                            <BrainCog className="w-4 h-4" />
+                            <span>Heart Steal Pro</span>
+                          </>
+                        ) : image.model === "imagine" ? (
+                          <>
+                            <BrainCog className="w-4 h-4" />
+                            <span>Imagine</span>
+                          </>
+                        ) : image.model === "dream" ? (
+                          <>
+                            <BrainCog className="w-4 h-4" />
+                            <span>Dream</span>
+                          </>
+                        ) : (
+                          <>
+                            <Aperture className="w-4 h-4" />
+                            <span>Heart Steal V2</span>
+                          </>
+                        )}
+                      </span>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
