@@ -79,7 +79,7 @@ const ModelDetail = () => {
             <CarouselItem
               onClick={() => router.push("/ai/generation")}
               key={index}
-              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 cursor-pointer"
+              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 cursor-pointer p-3"
             >
               <Card key={index}>
                 <CardBody>
@@ -98,7 +98,7 @@ const ModelDetail = () => {
                 <CardFooter>
                   <div className=" flex flex-col gap-2">
                     <span className=" text-sm font-semibold">{item.name}</span>
-                    <span className=" text-xs text-white/50">
+                    <span className=" text-xs dark:text-white/50">
                       {item.des}
                     </span>{" "}
                     <Chip className="bg-gr ml-auto">{item.badge}</Chip>

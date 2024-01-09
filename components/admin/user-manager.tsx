@@ -127,7 +127,7 @@ const UserManager = ({ userId }: { userId: string }) => {
               <div className=" flex items-center p-5 gap-3">
                 <Users className="w-20 h-20" />
                 <div className="flex flex-col">
-                  <span className="text-xl text-white/50">
+                  <span className="text-xl dark:text-white/50">
                     {language === "Vietnamese"
                       ? "Số lượng người dùng"
                       : "Total User"}
@@ -140,7 +140,7 @@ const UserManager = ({ userId }: { userId: string }) => {
               <div className=" flex items-center p-5 gap-3">
                 <UserCheck2 className="w-20 h-20" />
                 <div className="flex flex-col">
-                  <span className="text-xl text-white/50">
+                  <span className="text-xl dark:text-white/50">
                     {language === "Vietnamese"
                       ? "Người dùng vip"
                       : "Premium User"}

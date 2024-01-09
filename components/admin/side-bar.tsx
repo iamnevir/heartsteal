@@ -98,9 +98,12 @@ const Sidebar = ({ userId }: { userId: string }) => {
           )}
         >
           <LogOut
-            className={cn("ml-5 text-red-900", isMobile ? "w-8 h-8" : "")}
+            className={cn(
+              "ml-5 dark:text-red-900 text-red-500",
+              isMobile ? "w-8 h-8" : ""
+            )}
           />
-          <span className="text-red-900">
+          <span className="dark:text-red-900 text-red-500">
             {language === "Vietnamese" ? "Đăng xuất" : "Logout"}
           </span>
         </div>

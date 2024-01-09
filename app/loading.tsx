@@ -10,7 +10,7 @@ export default function Loading() {
           width={200}
           height={200}
           alt=""
-          className=" rounded-full shadow-md absolute shadow-black z-10"
+          className=" rounded-full absolute z-10"
         />
       </div>
     </div>

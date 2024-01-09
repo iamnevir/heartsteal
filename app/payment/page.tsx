@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import Loading from "../loading";
 const PayPage = () => {
   const searchParams = useSearchParams();
   const { user } = useUser();
@@ -157,8 +158,8 @@ const PayPage = () => {
               bank: bank ? bank : "",
             });
             updateUser({ id: u?._id!, isPro: true });
+            toast.success("Thanh toán thành công!");
           }
-          toast.success("Thanh toán thành công!");
           router.push("/ai");
         } catch (error) {
           toast.success("Thanh toán không thành công!");
@@ -166,6 +167,9 @@ const PayPage = () => {
       }
     }
   }, [searchParams, order]);
+  if (order === undefined) {
+    return <Loading />;
+  }
   if (order?.isPay) {
     router.push("/ai");
     return null;
@@ -201,7 +205,7 @@ const PayPage = () => {
                 {" "}
                 <span
                   className={cn(
-                    " font-semibold sm:text-3xl text-5xl text-white",
+                    " font-semibold sm:text-3xl text-5xl dark:text-white text-black",
                     item.title === "Professor" ||
                       (item.title === "Pro" && "gradient-text")
                   )}

@@ -86,6 +86,7 @@ body,
   box-shadow: rgba(161, 128, 255, 0.6) 0px 0px calc(0.5rem) 0px;
   animation-timing-function: ease-out;
   animation-duration: 200ms;
+  color: #fff;
 }
 .bg-gr-hover:hover {
   background-image: linear-gradient(

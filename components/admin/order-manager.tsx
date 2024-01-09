@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import { useQuery } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
-import { UserCheck2, Users } from "lucide-react";
+import { ListChecks, ScrollText } from "lucide-react";
 
 import { useCallback } from "react";
 import { Doc } from "@/convex/_generated/dataModel";
@@ -66,9 +66,9 @@ const OrderManager = ({ userId }: { userId: string }) => {
         <Card className="w-fit mt-4">
           <CardBody className="flex sm:flex-row">
             <div className=" flex items-center p-5 gap-3">
-              <Users className="w-20 h-20" />
+              <ScrollText className="w-20 h-20" />
               <div className="flex flex-col">
-                <span className="text-xl text-white/50">
+                <span className="text-xl dark:text-white/50">
                   {language === "Vietnamese"
                     ? "Số lượng đơn hàng"
                     : "Total User"}
@@ -77,9 +77,9 @@ const OrderManager = ({ userId }: { userId: string }) => {
               </div>
             </div>
             <div className=" flex items-center p-5 gap-3">
-              <UserCheck2 className="w-20 h-20" />
+              <ListChecks className="w-20 h-20" />
               <div className="flex flex-col">
-                <span className="text-xl text-white/50">
+                <span className="text-xl dark:text-white/50">
                   {language === "Vietnamese" ? "Đã thanh toán" : "Premium User"}
                 </span>
                 <span className="font-semibold text-2xl">

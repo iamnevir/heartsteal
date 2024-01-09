@@ -278,7 +278,7 @@ const ImageCommunityItem = ({
         <div
           onClick={handleLiked}
           className={cn(
-            "text-sm absolute z-[1] right-2 w-14 h-8 flex items-center justify-center top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0",
+            "text-sm absolute z-[1] right-2 text-white w-14 h-8 flex items-center justify-center top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-2 sm:pointer-events-none"
@@ -287,7 +287,7 @@ const ImageCommunityItem = ({
           <div>{image.likes}</div>
           <Heart
             className={cn(
-              " w-5 h-5 ml-2 hover:scale-125 duration-500",
+              " w-5 h-5 ml-2 hover:scale-125 duration-500 text-white",
               userName?.like.includes(image._id)
                 ? " fill-red-500 text-red-500"
                 : ""
@@ -304,6 +304,7 @@ const ImageCommunityItem = ({
         >
           <User
             name={imageAuthor}
+            classNames={{ name: "text-white" }}
             avatarProps={{
               name: imageAuthor?.charAt(0),
               className: "w-[30px] h-[30px] bg-gr",
@@ -312,7 +313,7 @@ const ImageCommunityItem = ({
         </div>
         <div
           className={cn(
-            "  duration-500 absolute bottom-2 left-2 cursor-pointer justify-start sm:line-clamp-6 line-clamp-4 max-w-[200px] gap-3 rounded-md  text-xs",
+            "  duration-500 absolute bottom-2 text-white left-2 cursor-pointer justify-start sm:line-clamp-6 line-clamp-4 max-w-[200px] gap-3 rounded-md  text-xs",
             hover
               ? "translate-x-0 opacity-100"
               : "sm:opacity-0 sm:-translate-x-2 sm:pointer-events-none"
@@ -335,7 +336,7 @@ const ImageCommunityItem = ({
                 : "sm:opacity-0 sm:translate-x-2 sm:pointer-events-none"
             )}
           >
-            <DownloadCloudIcon className="w-4 h-4" />
+            <DownloadCloudIcon className="w-4 h-4 text-white" />
           </div>
         </Tooltip>
       </motion.div>

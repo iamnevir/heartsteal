@@ -14,7 +14,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
     <div className=" w-full justify-center flex items-center mb-3">
-      <div className=" rounded-full bg-[#0B0F17] sm:w-44 w-[80%] sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
+      <div className=" rounded-full dark:bg-[#0B0F17] bg-slate-200 sm:w-44 w-[80%] sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
         {user?.isPro ? (
           <div className="w-6 h-6">
             <svg viewBox="0 0 24 24" fill="none">

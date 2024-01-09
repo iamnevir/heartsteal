@@ -184,7 +184,7 @@ const ImageItem = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         className={cn(
-          " relative  sm:w-[290px] sm:h-[290px] w-full cursor-pointer overflow-hidden",
+          " relative  sm:w-[290px] text-white sm:h-[290px] w-full cursor-pointer overflow-hidden",
           image.size === "1024x1792" ? "sm:h-[450px]" : "h-[370px]"
         )}
       >
@@ -220,7 +220,7 @@ const ImageItem = ({
         >
           <div
             onClick={handlePublic}
-            className=" w-8 h-8 flex group hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 top-2 rounded-full"
+            className=" w-8 h-8 flex group hover:scale-105 items-center  cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg absolute right-2 top-2 rounded-full"
           >
             {image.isPublish ? (
               <EyeIcon className="w-4 h-4 group-hover:rotate-180 duration-300" />
