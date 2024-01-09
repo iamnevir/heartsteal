@@ -72,6 +72,44 @@ export function formatVietnameseDate(timespanInMilliseconds: number): string {
 
   return formattedDate;
 }
+export function formatVietnameseDateTime(
+  timespanInMilliseconds: number
+): string {
+  const months: string[] = [
+    "Tháng 1",
+    "Tháng 2",
+    "Tháng 3",
+    "Tháng 4",
+    "Tháng 5",
+    "Tháng 6",
+    "Tháng 7",
+    "Tháng 8",
+    "Tháng 9",
+    "Tháng 10",
+    "Tháng 11",
+    "Tháng 12",
+  ];
+
+  const date = new Date(timespanInMilliseconds);
+
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  // Lấy giờ và phút từ đối tượng Date
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  // Format giờ và phút thành chuỗi với định dạng hh:mm
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+
+  // Kết hợp ngày, tháng, năm và giờ phút vào một chuỗi định dạng đầy đủ
+  const formattedDate = `${formattedTime} - ${day}, ${months[month]}, ${year}`;
+
+  return formattedDate;
+}
 export const calcCoinGenerate = (
   imageSize: string,
   imageNumber: number,

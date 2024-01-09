@@ -94,6 +94,7 @@ export const update = mutation({
     upload: v.optional(v.array(v.string())),
     coin: v.optional(v.number()),
     isPro: v.optional(v.boolean()),
+    isAdmin: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args;

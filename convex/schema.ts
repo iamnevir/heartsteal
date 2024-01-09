@@ -21,6 +21,7 @@ export default defineSchema({
     upload: v.array(v.string()),
     coin: v.optional(v.number()),
     isPro: v.optional(v.boolean()),
+    isAdmin: v.optional(v.boolean()),
   }).index("by_user", ["userId"]),
   order: defineTable({
     userId: v.id("user"),

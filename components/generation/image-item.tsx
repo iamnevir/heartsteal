@@ -170,6 +170,11 @@ const ImageItem = ({
   return (
     <>
       <ConfirmModal
+        title={
+          language === "Vietnamese"
+            ? "Xác nhận xóa ảnh này?"
+            : "Confirm delete this photo?"
+        }
         isOpen={isOpen}
         onClose={onClose}
         handleDelete={handleDelete}

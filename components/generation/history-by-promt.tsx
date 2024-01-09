@@ -10,7 +10,11 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { cn, formatVietnameseDate } from "@/lib/utils";
+import {
+  cn,
+  formatVietnameseDate,
+  formatVietnameseDateTime,
+} from "@/lib/utils";
 import {
   Aperture,
   ArrowUpCircle,
@@ -110,6 +114,11 @@ const HistoryByPrompt = ({
         items={item}
       />
       <ConfirmModal
+        title={
+          language === "Vietnamese"
+            ? "Xác nhận xóa những ảnh này?"
+            : "Confirm delete these photos?"
+        }
         isOpen={isOpen}
         onClose={onClose}
         handleDelete={() => {
@@ -130,7 +139,14 @@ const HistoryByPrompt = ({
         </Tooltip>
 
         <div className=" flex items-center gap-5 sm:justify-normal justify-between sm:w-fit w-full">
-          <span>{formatVietnameseDate(item[0]._creationTime)}</span>
+          <Tooltip
+            size="sm"
+            delay={100}
+            closeDelay={100}
+            content={formatVietnameseDateTime(item[0]._creationTime)}
+          >
+            <span>{formatVietnameseDate(item[0]._creationTime)}</span>
+          </Tooltip>
           <>
             <Tooltip
               size="sm"

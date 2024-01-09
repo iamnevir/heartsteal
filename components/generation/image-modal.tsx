@@ -193,6 +193,11 @@ const ImageModal = ({
   return (
     <>
       <ConfirmModal
+        title={
+          language === "Vietnamese"
+            ? "Xác nhận xóa ảnh này?"
+            : "Confirm delete this photo?"
+        }
         isOpen={isOpen.open}
         onClose={() => setIsOpen({ open: false, id: null })}
         handleDelete={() => handleDelete(isOpen.id ? isOpen.id : undefined)}

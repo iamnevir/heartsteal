@@ -8,10 +8,14 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 const ConfirmModal = ({
+  title,
+  desc,
   isOpen,
   onClose,
   handleDelete,
 }: {
+  title?: string;
+  desc?: string;
   isOpen: boolean;
   onClose: () => void;
   handleDelete: () => void;
@@ -23,14 +27,17 @@ const ConfirmModal = ({
         {(onClose) => (
           <>
             <ModalHeader className="gradient-text">
-              {language === "Vietnamese"
-                ? "Xác nhận xóa ảnh này?"
-                : "Confirm deletion of this photo?"}
+              {title
+                ? title
+                : language === "Vietnamese"
+                ? "Xác nhận thực hiện hành động này?"
+                : "Confirm this actions?"}
             </ModalHeader>
             <ModalBody>
               <span>
-                {" "}
-                {language === "Vietnamese"
+                {desc
+                  ? desc
+                  : language === "Vietnamese"
                   ? "Hành động của bạn sẽ không thể hoàn tác. Bạn có đồng ý?"
                   : "Your actions cannot be undone. Do you sure?"}
               </span>
