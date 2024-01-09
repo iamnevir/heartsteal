@@ -254,7 +254,11 @@ const ImageGenerationMain = () => {
           };
           const promises = [];
           for (let index = 0; index < generation.imageNumber; index++) {
-            promises.push(generateI(Math.round(Math.random())));
+            if (index < 6) {
+              promises.push(generateI(index));
+            } else {
+              promises.push(generateI(index - 6));
+            }
           }
           const results = await Promise.all(promises);
           results.forEach((result) => {
