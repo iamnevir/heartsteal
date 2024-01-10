@@ -1,13 +1,14 @@
 "use client";
 import CommunityFeed from "@/components/community-feed/community-feed";
 import SearchBar from "@/components/community-feed/search-bar";
+import { useGridImage } from "@/hooks/use-grid";
 import { useLanguage } from "@/hooks/use-language";
-import { Divider, SliderValue } from "@nextui-org/react";
+import { Divider } from "@nextui-org/react";
 import { useState } from "react";
 
 const CommunityFeedPage = () => {
   const [search, setSearch] = useState("");
-  const [grid, setGrid] = useState<SliderValue>(5);
+  const { grid, setGrid } = useGridImage();
   const { language } = useLanguage();
   return (
     <div className="sm:pl-64 px-3 pt-5">

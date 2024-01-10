@@ -2,15 +2,21 @@
 
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
-import { User } from "@clerk/nextjs/server";
 import LoadMore from "../load-more";
-import { CircularProgress } from "@nextui-org/react";
+import { CircularProgress, SliderValue } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
 import ImageItem from "../community-feed/image-item";
 import { useUser } from "@clerk/nextjs";
 import ImageSkeleton from "../image-skeleton";
+import { cn } from "@/lib/utils";
 
-const PersonalFeed = ({ search }: { search: string }) => {
+const PersonalFeed = ({
+  search,
+  grid,
+}: {
+  search: string;
+  grid: SliderValue;
+}) => {
   const { user } = useUser();
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImageByUser,
@@ -51,7 +57,22 @@ const PersonalFeed = ({ search }: { search: string }) => {
     return null;
   }
   return (
-    <div className=" grid xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4 gap-4 pr-2 my-4 pb-10">
+    <div
+      className={cn(
+        " grid  gap-4 sm:pr-2 py-2 sm:py-10",
+        grid === 1
+          ? "grid-cols-1"
+          : grid === 2
+          ? "grid-cols-2"
+          : grid === 3
+          ? "grid-cols-3"
+          : grid === 4
+          ? "grid-cols-4"
+          : grid === 5
+          ? "grid-cols-5"
+          : "xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4"
+      )}
+    >
       {[
         getColumns(0),
         getColumns(1),
@@ -61,7 +82,7 @@ const PersonalFeed = ({ search }: { search: string }) => {
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-4">
           {item.map((i, ind) => (
-            <ImageItem image={i} key={ind} userId={user?.id} />
+            <ImageItem grid={grid} image={i} key={ind} userId={user?.id} />
           ))}
         </div>
       ))}
