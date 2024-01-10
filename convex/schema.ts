@@ -4,6 +4,7 @@ import { v } from "convex/values";
 export default defineSchema({
   image: defineTable({
     prompt: v.optional(v.string()),
+    negativePrompt: v.optional(v.string()),
     url: v.string(),
     userId: v.string(),
     isPublish: v.boolean(),

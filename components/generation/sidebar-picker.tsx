@@ -43,7 +43,7 @@ const SidebarPicker = () => {
   return (
     <>
       <div className=" flex items-center gap-3 py-3 pl-2">
-        <Link href="/" className="flex items-center gap-1 ">
+        <Link href="/ai" className="flex items-center gap-1 ">
           {isMobile ? (
             <Image src="/logo.png" width={50} height={50} alt="" />
           ) : (

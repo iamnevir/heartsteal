@@ -134,6 +134,7 @@ const ImageGenerationMain = () => {
           create({
             prompt: generation.prompt,
             url: res.data.data[index],
+            negativePrompt: generation.negativePrompt,
             userId: user?.id!,
             isPublish: generation.publicImage,
             likes: 0,
@@ -163,6 +164,7 @@ const ImageGenerationMain = () => {
         for (let index = 0; index < urls?.length!; index++) {
           create({
             prompt: generation.prompt,
+            negativePrompt: generation.negativePrompt,
             url: urls![index],
             userId: user?.id!,
             isPublish: generation.publicImage,
@@ -195,6 +197,7 @@ const ImageGenerationMain = () => {
               if (res.url) {
                 create({
                   prompt: generation.prompt,
+                  negativePrompt: generation.negativePrompt,
                   url: res.url,
                   userId: user?.id!,
                   isPublish: generation.publicImage,
@@ -235,6 +238,7 @@ const ImageGenerationMain = () => {
               url: res.url,
               userId: user?.id!,
               isPublish: generation.publicImage,
+              negativePrompt: generation.negativePrompt,
               likes: 0,
               model: generation.model,
               size: generation.imageSize,
@@ -248,60 +252,54 @@ const ImageGenerationMain = () => {
           });
         }
       } else if (generation.model === "pro") {
-        generation.setIsLoading(true);
-        try {
-          const generateI = async (model: number) => {
-            const response = await axios({
-              method: "post",
-              url: `${backEndUrl}/img_gen`,
-              maxBodyLength: Infinity,
-              headers: { "Content-Type": "application/json" },
-              data: {
-                prompt: generation.prompt,
-                model,
-              },
-            });
-            const file = base64toFile(response.data.image_base64);
-            if (!file) {
-              return null;
-            }
-            const res = await edgestore.publicFiles.upload({
-              file,
-            });
-            if (!res.url) {
-              return null;
-            }
-            return res.url;
-          };
-          const promises = [];
-          for (let index = 0; index < generation.imageNumber; index++) {
-            if (index < 6) {
-              promises.push(generateI(index));
-            } else {
-              promises.push(generateI(index - 6));
-            }
-          }
-          const results = await Promise.all(promises);
-          results.forEach((result) => {
-            if (result !== null) {
-              create({
-                prompt: generation.prompt,
-                url: result,
-                userId: user?.id!,
-                isPublish: generation.publicImage,
-                likes: 0,
-                model: generation.model,
-                size: generation.imageSize,
-              });
-            } else {
-              console.error("One or more calls to generateI failed.");
-            }
+        const generateI = async (model: number) => {
+          const response = await axios({
+            method: "post",
+            url: `${backEndUrl}/img_gen`,
+            maxBodyLength: Infinity,
+            headers: { "Content-Type": "application/json" },
+            data: {
+              prompt: generation.prompt,
+              model,
+            },
           });
-        } catch (error) {
-          console.log(error);
-        } finally {
-          generation.setIsLoading(false);
+          const file = base64toFile(response.data.image_base64);
+          if (!file) {
+            return null;
+          }
+          const res = await edgestore.publicFiles.upload({
+            file,
+          });
+          if (!res.url) {
+            return null;
+          }
+          return res.url;
+        };
+        const promises = [];
+        for (let index = 0; index < generation.imageNumber; index++) {
+          if (index < 6) {
+            promises.push(generateI(index));
+          } else {
+            promises.push(generateI(index - 6));
+          }
         }
+        const results = await Promise.all(promises);
+        results.forEach((result) => {
+          if (result !== null) {
+            create({
+              prompt: generation.prompt,
+              negativePrompt: generation.negativePrompt,
+              url: result,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: 0,
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          } else {
+            console.error("One or more calls to generateI failed.");
+          }
+        });
       } else {
         const data = {
           model: generation.model,
@@ -322,6 +320,7 @@ const ImageGenerationMain = () => {
         for (let index = 0; index < generation.imageNumber; index++) {
           create({
             prompt: generation.prompt,
+            negativePrompt: generation.negativePrompt,
             url: res.data.data[index].url,
             userId: user?.id!,
             isPublish: generation.publicImage,

@@ -50,6 +50,7 @@ export const getImageByUser = query({
     const image = await ctx.db
       .query("image")
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .filter((q) => q.eq(q.field("isPublish"), true))
       .order("desc")
       .paginate(args.paginationOpts);
     return image;
@@ -58,6 +59,7 @@ export const getImageByUser = query({
 export const create = mutation({
   args: {
     prompt: v.optional(v.string()),
+    negativePrompt: v.optional(v.string()),
     url: v.string(),
     userId: v.string(),
     isPublish: v.boolean(),
@@ -68,6 +70,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const image = await ctx.db.insert("image", {
       prompt: args.prompt,
+      negativePrompt: args.negativePrompt,
       url: args.url,
       userId: args.userId,
       isPublish: args.isPublish,

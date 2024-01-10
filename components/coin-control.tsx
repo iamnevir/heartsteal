@@ -53,31 +53,41 @@ const CoinControl = ({ userId }: { userId: string }) => {
             </svg>
           </div>
         )}
-
-        <Tooltip
-          placement="right"
-          size="sm"
-          delay={100}
-          closeDelay={100}
-          content={
-            !user?.isPro
-              ? language === "Vietnamese"
+        {user?.isPro ? null : (
+          <Tooltip
+            placement="right"
+            size="sm"
+            delay={100}
+            closeDelay={100}
+            content={
+              language === "Vietnamese"
                 ? `Sẽ được đặt lại vào 17h giờ hàng ngày`
                 : `Resets in 17h per days`
-              : language === "Vietnamese"
-              ? `Không giới hạn tokens`
-              : `Unlimited Tokens`
-          }
-        >
-          <LucideShieldQuestion
-            size={isMobile ? "20" : "17"}
-            className=" text-slate-400/70"
-          />
-        </Tooltip>
+            }
+          >
+            <LucideShieldQuestion
+              size={isMobile ? "20" : "17"}
+              className=" text-slate-400/70"
+            />
+          </Tooltip>
+        )}
+
         {user?.isPro ? (
-          <Chip className="bg-gr sm:text-[10px] text-sm font-semibold">
-            Premium
-          </Chip>
+          <Tooltip
+            placement="right"
+            size="sm"
+            delay={100}
+            closeDelay={100}
+            content={
+              language === "Vietnamese"
+                ? `Không giới hạn tính năng.`
+                : `Unlimited Tokens`
+            }
+          >
+            <Chip className="bg-gr sm:text-[10px] text-sm font-semibold">
+              Premium
+            </Chip>
+          </Tooltip>
         ) : (
           <Button
             onPress={() => router.push("/payment")}

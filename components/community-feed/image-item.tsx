@@ -1,6 +1,6 @@
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
-import { cn, formatVietnameseDate } from "@/lib/utils";
+import { cn, formatVietnameseDateTime } from "@/lib/utils";
 import {
   Card,
   CardBody,
@@ -30,8 +30,9 @@ import { saveAs } from "file-saver";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
+import { useCopyToClipboard, useMediaQuery } from "usehooks-ts";
 import { useLanguage } from "@/hooks/use-language";
+import { useRouter } from "next/navigation";
 const ImageCommunityItem = ({
   image,
   userId,
@@ -45,11 +46,13 @@ const ImageCommunityItem = ({
   const userName = useQuery(api.user.getUserByUser, { userId });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const update = useMutation(api.image.update);
+  const router = useRouter();
   const updateUser = useMutation(api.user.update);
   const imageAuthor = users
     ? users.find((f) => f.userId === image.userId)?.username
     : userName?.username;
   const [value, copy] = useCopyToClipboard();
+  const isMobile = useMediaQuery("(max-width:640px)");
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
   const { language } = useLanguage();
@@ -78,7 +81,7 @@ const ImageCommunityItem = ({
   return (
     <>
       <Modal
-        scrollBehavior="inside"
+        scrollBehavior="outside"
         size="2xl"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -141,12 +144,13 @@ const ImageCommunityItem = ({
                 </div>
 
                 <div className=" flex flex-col items-start gap-3 w-full max-w-xs">
-                  <div className="flex items-center gap-2 w-full justify-between">
+                  <div className="flex items-center gap-2 w-full justify-between ">
                     <User
+                      onClick={() => router.push(`/ai/profile/${imageAuthor}`)}
                       name={imageAuthor}
                       avatarProps={{
                         name: imageAuthor?.charAt(0),
-                        className: "w-[30px] h-[30px] bg-gr",
+                        className: "w-[30px] h-[30px] bg-gr cursor-pointer",
                       }}
                     />
                     <Heart
@@ -170,7 +174,7 @@ const ImageCommunityItem = ({
                       </span>
                       <Card>
                         <CardBody>
-                          <div className="sm:line-clamp-[10] line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
+                          <div className="sm:line-clamp-[10] line-clamp-3 relative rounded-[10px] dark:bg-black bg-slate-200 sm:p-3 p-1 pr-10 text-sm max-w-xs">
                             {image.prompt}
                             <div
                               onClick={() => {
@@ -198,6 +202,46 @@ const ImageCommunityItem = ({
                       </Card>
                     </>
                   )}
+                  {image.negativePrompt &&
+                    image.negativePrompt !== "" &&
+                    !isMobile && (
+                      <>
+                        <Divider />
+                        <span className=" text-sm">
+                          {language === "Vietnamese"
+                            ? "Lời nhắc tiêu cực "
+                            : "Negative Prompt"}
+                        </span>
+                        <Card>
+                          <CardBody>
+                            <div className="line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
+                              {image.negativePrompt}
+                              <div
+                                onClick={() => {
+                                  copy(image.negativePrompt!);
+                                  toast.success(
+                                    language === "Vietnamese"
+                                      ? "Đã sao chép."
+                                      : "Copied to Clipboard."
+                                  );
+                                  setCopied(true);
+                                  setTimeout(() => {
+                                    setCopied(false);
+                                  }, 1000);
+                                }}
+                                className=" absolute cursor-pointer right-2 top-2 p-1 bg-black rounded-xl"
+                              >
+                                {copied ? (
+                                  <Check className=" w-4 h-4" color="white" />
+                                ) : (
+                                  <Copy className=" w-4 h-4" color="white" />
+                                )}
+                              </div>
+                            </div>
+                          </CardBody>
+                        </Card>
+                      </>
+                    )}
 
                   <Divider />
                   <div className="grid grid-cols-2 gap-3">
@@ -207,21 +251,21 @@ const ImageCommunityItem = ({
                           ? "Kích thước"
                           : "Input Resolution"}
                       </span>
-                      <span className="text-sm">{image.size}</span>
+                      <span className="text-xs">{image.size}</span>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
                         {language === "Vietnamese" ? "Ngày tạo" : "CreatedAt"}
                       </span>
-                      <span className="text-sm whitespace-nowrap">
-                        {formatVietnameseDate(image._creationTime)}
+                      <span className="text-xs whitespace-nowrap">
+                        {formatVietnameseDateTime(image._creationTime)}
                       </span>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs text-gray-600">
                         {language === "Vietnamese" ? "Mô hình" : "Model"}
                       </span>
-                      <span className="text-sm flex items-center gap-1">
+                      <span className="text-xs flex items-center gap-1">
                         {" "}
                         {image.model === "dall-e-2" ? (
                           <>
@@ -256,7 +300,7 @@ const ImageCommunityItem = ({
                       <span className=" text-xs text-gray-600">
                         {language === "Vietnamese" ? "Lượt thích" : "Likes"}
                       </span>
-                      <span className="text-sm">{image.likes}</span>
+                      <span className="text-xs">{image.likes}</span>
                     </div>
                   </div>
                 </div>
@@ -330,6 +374,7 @@ const ImageCommunityItem = ({
           />
         </div>
         <div
+          onClick={() => router.push(`/ai/profile/${imageAuthor}`)}
           className={cn(
             " flex items-center duration-500 absolute top-2 left-2 cursor-pointer justify-start gap-3 rounded-md w-full  text-xs",
             hover
