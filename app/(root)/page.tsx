@@ -1,7 +1,20 @@
 import BrainCanvas from "@/components/brain/brain-canvas";
 import HeroSection from "@/components/hero-section";
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 const NavbarPage = dynamic(() => import("@/components/navbar"), { ssr: false });
+export const metadata: Metadata = {
+  title: "HeartSteal Ai",
+  description: "Best Image Generation by HeartSteal.",
+  openGraph: {
+    siteName: "HeartSteal Ai",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    title: `HeartSteal Ai`,
+    description: `Nền tảng tạo ảnh bằng AI số một dành cho người Việt.`,
+    type: "website",
+    images: ["logo.png"],
+  },
+};
 export default function Home() {
   return (
     <>
