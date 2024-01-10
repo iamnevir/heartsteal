@@ -63,8 +63,6 @@ const LikedPost = ({ search, grid }: { search: string; grid: SliderValue }) => {
           ? "grid-cols-3"
           : grid === 4
           ? "grid-cols-4"
-          : grid === 5
-          ? "grid-cols-5"
           : "xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4"
       )}
     >
