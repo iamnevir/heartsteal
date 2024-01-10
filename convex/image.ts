@@ -56,6 +56,20 @@ export const getImageByUser = query({
     return image;
   },
 });
+export const getImageByOwnUser = query({
+  args: {
+    userId: v.string(),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const image = await ctx.db
+      .query("image")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .order("desc")
+      .paginate(args.paginationOpts);
+    return image;
+  },
+});
 export const create = mutation({
   args: {
     prompt: v.optional(v.string()),

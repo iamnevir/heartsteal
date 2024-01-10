@@ -19,7 +19,7 @@ const PersonalFeed = ({
 }) => {
   const { user } = useUser();
   const { results, status, loadMore } = usePaginatedQuery(
-    api.image.getImageByUser,
+    api.image.getImageByOwnUser,
     { userId: user?.id! },
     { initialNumItems: 20 }
   );
