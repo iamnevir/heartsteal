@@ -51,7 +51,7 @@ const Dive = () => {
   return (
     <motion.div
       onClick={handleRandomPrompt}
-      animate={
+      whileInView={
         loading
           ? {
               scale: [1, 1.1, 1.1, 1, 1],

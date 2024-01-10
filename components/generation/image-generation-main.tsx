@@ -5,9 +5,13 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Select,
+  SelectItem,
+  Switch,
   Tab,
   Tabs,
   Textarea,
+  Tooltip,
 } from "@nextui-org/react";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import Dive from "./dive";
@@ -32,6 +36,15 @@ import ImageEdit from "./image-edit";
 import { useLanguage } from "@/hooks/use-language";
 import { useEdgeStore } from "@/lib/edgestore";
 import { dreamGeneration } from "@/actions/dreamGeneration";
+import {
+  Aperture,
+  Atom,
+  Biohazard,
+  Box,
+  BrainCog,
+  CandyCane,
+  LucideShieldQuestion,
+} from "lucide-react";
 
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
@@ -208,6 +221,7 @@ const ImageGenerationMain = () => {
           data: {
             prompt: generation.prompt,
             style_id: generation.style,
+            negative_prompt: generation.negativePrompt,
           },
         });
         const file = base64toFile(res.data.image_base64);
@@ -371,7 +385,7 @@ const ImageGenerationMain = () => {
             value={generation.prompt}
             placeholder={
               language === "Vietnamese"
-                ? "Nhập một lệnh..."
+                ? "Nhập mô tả cho bức ảnh của bạn..."
                 : "Type a prompt..."
             }
             onValueChange={generation.setPrompt}
@@ -413,7 +427,198 @@ const ImageGenerationMain = () => {
           </div>
         </Button>
       </div>
+      <div className="w-full sm:pr-10 flex flex-col gap-3 items-start">
+        <Textarea
+          disabled={generation.isLoading}
+          className={cn(
+            " w-full transition-all duration-500 sm:px-0 px-2",
+            generation.isNegative
+              ? generation.negativePrompt === ""
+                ? "sm:h-12 h-14"
+                : ""
+              : " h-0 opacity-0 pointer-events-none"
+          )}
+          classNames={{
+            inputWrapper:
+              "dark:bg-slate-900/70 bg-slate-200 rounded-md focus-visible:border-2",
+          }}
+          value={generation.negativePrompt}
+          onValueChange={generation.setNegativePrompt}
+          placeholder={
+            language === "Vietnamese"
+              ? "Nhập những gì bạn không muốn xuất hiện trong ảnh..."
+              : "Type what you dont want to see in the image..."
+          }
+          isRequired
+          maxLength={1000}
+        />
+        <div className="flex sm:items-center sm:flex-row flex-col gap-3 items-start w-full sm:px-0 px-2 pb-2">
+          <Select
+            defaultSelectedKeys={["dall-e-2"]}
+            value={generation.model}
+            startContent={
+              generation.model === "dall-e-2" ? (
+                <Atom className={isMobile ? "w-8 h-8" : ""} />
+              ) : generation.model === "pro" ? (
+                <BrainCog className={isMobile ? "w-8 h-8" : ""} />
+              ) : generation.model === "dream" ? (
+                <CandyCane className={isMobile ? "w-8 h-8" : ""} />
+              ) : generation.model === "imagine" ? (
+                <Biohazard className={isMobile ? "w-8 h-8" : ""} />
+              ) : (
+                <Aperture className={isMobile ? "w-8 h-8" : ""} />
+              )
+            }
+            endContent={<Box />}
+            className={cn("sm:max-w-xs")}
+            variant="bordered"
+            onChange={(v) => {
+              generation.setModel(v.target.value);
+              if (v.target.value === "pro") {
+                generation.setHd(false);
+                generation.setNatural(false);
+                generation.setImageInput(false);
+              } else if (v.target.value === "bimg") {
+                generation.setImageInput(false);
+                generation.setImageNumber(4);
+                generation.setImageSize("1024x1024");
+              } else if (v.target.value === "imagine") {
+                generation.setImageInput(false);
+                generation.setImageNumber(1);
+                generation.setImageSize("512x512");
+              }
+            }}
+            selectionMode="single"
+            classNames={{
+              label: "sm:text-base text-2xl",
+              value: "sm:text-base text-xl",
+              selectorIcon: isMobile && "w-5 h-5",
+            }}
+            placeholder={
+              language === "Vietnamese" ? "Chọn mô hình" : "Select Model"
+            }
+          >
+            <SelectItem
+              startContent={<Atom className={isMobile ? "w-8 h-8" : ""} />}
+              key={"dall-e-2"}
+              value={"Heart Steal"}
+              classNames={{ title: "sm:text-base text-xl" }}
+            >
+              Heart Steal
+            </SelectItem>
+            <SelectItem
+              classNames={{ title: "sm:text-base text-xl" }}
+              startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
+              key={"bimg"}
+              value={"Heart Steal V2"}
+              className={cn("sm:max-w-xs ")}
+            >
+              Heart Steal V2
+            </SelectItem>
+            <SelectItem
+              classNames={{ title: "sm:text-base text-xl" }}
+              startContent={<CandyCane className={isMobile ? "w-8 h-8" : ""} />}
+              key={"dream"}
+              value={"Dream"}
+              className={cn("sm:max-w-xs ")}
+            >
+              Dream
+            </SelectItem>
+            <SelectItem
+              classNames={{ title: "sm:text-base text-xl" }}
+              startContent={<Biohazard className={isMobile ? "w-8 h-8" : ""} />}
+              endContent={<Chip className="bg-gr">Premium</Chip>}
+              key={"imagine"}
+              value={"Imagine"}
+              className={cn(
+                "sm:max-w-xs",
+                !u?.isPro && " opacity-50 pointer-events-none"
+              )}
+            >
+              Imagine
+            </SelectItem>
+            <SelectItem
+              classNames={{ title: "sm:text-base text-xl" }}
+              startContent={
+                <Tooltip
+                  placement="right"
+                  size="sm"
+                  delay={100}
+                  closeDelay={100}
+                  classNames={{ content: "bg-gr" }}
+                  content="Premium"
+                >
+                  <BrainCog className={isMobile ? "w-8 h-8" : ""} />
+                </Tooltip>
+              }
+              key={"pro"}
+              endContent={<Chip className="bg-gr">Premium</Chip>}
+              value={"Heart Steal Pro"}
+              className={cn(
+                "sm:max-w-xs overflow-auto",
+                !u?.isPro && " opacity-50 pointer-events-none"
+              )}
+            >
+              Heart Steal Pro
+            </SelectItem>
+          </Select>
+          {generation.model === "imagine" && (
+            <Select
+              onChange={(v) => generation.setStyle(v.target.value)}
+              variant="bordered"
+              label={
+                <div className="flex items-center gap-1">
+                  <span>
+                    {language === "Vietnamese" ? "Phong cách" : "Imagine Style"}
+                  </span>
+                  <Tooltip
+                    placement="right"
+                    size="sm"
+                    delay={100}
+                    closeDelay={100}
+                    content={
+                      <div className="w-40">
+                        {language === "Vietnamese"
+                          ? "Bằng cách chọn phong cách, bạn hướng dẫn AI tạo hình ảnh có tính thẩm mỹ thị giác cụ thể, mặc định là Anime."
+                          : "By choosing a style, you instruct the AI to create images with a specific visual aesthetic, defaulting to Anime."}
+                      </div>
+                    }
+                  >
+                    <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+                  </Tooltip>
+                </div>
+              }
+              className="max-w-[150px]"
+            >
+              <SelectItem key="21" value="Anime">
+                Anime
+              </SelectItem>
 
+              <SelectItem
+                key="29"
+                value={language === "Vietnamese" ? "Chân thực" : "Realistic"}
+              >
+                {language === "Vietnamese" ? "Chân thực" : "Realistic"}
+              </SelectItem>
+            </Select>
+          )}
+          <Switch
+            size={!isMobile ? "sm" : "md"}
+            className="sm:ml-auto"
+            defaultSelected={generation.isNegative}
+            onValueChange={generation.setIsNegative}
+            classNames={{
+              wrapper: generation.isNegative
+                ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]"
+                : "",
+            }}
+          >
+            {language === "Vietnamese"
+              ? "Thêm lời nhắc tiêu cực"
+              : "Add Negative Prompt"}
+          </Switch>
+        </div>
+      </div>
       <Tabs
         variant="underlined"
         classNames={{ cursor: "bg-gr" }}
@@ -481,7 +686,7 @@ const ImageGenerationMain = () => {
                   : "Image Edit"}
               </span>
               <Chip className="bg-gr" size="sm">
-                Pro
+                Beta
               </Chip>
             </div>
           }

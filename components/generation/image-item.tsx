@@ -183,10 +183,7 @@ const ImageItem = ({
       <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className={cn(
-          " relative  sm:w-[290px] text-white sm:h-[290px] w-full cursor-pointer overflow-hidden",
-          image.size === "1024x1792" ? "sm:h-[450px]" : "h-[370px]"
-        )}
+        className={cn(" relative  text-white  cursor-pointer overflow-hidden")}
       >
         <Image
           className={"rounded-md"}

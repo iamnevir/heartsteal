@@ -14,25 +14,13 @@ const CoinControl = ({ userId }: { userId: string }) => {
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
     <div className=" w-full justify-center flex items-center mb-3">
-      <div className=" rounded-full dark:bg-[#0B0F17] bg-slate-200 sm:w-44 w-[80%] sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
-        {user?.isPro ? (
-          <div className="w-6 h-6">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z"
-                stroke="url(#radialGradient)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-        ) : (
-          <span className={cn(" sm:text-xs text-lg font-semibold")}>
+      <div className=" rounded-full dark:bg-[#0B0F17] bg-slate-200  sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
+        {user?.isPro ? null : (
+          <span className={cn(" sm:text-xs text-sm font-semibold")}>
             {user?.coin}
           </span>
         )}
-        {isMobile ? (
+        {user?.isPro ? null : isMobile ? (
           <Gem className=" w-5 h-5 sm:hidden text-red-400" />
         ) : (
           <div className="w-6 h-6 mt-1 sm:block hidden">
@@ -93,7 +81,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
         ) : (
           <Button
             onPress={() => router.push("/payment")}
-            className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-5"
+            className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-4"
             size="sm"
           >
             {language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}

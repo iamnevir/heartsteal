@@ -205,13 +205,11 @@ const Profile = ({ userId }: { userId: string }) => {
         <User
           className={cn("ml-5 gradient-text")}
           name={name}
-          classNames={{ name: isMobile ? "text-xl" : "" }}
+          classNames={{ name: isMobile ? "text-lg" : "" }}
           avatarProps={{
             title: "",
             name: name?.charAt(0).toUpperCase(),
-            className: isMobile
-              ? "w-10 h-10 bg-gr"
-              : "w-[30px] h-[30px] bg-gr ",
+            className: isMobile ? "w-8 h-8 bg-gr" : "w-[30px] h-[30px] bg-gr ",
           }}
         />
       </div>

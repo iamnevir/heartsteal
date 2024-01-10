@@ -8,6 +8,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  SliderValue,
   Tooltip,
   User,
   useDisclosure,
@@ -34,9 +35,11 @@ import { useLanguage } from "@/hooks/use-language";
 const ImageCommunityItem = ({
   image,
   userId,
+  grid,
 }: {
   image: Doc<"image">;
   userId: string;
+  grid: SliderValue;
 }) => {
   const users = useQuery(api.user.getUsers);
   const userName = useQuery(api.user.getUserByUser, { userId });
@@ -283,8 +286,8 @@ const ImageCommunityItem = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         className={cn(
-          " relative  sm:w-[240px] sm:h-[390px] w-full  cursor-pointer overflow-hidden",
-          image.size === "512x512" ? "sm:h-[290px] h-[370px]" : "h-[370px]"
+          " relative  w-full  cursor-pointer overflow-hidden",
+          grid === 5 && image.size === "1024x1024" ? "h-[370px]" : ""
         )}
       >
         <Image

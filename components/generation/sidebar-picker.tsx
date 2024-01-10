@@ -8,6 +8,7 @@ import {
   Link,
   Select,
   SelectItem,
+  Slider,
   Switch,
   Tooltip,
 } from "@nextui-org/react";
@@ -63,154 +64,7 @@ const SidebarPicker = () => {
 
       <CoinControl userId={user?.id!} />
       <Divider className="px-5" />
-      <Select
-        label={language === "Vietnamese" ? "Mô hình" : "Generate Model"}
-        defaultSelectedKeys={["dall-e-2"]}
-        value={generation.model}
-        startContent={
-          generation.model === "dall-e-2" ? (
-            <Atom className={isMobile ? "w-8 h-8" : ""} />
-          ) : generation.model === "pro" ? (
-            <BrainCog className={isMobile ? "w-8 h-8" : ""} />
-          ) : generation.model === "dream" ? (
-            <CandyCane className={isMobile ? "w-8 h-8" : ""} />
-          ) : generation.model === "imagine" ? (
-            <Biohazard className={isMobile ? "w-8 h-8" : ""} />
-          ) : (
-            <Aperture className={isMobile ? "w-8 h-8" : ""} />
-          )
-        }
-        className={cn("max-w-xs ")}
-        variant="underlined"
-        onChange={(v) => {
-          generation.setModel(v.target.value);
-          if (v.target.value === "pro") {
-            generation.setImageNumber(1);
-            generation.setHd(false);
-            generation.setNatural(false);
-            generation.setImageInput(false);
-          } else if (v.target.value === "bimg") {
-            generation.setImageInput(false);
-            generation.setImageNumber(4);
-            generation.setImageSize("1024x1024");
-          } else if (v.target.value === "imagine") {
-            generation.setImageInput(false);
-            generation.setImageNumber(1);
-            generation.setImageSize("512x512");
-          }
-        }}
-        selectionMode="single"
-        classNames={{
-          label: "sm:text-base text-2xl",
-          value: "sm:text-base text-xl",
-          selectorIcon: isMobile && "w-5 h-5",
-        }}
-        placeholder={
-          language === "Vietnamese" ? "Chọn mô hình" : "Select Model"
-        }
-      >
-        <SelectItem
-          startContent={<Atom className={isMobile ? "w-8 h-8" : ""} />}
-          key={"dall-e-2"}
-          value={"Heart Steal"}
-          classNames={{ title: "sm:text-base text-xl" }}
-        >
-          Heart Steal
-        </SelectItem>
-        <SelectItem
-          classNames={{ title: "sm:text-base text-xl" }}
-          startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
-          key={"bimg"}
-          value={"Heart Steal V2"}
-          className={cn("max-w-xs ")}
-        >
-          Heart Steal V2
-        </SelectItem>
-        <SelectItem
-          classNames={{ title: "sm:text-base text-xl" }}
-          startContent={<CandyCane className={isMobile ? "w-8 h-8" : ""} />}
-          key={"dream"}
-          value={"Dream"}
-          className={cn("max-w-xs ")}
-        >
-          Dream
-        </SelectItem>
-        <SelectItem
-          classNames={{ title: "sm:text-base text-xl" }}
-          startContent={<Biohazard className={isMobile ? "w-8 h-8" : ""} />}
-          key={"imagine"}
-          value={"Imagine"}
-          className={cn(
-            "max-w-xs",
-            !u?.isPro && " opacity-50 pointer-events-none"
-          )}
-        >
-          Imagine
-        </SelectItem>
-        <SelectItem
-          classNames={{ title: "sm:text-base text-xl" }}
-          startContent={
-            <Tooltip
-              placement="right"
-              size="sm"
-              delay={100}
-              closeDelay={100}
-              classNames={{ content: "bg-gr" }}
-              content="Premium"
-            >
-              <BrainCog className={isMobile ? "w-8 h-8" : ""} />
-            </Tooltip>
-          }
-          key={"pro"}
-          value={"Heart Steal Pro"}
-          className={cn(
-            "max-w-xs overflow-auto",
-            !u?.isPro && " opacity-50 pointer-events-none"
-          )}
-        >
-          Heart Steal Pro
-        </SelectItem>
-      </Select>
-      {generation.model === "imagine" && (
-        <Select
-          onChange={(v) => generation.setStyle(v.target.value)}
-          variant="underlined"
-          label={
-            <div className="flex items-center gap-1">
-              <span>
-                {language === "Vietnamese" ? "Phong cách" : "Imagine Style"}
-              </span>
-              <Tooltip
-                placement="right"
-                size="sm"
-                delay={100}
-                closeDelay={100}
-                content={
-                  <div className="w-40">
-                    {language === "Vietnamese"
-                      ? "Bằng cách chọn phong cách, bạn hướng dẫn AI tạo hình ảnh có tính thẩm mỹ thị giác cụ thể, mặc định là Anime."
-                      : "By choosing a style, you instruct the AI to create images with a specific visual aesthetic, defaulting to Anime."}
-                  </div>
-                }
-              >
-                <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
-              </Tooltip>
-            </div>
-          }
-          className="max-w-xs"
-        >
-          <SelectItem key="21" value="Anime">
-            Anime
-          </SelectItem>
 
-          <SelectItem
-            key="29"
-            value={language === "Vietnamese" ? "Chân thực" : "Realistic"}
-          >
-            {language === "Vietnamese" ? "Chân thực" : "Realistic"}
-          </SelectItem>
-        </Select>
-      )}
       <Accordion selectionMode="multiple" defaultExpandedKeys={["2", "1"]}>
         <AccordionItem
           key="1"
@@ -301,6 +155,37 @@ const SidebarPicker = () => {
           </div>
         </AccordionItem>
       </Accordion>
+      <Slider
+        color="danger"
+        classNames={{ filler: "bg-gr", thumb: "bg-gr", base: "px-2 gap-1" }}
+        label={
+          <div className=" flex items-center gap-1 sm:text-xs text-xl">
+            <span>
+              {language === "Vietnamese" ? "Độ bám lệnh" : "Prompt Weight"}
+            </span>
+            <Tooltip
+              placement="right"
+              size="sm"
+              delay={100}
+              closeDelay={100}
+              content={
+                <div className=" w-40">
+                  {language === "Vietnamese"
+                    ? "Điểm này giúp tăng độ bám của lệnh gợi ý của bạn."
+                    : "This point helps increase the weight of your suggested prompt."}
+                </div>
+              }
+            >
+              <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+            </Tooltip>
+          </div>
+        }
+        step={0.1}
+        maxValue={1}
+        minValue={0}
+        defaultValue={0.4}
+        className="pb-2"
+      />
       <div
         className={cn(
           " flex items-center gap-2 w-full pb-2",

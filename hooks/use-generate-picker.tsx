@@ -15,6 +15,10 @@ type GenerateImage = {
   maskInput: string;
   isLoading: boolean;
   style: string;
+  negativePrompt: string;
+  isNegative: boolean;
+  setIsNegative: (isNegative: boolean) => void;
+  setNegativePrompt: (negativePrompt: string) => void;
   setStyle: (style: string) => void;
   setIsLoading: (isLoading: boolean) => void;
   setMaskInput: (maskInput: string) => void;
@@ -46,6 +50,10 @@ export const useGenerateImage = create<GenerateImage>((set, get) => ({
   maskInput: "",
   isLoading: false,
   style: "21",
+  negativePrompt: "",
+  isNegative: false,
+  setIsNegative: (isNegative: boolean) => set({ isNegative }),
+  setNegativePrompt: (negativePrompt: string) => set({ negativePrompt }),
   setStyle: (style: string) => set({ style }),
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   setMaskInput: (maskInput: string) => set({ maskInput }),

@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
-import { Link } from "@nextui-org/react";
+import { Divider, Link } from "@nextui-org/react";
 import {
   Biohazard,
   CandyCane,
@@ -10,6 +10,7 @@ import {
   Drama,
   Flame,
   HeartPulseIcon,
+  ImageOff,
   LogOut,
   Settings,
   VenetianMask,
@@ -70,6 +71,11 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
         language === "Vietnamese" ? "Tăng chất lượng ảnh" : "Image Upscale",
       href: "/ai/generation",
     },
+    {
+      icon: ImageOff,
+      title: language === "Vietnamese" ? "Xóa nền" : "Remove Background",
+      href: "/ai/generation",
+    },
   ];
   const footerItems = [
     {
@@ -121,13 +127,13 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
               pathname === item.href
                 ? "dark:text-white dark:bg-white/10 bg-black/10"
                 : "",
-              isMobile ? " text-xl" : ""
+              isMobile ? "text-lg" : ""
             )}
           >
             <item.icon
               className={cn(
                 "ml-5",
-                isMobile && "w-8 h-8",
+                isMobile && "w-7 h-7",
                 pathname === item.href && " text-rose-500"
               )}
             />
@@ -137,8 +143,8 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
           </Link>
         ))}
       </div>
-      <div className=" flex flex-col w-full gap-2">
-        <span className="p-3">
+      <div className=" flex flex-col w-full gap-2 pb-1">
+        <span className="p-3 text-sm">
           {language === "Vietnamese" ? "Công cụ của bạn" : "User tools"}
         </span>
         {toolItems.map((item, index) => (
@@ -154,13 +160,13 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
               pathname === item.href
                 ? "dark:text-white dark:bg-white/10 bg-black/10"
                 : "",
-              isMobile ? " text-xl" : ""
+              isMobile ? " text-lg" : ""
             )}
           >
             <item.icon
               className={cn(
                 "ml-5",
-                isMobile && "w-8 h-8",
+                isMobile && "w-7 h-7",
                 pathname === item.href && " text-rose-500"
               )}
             />
@@ -170,6 +176,7 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
           </Link>
         ))}
       </div>
+      <Divider />
       <div className=" flex flex-col w-full gap-2 mt-auto">
         {footerItems.map((item, index) => (
           <Link
@@ -184,13 +191,13 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
               pathname === item.href
                 ? "dark:text-white dark:bg-white/10 bg-black/10"
                 : "",
-              isMobile ? " text-xl" : ""
+              isMobile ? " text-lg" : ""
             )}
           >
             <item.icon
               className={cn(
                 "ml-5",
-                isMobile && "w-8 h-8",
+                isMobile && "w-7 h-7",
                 pathname === item.href && " text-rose-500"
               )}
             />
@@ -203,13 +210,13 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
           onClick={() => signOut()}
           className={cn(
             " flex items-center cursor-pointer text-xs justify-start gap-3 rounded-md py-1 w-full hover:bg-black/10 dark:hover:bg-white/10 dark:text-white/65",
-            isMobile ? " text-xl" : ""
+            isMobile ? " text-lg" : ""
           )}
         >
           <LogOut
             className={cn(
               "ml-5 dark:text-red-900 text-red-500",
-              isMobile ? "w-8 h-8" : ""
+              isMobile ? "w-7 h-7" : ""
             )}
           />
           <span className="dark:text-red-900 text-red-500">

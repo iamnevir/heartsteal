@@ -1,9 +1,10 @@
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Slider, SliderValue } from "@nextui-org/react";
 import {
   Cake,
   Film,
+  Grid,
   Instagram,
   LayoutList,
   Palette,
@@ -16,8 +17,10 @@ import {
 const SearchBar = ({
   search,
   setSearch,
+  setGrid,
 }: {
   search: string;
+  setGrid: (v: SliderValue) => void;
   setSearch: (v: string) => void;
 }) => {
   const { language } = useLanguage();
@@ -57,27 +60,47 @@ const SearchBar = ({
   ];
   return (
     <>
-      <div className=" max-w-sm py-3 flex items-center gap-4">
-        <Input
-          isClearable
-          radius="sm"
-          onValueChange={setSearch}
-          labelPlacement="outside"
-          placeholder={
-            language === "Vietnamese"
-              ? "Tìm kiếm bằng lệnh..."
-              : "search by prompt..."
-          }
-          startContent={
-            <SearchIcon className="w-4 h-4 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-          }
-        />{" "}
-        <Button
-          variant="shadow"
-          className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-[40%] sm:px-10 font-semibold text-sm py-3"
-        >
-          {language === "Vietnamese" ? "Tìm kiếm" : "Search"}
-        </Button>
+      <div className="py-3 flex items-center gap-4">
+        <div className=" flex items-center gap-4 max-w-md">
+          <Input
+            isClearable
+            radius="sm"
+            onValueChange={setSearch}
+            labelPlacement="outside"
+            placeholder={
+              language === "Vietnamese"
+                ? "Tìm kiếm bằng lệnh..."
+                : "search by prompt..."
+            }
+            startContent={
+              <SearchIcon className="w-4 h-4 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+            }
+          />{" "}
+          <Button
+            variant="shadow"
+            className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-[40%] sm:px-10 font-semibold text-sm py-3"
+          >
+            {language === "Vietnamese" ? "Tìm kiếm" : "Search"}
+          </Button>
+        </div>
+
+        <Slider
+          size="lg"
+          startContent={<Grid />}
+          classNames={{
+            filler: "bg-gr",
+            thumb: "bg-gr",
+            base: "px-2 gap-1 sm:ml-auto sm:flex hidden",
+          }}
+          onChange={(v) => setGrid(v)}
+          step={1}
+          color="danger"
+          showSteps={true}
+          maxValue={5}
+          minValue={1}
+          defaultValue={5}
+          className="max-w-md"
+        />
       </div>
       <div className=" flex items-center flex-wrap gap-2">
         {category.map((item, index) => (
