@@ -157,6 +157,7 @@ const SidebarPicker = () => {
       </Accordion>
       <Slider
         color="danger"
+        aria-label="a"
         classNames={{ filler: "bg-gr", thumb: "bg-gr", base: "px-2 gap-1" }}
         label={
           <div className=" flex items-center gap-1 sm:text-xs text-xl">

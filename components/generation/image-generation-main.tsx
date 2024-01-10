@@ -454,6 +454,7 @@ const ImageGenerationMain = () => {
         />
         <div className="flex sm:items-center sm:flex-row flex-col gap-3 items-start w-full sm:px-0 px-2 pb-2">
           <Select
+            aria-label="a"
             defaultSelectedKeys={["dall-e-2"]}
             value={generation.model}
             startContent={

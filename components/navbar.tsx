@@ -76,7 +76,7 @@ const NavbarPage = () => {
           <NavbarItem>
             <Link
               color="foreground"
-              href="https://github.com/iamnevir/heartsteal"
+              href="https://github.com/iamnevir"
               className=" cursor-pointer flex items-center"
             >
               <svg

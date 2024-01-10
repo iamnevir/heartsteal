@@ -1,6 +1,5 @@
 import BrainCanvas from "@/components/brain/brain-canvas";
 import HeroSection from "@/components/hero-section";
-import { Copyright } from "lucide-react";
 import dynamic from "next/dynamic";
 const NavbarPage = dynamic(() => import("@/components/navbar"), { ssr: false });
 export default function Home() {

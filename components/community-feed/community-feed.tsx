@@ -57,7 +57,6 @@ const CommunityFeed = ({
   if (!user?.id) {
     return null;
   }
-  console.log(grid);
   return (
     <div
       className={cn(
@@ -70,7 +69,8 @@ const CommunityFeed = ({
           ? "grid-cols-3"
           : grid === 4
           ? "grid-cols-4"
-          : "xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4"
+          : "xl:grid-cols-5 min-[1000px]:grid-cols-3 min-[750px]:grid-cols-2 grid-cols-1 min-[1200px]:grid-cols-4",
+        isMobile && "grid-cols-1"
       )}
     >
       {[

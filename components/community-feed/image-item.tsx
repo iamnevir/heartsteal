@@ -287,7 +287,7 @@ const ImageCommunityItem = ({
         onMouseLeave={() => setHover(false)}
         className={cn(
           " relative  w-full  cursor-pointer overflow-hidden",
-          grid === 5 && image.size === "1024x1024" ? "h-[370px]" : ""
+          grid === 5 && image.size === "1024x1024" && "h-[370px]"
         )}
       >
         <Image

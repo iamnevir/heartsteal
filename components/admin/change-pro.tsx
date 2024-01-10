@@ -24,7 +24,10 @@ const ChangePro = ({
         }
         isOpen={isOpen}
         onClose={onClose}
-        handleDelete={() => update({ id: userId, isPro: !isPro })}
+        handleDelete={() => {
+          update({ id: userId, isPro: !isPro });
+          onClose();
+        }}
       />
       <Chip
         onClick={onOpen}

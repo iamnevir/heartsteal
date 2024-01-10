@@ -117,7 +117,10 @@ const UserManager = ({ userId }: { userId: string }) => {
         }
         isOpen={delele.o}
         onClose={() => setDelete({ o: false, id: undefined })}
-        handleDelete={() => remove({ id: delele.id! })}
+        handleDelete={() => {
+          remove({ id: delele.id! });
+          setDelete({ o: false, id: undefined });
+        }}
       />
       <div>
         <div className="sm:pl-64 sm:p-4 p-2">

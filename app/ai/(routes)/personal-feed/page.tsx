@@ -6,7 +6,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { Divider } from "@nextui-org/react";
 import { useState } from "react";
 
-const PersonalFeedPage = async () => {
+const PersonalFeedPage = () => {
   const [search, setSearch] = useState("");
   const { language } = useLanguage();
   const { grid, setGrid } = useGridImage();

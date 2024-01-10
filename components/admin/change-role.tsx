@@ -20,7 +20,10 @@ const ChangeRole = ({
         title={`Xác nhận cấp quyền Admin cho người dùng này?`}
         isOpen={isOpen}
         onClose={onClose}
-        handleDelete={() => update({ id: userId, isAdmin: !isAdmin })}
+        handleDelete={() => {
+          update({ id: userId, isAdmin: !isAdmin });
+          onClose();
+        }}
       />
       <Chip
         onClick={() => {

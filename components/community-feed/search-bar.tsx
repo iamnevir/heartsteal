@@ -63,6 +63,7 @@ const SearchBar = ({
       <div className="py-3 flex items-center gap-4">
         <div className=" flex items-center gap-4 max-w-md">
           <Input
+            aria-label=""
             isClearable
             radius="sm"
             onValueChange={setSearch}
@@ -85,27 +86,45 @@ const SearchBar = ({
         </div>
 
         <Slider
+          aria-label="a"
           size="lg"
+          color="danger"
           startContent={<Grid />}
           classNames={{
             filler: "bg-gr",
-            thumb: "bg-gr",
-            base: "px-2 gap-1 sm:ml-auto sm:flex hidden",
+            base: "px-2 gap-1 ml-auto min-[1200px]:flex hidden",
           }}
-          onChange={(v) => setGrid(v)}
+          onChange={setGrid}
           step={1}
-          color="danger"
           showSteps={true}
           maxValue={5}
           minValue={1}
           defaultValue={5}
           className="max-w-md"
+          renderThumb={({ index, ...props }) => (
+            <div
+              {...props}
+              className="group p-1 top-1/2 bg-background border-small border-default-200 dark:border-default-400/50 shadow-medium rounded-full cursor-grab data-[dragging=true]:cursor-grabbing"
+            >
+              <span
+                className={cn(
+                  "transition-transform bg-gr shadow-small rounded-full w-5 h-5 block group-data-[dragging=true]:scale-80"
+                )}
+              />
+            </div>
+          )}
         />
       </div>
       <div className=" flex items-center flex-wrap gap-2">
         {category.map((item, index) => (
           <div
-            onClick={() => setSearch(item.title === "All" ? "" : item.title)}
+            onClick={() =>
+              setSearch(
+                item.title === "All" || item.title === "Tất cả"
+                  ? ""
+                  : item.title
+              )
+            }
             key={index}
             className={cn(
               " cursor-pointer dark:bg-[#101622] bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 rounded-full gap-2 flex items-center justify-center px-3 py-1",

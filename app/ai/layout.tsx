@@ -1,4 +1,3 @@
-import UserInfoModal from "@/components/user-info-modal";
 import dynamic from "next/dynamic";
 const Sidebar = dynamic(() => import("@/components/sidebar"), { ssr: false });
 const SideMenu = dynamic(() => import("@/components/side-menu"), {

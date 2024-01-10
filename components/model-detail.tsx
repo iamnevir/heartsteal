@@ -89,8 +89,12 @@ const ModelDetail = () => {
                       alt=""
                       className=" opacity-40"
                       src={item.bg}
-                      style={{ objectFit: "cover" }}
-                      sizes="100vw"
+                      sizes="(max-width: 768px) 100vw,66vw"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                     <item.icon className="group-hover:scale-125 duration-500 sm:w-[80px] sm:h-[80px] w-10 h-10" />
                   </div>
