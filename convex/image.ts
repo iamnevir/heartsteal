@@ -142,3 +142,16 @@ export const removeAll = mutation({
     return images;
   },
 });
+export const resetLike = mutation({
+  handler: async (ctx) => {
+    const users = await ctx.db.query("image").collect();
+    if (!users) {
+      return;
+    }
+    for (let i = 0; i < users.length; i++) {
+      await ctx.db.patch(users[i]._id, {
+        likes: Math.floor(Math.random() * (1000 - 100 + 1)) + 100,
+      });
+    }
+  },
+});
