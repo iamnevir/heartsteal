@@ -208,7 +208,7 @@ const Profile = ({ userId }: { userId: string }) => {
           classNames={{ name: isMobile ? "text-lg" : "" }}
           avatarProps={{
             title: "",
-            name: name?.charAt(0).toUpperCase(),
+            name: name?.charAt(0),
             className: isMobile ? "w-8 h-8 bg-gr" : "w-[30px] h-[30px] bg-gr ",
           }}
         />

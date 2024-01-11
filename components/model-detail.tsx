@@ -67,7 +67,7 @@ const ModelDetail = () => {
     },
   ];
   return (
-    <div className="flex sm:flex-row flex-col items-center gap-5 pt-5 sm:pl-64 px-5">
+    <div className="flex sm:flex-row flex-col items-center justify-center gap-5 pt-5 sm:pl-64 px-5">
       <Carousel
         opts={{
           align: "start",
@@ -79,15 +79,15 @@ const ModelDetail = () => {
             <CarouselItem
               onClick={() => router.push("/ai/generation")}
               key={index}
-              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 cursor-pointer p-3"
+              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4  cursor-pointer"
             >
               <Card key={index}>
-                <CardBody>
-                  <div className=" group relative scale-110 flex items-center justify-center p-3">
+                <CardBody className="overflow-hidden">
+                  <div className="  group relative scale-110 flex items-center justify-center p-3">
                     <Image
                       fill
                       alt=""
-                      className=" opacity-40"
+                      className=" opacity-40 -translate-y-2"
                       src={item.bg}
                       sizes="(max-width: 768px) 100vw,66vw"
                       style={{

@@ -85,12 +85,7 @@ const PersonalFeed = ({
         </div>
       ))}
       {status === "CanLoadMore" ? (
-        <LoadMore loadMore={() => loadMore(isMobile ? 3 : 8)} />
-      ) : null}
-      {status === "LoadingMore" ? (
-        <div className=" w-full py-3 flex items-center justify-center">
-          <CircularProgress size="sm" aria-label="Loading..." />
-        </div>
+        <LoadMore loadMore={() => loadMore(isMobile ? 5 : 20)} />
       ) : null}
     </div>
   );

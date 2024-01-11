@@ -623,6 +623,8 @@ const ImageGenerationMain = () => {
         variant="underlined"
         classNames={{ cursor: "bg-gr" }}
         aria-label="Tabs variants"
+        selectedKey={generation.tab}
+        onSelectionChange={(v) => generation.setTab(v.toString())}
       >
         <Tab
           key="history"
@@ -642,12 +644,7 @@ const ImageGenerationMain = () => {
             images={images}
           />
           {status === "CanLoadMore" ? (
-            <LoadMore loadMore={() => loadMore(isMobile ? 3 : 4)} />
-          ) : null}
-          {status === "LoadingMore" ? (
-            <div className=" w-full py-3 flex items-center justify-center">
-              <CircularProgress size="sm" aria-label="Loading..." />
-            </div>
+            <LoadMore loadMore={() => loadMore(isMobile ? 4 : 12)} />
           ) : null}
         </Tab>
         <Tab

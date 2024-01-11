@@ -51,7 +51,7 @@ const ImageInput = () => {
                 : "Your Uploads"}
             </span>
             <Divider />
-            <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2">
+            <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2 ">
               {u?.upload.map((item, index) => (
                 <Image
                   onClick={() => {
@@ -71,8 +71,8 @@ const ImageInput = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <div className=" max-w-2xl text-sm">
-        <Card classNames={{ base: "dark:bg-slate-950/70 bg-slate-200" }}>
+      <div className=" max-w-2xl text-sm ">
+        <Card classNames={{ base: "dark:bg-slate-950/70 bg-slate-200 " }}>
           <CardHeader>
             <span className="flex items-center gap-1">
               <ImageIcon className="w-5 h-5" />
@@ -115,7 +115,7 @@ const ImageInput = () => {
             </div>
           </CardHeader>
           <Divider />
-          <CardBody className="gap-2">
+          <CardBody className="gap-2 overflow-hidden">
             <div className="ml-2 flex items-center gap-2 font-semibold text-xs justify-between">
               <div className="flex items-center gap-2">
                 {" "}

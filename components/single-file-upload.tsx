@@ -28,7 +28,7 @@ const SingleFileUpload = ({
     <div
       onClick={() => imageInput.current?.click()}
       className={cn(
-        " relative cursor-pointer rounded-[10px] border-dashed border-blue-500 border-2 flex flex-col items-center h-[300px] max-w-2xl",
+        " relative cursor-pointer rounded-[10px]  border-dashed border-blue-500 border-2 flex flex-col items-center h-[300px] max-w-2xl",
         value ? "xl:w-[650px] xl:h-[300px]" : ""
       )}
     >

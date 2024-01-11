@@ -72,10 +72,20 @@ const GenerationHistory = ({
                     <Atom className="w-4 h-4" />
                     <span>Heart Steal</span>
                   </>
-                ) : generation.model === "dall-e-3" ? (
+                ) : generation.model === "pro" ? (
                   <>
                     <BrainCog className="w-4 h-4" />
                     <span>Heart Steal Pro</span>
+                  </>
+                ) : generation.model === "imagine" ? (
+                  <>
+                    <BrainCog className="w-4 h-4" />
+                    <span>Imagine</span>
+                  </>
+                ) : generation.model === "dream" ? (
+                  <>
+                    <BrainCog className="w-4 h-4" />
+                    <span>Dream</span>
                   </>
                 ) : (
                   <>

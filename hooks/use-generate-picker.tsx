@@ -17,6 +17,8 @@ type GenerateImage = {
   style: string;
   negativePrompt: string;
   isNegative: boolean;
+  tab: string;
+  setTab: (tab: string) => void;
   setIsNegative: (isNegative: boolean) => void;
   setNegativePrompt: (negativePrompt: string) => void;
   setStyle: (style: string) => void;
@@ -52,6 +54,8 @@ export const useGenerateImage = create<GenerateImage>((set, get) => ({
   style: "21",
   negativePrompt: "",
   isNegative: false,
+  tab: "",
+  setTab: (tab: string) => set({ tab }),
   setIsNegative: (isNegative: boolean) => set({ isNegative }),
   setNegativePrompt: (negativePrompt: string) => set({ negativePrompt }),
   setStyle: (style: string) => set({ style }),

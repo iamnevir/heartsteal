@@ -1,9 +1,16 @@
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
-import { cn, formatVietnameseDateTime } from "@/lib/utils";
+import {
+  backEndUrl,
+  base64toFile,
+  cn,
+  formatVietnameseDateTime,
+} from "@/lib/utils";
 import {
   Card,
   CardBody,
+  CardFooter,
+  Chip,
   Divider,
   Modal,
   ModalBody,
@@ -24,15 +31,21 @@ import {
   Download,
   DownloadCloudIcon,
   ExternalLinkIcon,
+  Film,
   Heart,
+  ScanEyeIcon,
+  Wand2,
 } from "lucide-react";
 import { saveAs } from "file-saver";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard, useMediaQuery } from "usehooks-ts";
+import { useCopyToClipboard } from "usehooks-ts";
 import { useLanguage } from "@/hooks/use-language";
 import { useRouter } from "next/navigation";
+import { useGenerateImage } from "@/hooks/use-generate-picker";
+import axios from "axios";
+import { useEdgeStore } from "@/lib/edgestore";
 const ImageCommunityItem = ({
   image,
   userId,
@@ -44,15 +57,17 @@ const ImageCommunityItem = ({
 }) => {
   const users = useQuery(api.user.getUsers);
   const userName = useQuery(api.user.getUserByUser, { userId });
+  const create = useMutation(api.image.create);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const generation = useGenerateImage();
   const update = useMutation(api.image.update);
   const router = useRouter();
   const updateUser = useMutation(api.user.update);
+  const { edgestore } = useEdgeStore();
   const imageAuthor = users
     ? users.find((f) => f.userId === image.userId)?.username
     : userName?.username;
   const [value, copy] = useCopyToClipboard();
-  const isMobile = useMediaQuery("(max-width:640px)");
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
   const { language } = useLanguage();
@@ -77,6 +92,84 @@ const ImageCommunityItem = ({
   };
   const downloadImage = async () => {
     saveAs(image.url, "heartsteal.png");
+  };
+  const handleRemix = () => {
+    generation.setImageSize(image.size);
+    generation.setModel(image.model);
+    generation.setImageInput(false);
+    generation.setPrompt(image.prompt ? image.prompt : "");
+    generation.setNegativePrompt(
+      image.negativePrompt ? image.negativePrompt : ""
+    );
+    generation.setIsNegative(
+      image.negativePrompt && image.negativePrompt !== "" ? true : false
+    );
+    generation.setTab("history");
+    router.push("/ai/generation");
+  };
+  const handleInput = () => {
+    generation.setInputUrl(image.url);
+    generation.setImageInput(true);
+    generation.setPrompt("");
+    generation.setIsNegative(false);
+    generation.setNegativePrompt("");
+    generation.setTab("image-input");
+    router.push("/ai/generation");
+  };
+  const handleRemoveBg = async () => {
+    if (!userName?.isPro) {
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy nâng cấp Premium để sử dụng."
+          : "Upgrade to Professor to use."
+      );
+      return;
+    }
+    generation.setIsLoading(true);
+    try {
+      generation.setTab("history");
+      router.push(`/ai/generation?img=${image.url}`);
+      const res = await axios({
+        method: "post",
+        url: `${backEndUrl}/rm_bg`,
+        maxBodyLength: Infinity,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          url: image.url,
+        },
+      });
+      const file = base64toFile(res.data.image_base64);
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+        });
+        if (res.url) {
+          create({
+            prompt: `${image._id} remove background`,
+            url: res.url,
+            userId,
+            isPublish: image.isPublish,
+            likes: 0,
+            model: image.model,
+            size: image.size,
+          });
+        }
+      }
+      toast.success(
+        language === "Vietnamese"
+          ? "Xóa nền thành công."
+          : "Remove background successfull."
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      generation.setIsLoading(false);
+      toast.error(
+        language === "Vietnamese"
+          ? "Xóa nền không thành công."
+          : "Remove background failed."
+      );
+    }
   };
   return (
     <>
@@ -143,7 +236,7 @@ const ImageCommunityItem = ({
                   </div>
                 </div>
 
-                <div className=" flex flex-col items-start gap-3 w-full max-w-xs">
+                <div className=" flex flex-col items-start gap-3 w-full">
                   <div className="flex items-center gap-2 w-full justify-between ">
                     <User
                       onClick={() => router.push(`/ai/profile/${imageAuthor}`)}
@@ -163,19 +256,22 @@ const ImageCommunityItem = ({
                       )}
                     />
                   </div>
-
+                  <span className=" line-clamp-1 font-medium text-sm">
+                    {image.prompt}
+                  </span>
                   {image.prompt !== "" && (
                     <>
                       <Divider />
-                      <span className=" text-sm">
+                      <span className=" text-xs font-semibold">
                         {language === "Vietnamese"
                           ? "Chi tiết lệnh"
                           : "Prompt details"}
                       </span>
                       <Card>
                         <CardBody>
-                          <div className="sm:line-clamp-[10] line-clamp-3 relative rounded-[10px] dark:bg-black bg-slate-200 sm:p-3 p-1 pr-10 text-sm max-w-xs">
+                          <div className=" relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-xs max-w-xs">
                             {image.prompt}
+
                             <div
                               onClick={() => {
                                 copy(image.prompt!);
@@ -189,12 +285,110 @@ const ImageCommunityItem = ({
                                   setCopied(false);
                                 }, 1000);
                               }}
-                              className=" absolute cursor-pointer right-2 top-2 p-1 bg-black rounded-xl"
+                              className=" absolute cursor-pointer right-2 top-2 p-1 dark:bg-black bg-white rounded-xl"
                             >
                               {copied ? (
-                                <Check className=" w-4 h-4" color="white" />
+                                <Check className=" w-4 h-4 dark:text-white text-black" />
                               ) : (
-                                <Copy className=" w-4 h-4" color="white" />
+                                <Copy className=" w-4 h-4 dark:text-white text-black" />
+                              )}
+                            </div>
+                          </div>
+                        </CardBody>
+                        <CardFooter>
+                          <div className=" text-xs grid grid-cols-3 w-full items-center gap-3">
+                            <Tooltip
+                              size="sm"
+                              delay={100}
+                              closeDelay={100}
+                              content={
+                                language === "Vietnamese"
+                                  ? "Chỉ áp dụng cho Premium"
+                                  : "Just for Premium"
+                              }
+                            >
+                              <div
+                                onClick={handleRemoveBg}
+                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                              >
+                                <Film className="w-4 h-4" />
+                                {language === "Vietnamese"
+                                  ? "Xóa nền"
+                                  : "Remove Background"}
+                              </div>
+                            </Tooltip>
+                            <Tooltip
+                              size="sm"
+                              delay={100}
+                              closeDelay={100}
+                              content={
+                                language === "Vietnamese"
+                                  ? "Dùng ảnh này như một đầu vào."
+                                  : "Use like an Image Input."
+                              }
+                            >
+                              <div
+                                onClick={handleInput}
+                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                              >
+                                <ScanEyeIcon className="w-4 h-4" />
+                                Input
+                              </div>
+                            </Tooltip>
+                            <Tooltip
+                              size="sm"
+                              delay={100}
+                              closeDelay={100}
+                              content={
+                                language === "Vietnamese"
+                                  ? "Tạo lại ảnh có thuộc tính như thế ảnh này."
+                                  : "Reuse this image settings to generation."
+                              }
+                            >
+                              <div
+                                onClick={handleRemix}
+                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                              >
+                                <Wand2 className="w-4 h-4" />
+                                Remix
+                              </div>
+                            </Tooltip>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </>
+                  )}
+                  {image.negativePrompt && image.negativePrompt !== "" && (
+                    <>
+                      <Divider />
+                      <span className="  text-xs font-semibold">
+                        {language === "Vietnamese"
+                          ? "Lời nhắc tiêu cực "
+                          : "Negative Prompt"}
+                      </span>
+                      <Card>
+                        <CardBody>
+                          <div className=" relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-xs max-w-xs">
+                            {image.negativePrompt}
+                            <div
+                              onClick={() => {
+                                copy(image.negativePrompt!);
+                                toast.success(
+                                  language === "Vietnamese"
+                                    ? "Đã sao chép."
+                                    : "Copied to Clipboard."
+                                );
+                                setCopied(true);
+                                setTimeout(() => {
+                                  setCopied(false);
+                                }, 1000);
+                              }}
+                              className=" absolute cursor-pointer right-2 top-2 p-1 dark:bg-black bg-white rounded-xl"
+                            >
+                              {copied ? (
+                                <Check className=" w-4 h-4 dark:text-white text-black" />
+                              ) : (
+                                <Copy className=" w-4 h-4 dark:text-white text-black" />
                               )}
                             </div>
                           </div>
@@ -202,51 +396,11 @@ const ImageCommunityItem = ({
                       </Card>
                     </>
                   )}
-                  {image.negativePrompt &&
-                    image.negativePrompt !== "" &&
-                    !isMobile && (
-                      <>
-                        <Divider />
-                        <span className=" text-sm">
-                          {language === "Vietnamese"
-                            ? "Lời nhắc tiêu cực "
-                            : "Negative Prompt"}
-                        </span>
-                        <Card>
-                          <CardBody>
-                            <div className="line-clamp-2 relative rounded-[10px] dark:bg-black bg-slate-200 p-3 pr-10 text-sm max-w-xs">
-                              {image.negativePrompt}
-                              <div
-                                onClick={() => {
-                                  copy(image.negativePrompt!);
-                                  toast.success(
-                                    language === "Vietnamese"
-                                      ? "Đã sao chép."
-                                      : "Copied to Clipboard."
-                                  );
-                                  setCopied(true);
-                                  setTimeout(() => {
-                                    setCopied(false);
-                                  }, 1000);
-                                }}
-                                className=" absolute cursor-pointer right-2 top-2 p-1 bg-black rounded-xl"
-                              >
-                                {copied ? (
-                                  <Check className=" w-4 h-4" color="white" />
-                                ) : (
-                                  <Copy className=" w-4 h-4" color="white" />
-                                )}
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </>
-                    )}
 
                   <Divider />
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">
+                      <span className=" text-xs dark:text-white/50 text-black/50">
                         {language === "Vietnamese"
                           ? "Kích thước"
                           : "Input Resolution"}
@@ -254,7 +408,7 @@ const ImageCommunityItem = ({
                       <span className="text-xs">{image.size}</span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">
+                      <span className=" text-xs dark:text-white/50 text-black/50">
                         {language === "Vietnamese" ? "Ngày tạo" : "CreatedAt"}
                       </span>
                       <span className="text-xs whitespace-nowrap">
@@ -262,7 +416,7 @@ const ImageCommunityItem = ({
                       </span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">
+                      <span className=" text-xs dark:text-white/50 text-black/50">
                         {language === "Vietnamese" ? "Mô hình" : "Model"}
                       </span>
                       <span className="text-xs flex items-center gap-1">
@@ -277,11 +431,17 @@ const ImageCommunityItem = ({
                           <>
                             <BrainCog className="w-4 h-4" />
                             <span>Heart Steal Pro</span>
+                            <Chip className="bg-gr w-8 justify-center h-4 text-xs">
+                              Pro
+                            </Chip>
                           </>
                         ) : image.model === "imagine" ? (
                           <>
                             <BrainCog className="w-4 h-4" />
                             <span>Imagine</span>
+                            <Chip className="bg-gr w-8 justify-center h-4 text-xs">
+                              Pro
+                            </Chip>
                           </>
                         ) : image.model === "dream" ? (
                           <>
@@ -297,7 +457,7 @@ const ImageCommunityItem = ({
                       </span>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className=" text-xs text-gray-600">
+                      <span className=" text-xs dark:text-white/50 text-black/50">
                         {language === "Vietnamese" ? "Lượt thích" : "Likes"}
                       </span>
                       <span className="text-xs">{image.likes}</span>
@@ -337,7 +497,7 @@ const ImageCommunityItem = ({
         <Image
           className={cn(
             "rounded-md duration-300 ",
-            hover ? "sm:smopacity-40" : ""
+            hover ? "sm:opacity-40" : ""
           )}
           alt=""
           onClick={onOpen}
@@ -393,7 +553,7 @@ const ImageCommunityItem = ({
         </div>
         <div
           className={cn(
-            "  duration-500 absolute bottom-2 text-white left-2 cursor-pointer justify-start sm:line-clamp-6 line-clamp-4 max-w-[200px] gap-3 rounded-md  text-xs",
+            "  duration-500 absolute bottom-2 text-white left-2 cursor-pointer justify-start sm:line-clamp-6 line-clamp-4 max-w-[80%] gap-3 rounded-md  text-xs",
             hover
               ? "translate-x-0 opacity-100"
               : "sm:opacity-0 sm:-translate-x-2 sm:pointer-events-none"
