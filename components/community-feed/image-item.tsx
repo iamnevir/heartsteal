@@ -246,15 +246,18 @@ const ImageCommunityItem = ({
                         className: "w-[30px] h-[30px] bg-gr cursor-pointer",
                       }}
                     />
-                    <Heart
-                      onClick={handleLiked}
-                      className={cn(
-                        " mr-3 hover:scale-105 duration-500 cursor-pointer",
-                        userName?.like.includes(image._id)
-                          ? " fill-red-500 text-red-500"
-                          : ""
-                      )}
-                    />
+                    <div className=" flex items-center gap-1">
+                      {image.likes}
+                      <Heart
+                        onClick={handleLiked}
+                        className={cn(
+                          " mr-3 hover:scale-105 duration-500 cursor-pointer",
+                          userName?.like.includes(image._id)
+                            ? " fill-red-500 text-red-500"
+                            : ""
+                        )}
+                      />
+                    </div>
                   </div>
                   <span className=" line-clamp-1 font-medium text-sm">
                     {image.prompt}
@@ -517,7 +520,7 @@ const ImageCommunityItem = ({
         <div
           onClick={handleLiked}
           className={cn(
-            "text-sm absolute z-[1] right-2 text-white w-14 h-8 flex items-center justify-center top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0",
+            "text-sm absolute z-[1] right-2 px-2 gap-1 text-white w-18 h-8 flex items-center justify-center top-2 duration-500 rounded-full backdrop-blur-lg bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0",
             hover
               ? "opacity-100 translate-x-0"
               : "sm:opacity-0 sm:translate-x-2 sm:pointer-events-none"
@@ -526,7 +529,7 @@ const ImageCommunityItem = ({
           <div>{image.likes}</div>
           <Heart
             className={cn(
-              " w-5 h-5 ml-2 hover:scale-125 duration-500 text-white",
+              " w-5 h-5 hover:scale-125 duration-500 text-white",
               userName?.like.includes(image._id)
                 ? " fill-red-500 text-red-500"
                 : ""

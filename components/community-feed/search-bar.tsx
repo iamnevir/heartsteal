@@ -1,8 +1,6 @@
-import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import { Button, Input, Slider, SliderValue } from "@nextui-org/react";
-import { useMutation } from "convex/react";
 import {
   Cake,
   Film,
@@ -26,7 +24,6 @@ const SearchBar = ({
   setSearch: (v: string) => void;
 }) => {
   const { language } = useLanguage();
-  const reset = useMutation(api.image.resetLike);
   const category = [
     {
       title: language === "Vietnamese" ? "Tất cả" : "All",
@@ -81,7 +78,6 @@ const SearchBar = ({
             }
           />{" "}
           <Button
-            onPress={() => reset()}
             variant="shadow"
             className="bg-gr hover:scale-105 rounded-lg sm:w-fit w-[40%] sm:px-10 font-semibold text-sm py-3"
           >

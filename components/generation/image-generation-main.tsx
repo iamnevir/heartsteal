@@ -28,6 +28,7 @@ import {
   cn,
   groupObjectsByPrompt,
   openaiApi,
+  randomInt,
 } from "@/lib/utils";
 import { usePaginatedQuery } from "convex/react";
 import LoadMore from "../load-more";
@@ -97,7 +98,7 @@ const ImageGenerationMain = () => {
             url: res.data.data[index],
             userId: user?.id!,
             isPublish: generation.publicImage,
-            likes: 0,
+            likes: randomInt(50, 300),
             model: generation.model,
             size: generation.imageSize,
           });
@@ -137,7 +138,7 @@ const ImageGenerationMain = () => {
             negativePrompt: generation.negativePrompt,
             userId: user?.id!,
             isPublish: generation.publicImage,
-            likes: 0,
+            likes: randomInt(50, 300),
             model: generation.model,
             size: generation.imageSize,
           });
@@ -168,7 +169,7 @@ const ImageGenerationMain = () => {
             url: urls![index],
             userId: user?.id!,
             isPublish: generation.publicImage,
-            likes: 0,
+            likes: randomInt(50, 300),
             model: generation.model,
             size: generation.imageSize,
           });
@@ -201,7 +202,7 @@ const ImageGenerationMain = () => {
                   url: res.url,
                   userId: user?.id!,
                   isPublish: generation.publicImage,
-                  likes: 0,
+                  likes: randomInt(50, 500),
                   model: generation.model,
                   size: generation.imageSize,
                 });
@@ -239,7 +240,7 @@ const ImageGenerationMain = () => {
               userId: user?.id!,
               isPublish: generation.publicImage,
               negativePrompt: generation.negativePrompt,
-              likes: 0,
+              likes: randomInt(50, 500),
               model: generation.model,
               size: generation.imageSize,
             });
@@ -292,7 +293,7 @@ const ImageGenerationMain = () => {
               url: result,
               userId: user?.id!,
               isPublish: generation.publicImage,
-              likes: 0,
+              likes: randomInt(500, 1000),
               model: generation.model,
               size: generation.imageSize,
             });
