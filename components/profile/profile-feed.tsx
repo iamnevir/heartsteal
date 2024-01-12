@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
 import LoadMore from "../load-more";
-import { CircularProgress, SliderValue } from "@nextui-org/react";
+import { SliderValue } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
 import ImageItem from "../community-feed/image-item";
 import ImageSkeleton from "../image-skeleton";
@@ -51,7 +51,7 @@ const ProfileFeed = ({
     }
   }
   if (status === "LoadingFirstPage") {
-    return <ImageSkeleton />;
+    return <ImageSkeleton grid={grid} />;
   }
   if (!userId) {
     return null;
@@ -86,11 +86,6 @@ const ProfileFeed = ({
       ))}
       {status === "CanLoadMore" ? (
         <LoadMore loadMore={() => loadMore(isMobile ? 5 : 20)} />
-      ) : null}
-      {status === "LoadingMore" ? (
-        <div className=" w-full py-3 flex items-center justify-center">
-          <CircularProgress size="sm" aria-label="Loading..." />
-        </div>
       ) : null}
     </div>
   );

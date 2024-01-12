@@ -43,7 +43,7 @@ const LikedPost = ({ search, grid }: { search: string; grid: SliderValue }) => {
     }
   }
   if (posts === undefined) {
-    return <ImageSkeleton />;
+    return <ImageSkeleton grid={grid} />;
   }
   if (!posts) {
     return null;
