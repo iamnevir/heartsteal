@@ -48,7 +48,7 @@ const GenerationHistory = ({
   }, [isLoading]);
   return (
     <div className=" w-full h-full">
-      {true && (
+      {isLoading && (
         <>
           <div className=" flex py-2 items-center sm:justify-between text-xs">
             <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
