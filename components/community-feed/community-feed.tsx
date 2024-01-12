@@ -52,7 +52,7 @@ const CommunityFeed = ({
     }
   }
   if (status === "LoadingFirstPage") {
-    return <ImageSkeleton />;
+    return <ImageSkeleton grid={grid} />;
   }
   if (!user?.id) {
     return null;

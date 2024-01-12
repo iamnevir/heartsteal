@@ -48,7 +48,7 @@ const GenerationHistory = ({
   }, [isLoading]);
   return (
     <div className=" w-full h-full">
-      {isLoading && (
+      {true && (
         <>
           <div className=" flex py-2 items-center sm:justify-between text-xs">
             <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
@@ -111,10 +111,10 @@ const GenerationHistory = ({
                 <div
                   key={ind}
                   className={cn(
-                    " rounded-lg relative sm:w-[290px] w-[370px]",
+                    " rounded-lg relative",
                     generation.imageSize === "512x512"
                       ? "sm:h-[290px] h-[370px]"
-                      : "h-[390px]"
+                      : "h-[370px]"
                   )}
                 >
                   <CircularProgress
@@ -128,10 +128,10 @@ const GenerationHistory = ({
                   </span>
                   <Skeleton
                     className={cn(
-                      " rounded-lg absolute sm:w-[290px] w-[370px]",
+                      " rounded-lg absolute w-full",
                       generation.imageSize === "512x512"
                         ? "sm:h-[290px] h-[370px]"
-                        : "h-[390px]"
+                        : "h-[370px]"
                     )}
                   />
                   <Image

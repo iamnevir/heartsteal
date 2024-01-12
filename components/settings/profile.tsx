@@ -137,11 +137,11 @@ const Profile = ({ userId }: { userId: string }) => {
                   endContent={
                     <>
                       {isValid ? (
-                        <div className="duration-500 w-8 h-7 rounded-full bg-green-500 items-center justify-center flex">
+                        <div className="duration-500 w-8 h-[26px] rounded-full bg-green-500 items-center justify-center flex">
                           <Check className=" duration-500 w-4 h-4" />
                         </div>
                       ) : isValid === false ? (
-                        <div className="duration-500 w-8 h-7 rounded-full bg-red-500 items-center justify-center flex">
+                        <div className="duration-500 w-8 h-[26px] rounded-full bg-red-500 items-center justify-center flex">
                           <X className="duration-500 w-4 h-4" />
                         </div>
                       ) : null}
