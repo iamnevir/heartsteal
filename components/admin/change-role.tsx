@@ -3,7 +3,8 @@ import { Chip, cn, useDisclosure } from "@nextui-org/react";
 import ConfirmModal from "../confirm-modal";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-
+import { useLanguage } from "@/hooks/use-language";
+import { toast } from "sonner";
 const ChangeRole = ({
   userId,
   isAdmin,
@@ -12,7 +13,7 @@ const ChangeRole = ({
   isAdmin: boolean;
 }) => {
   const update = useMutation(api.user.update);
-
+  const { language } = useLanguage();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -21,7 +22,22 @@ const ChangeRole = ({
         isOpen={isOpen}
         onClose={onClose}
         handleDelete={() => {
-          update({ id: userId, isAdmin: !isAdmin });
+          try {
+            update({ id: userId, isAdmin: !isAdmin });
+            toast.success(
+              language === "Vietnamese"
+                ? "Cập nhật thành công."
+                : "Updated Admin."
+            );
+          } catch (error) {
+            console.log(error);
+            toast.error(
+              language === "Vietnamese"
+                ? "Cập nhật không thành công."
+                : "Update Failed."
+            );
+          }
+
           onClose();
         }}
       />

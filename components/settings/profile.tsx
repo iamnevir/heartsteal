@@ -26,7 +26,7 @@ const Profile = ({ userId }: { userId: string }) => {
   const [username, setUserName] = useState(u?.username);
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [fav, setFav] = useState<string[]>([]);
-  const language = useLanguage();
+  const { language } = useLanguage();
   useEffect(() => {
     if (u?.favorite) {
       setFav(u?.favorite);
@@ -46,20 +46,18 @@ const Profile = ({ userId }: { userId: string }) => {
         favorite: fav,
       });
       toast.success(
-        language.language === "Vietnamese"
-          ? "Đã cập nhật hồ sơ."
-          : "Updated Profile."
+        language === "Vietnamese" ? "Đã cập nhật hồ sơ." : "Updated Profile."
       );
     } else {
       toast.error(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Làm ơn xem lại lựa chọn."
           : "Please looking for your form again."
       );
     }
   }
   const favorites =
-    language.language === "Vietnamese"
+    language === "Vietnamese"
       ? [
           "Hoạt hình",
           "Nhiếp ảnh",
@@ -102,18 +100,14 @@ const Profile = ({ userId }: { userId: string }) => {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            {language.language === "Vietnamese"
-              ? "Hồ sơ của bạn"
-              : "Your Profile"}
+            {language === "Vietnamese" ? "Hồ sơ của bạn" : "Your Profile"}
           </ModalHeader>
           <ModalBody>
             <div className=" flex items-center flex-col gap-2">
               <div className=" w-full flex-col gap-2 flex">
                 <span className="gradient-text">
                   {" "}
-                  {language.language === "Vietnamese"
-                    ? "@Biệt danh"
-                    : "@username"}
+                  {language === "Vietnamese" ? "@Biệt danh" : "@username"}
                 </span>{" "}
                 <Input
                   defaultValue={u?.username}
@@ -150,7 +144,7 @@ const Profile = ({ userId }: { userId: string }) => {
                   placeholder="someawesomeusername"
                 />
                 <span className=" text-slate-400 text-xs">
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Hồ sơ của bạn"
                     : "Biệt danh phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới."}
                 </span>
@@ -191,7 +185,7 @@ const Profile = ({ userId }: { userId: string }) => {
                 isValid === false ? "opacity-50 pointer-events-none" : ""
               )}
             >
-              {language.language === "Vietnamese" ? "Lưu" : "Save"}
+              {language === "Vietnamese" ? "Lưu" : "Save"}
             </Button>
           </ModalFooter>
         </ModalContent>

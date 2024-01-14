@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import isValidName from "@/actions/isValidName";
 import { toast } from "sonner";
+import { useLanguage } from "@/hooks/use-language";
 const UserInfoModal = ({ userId }: { userId: string }) => {
   const update = useMutation(api.user.update);
   const u = useQuery(api.user.getUserByUser, { userId });
@@ -27,6 +28,7 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [fav, setFav] = useState<string[]>([]);
+  const { language } = useLanguage();
   useEffect(() => {
     if (u?.username === undefined) {
       onOpen();
@@ -41,43 +43,76 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
 
   async function onSubmit() {
     if (isValid && confirm) {
-      if (!u?.coin) {
-        await update({
-          id: u?._id!,
-          username: name?.replace(/\s/g, ""),
-          favorite: fav,
-          coin: 150,
-        });
-      } else {
-        await update({
-          id: u?._id!,
-          username: name?.replace(/\s/g, ""),
-          favorite: fav,
-        });
+      try {
+        if (!u?.coin) {
+          await update({
+            id: u?._id!,
+            username: name?.replace(/\s/g, ""),
+            favorite: fav,
+            coin: 150,
+          });
+        } else {
+          await update({
+            id: u?._id!,
+            username: name?.replace(/\s/g, ""),
+            favorite: fav,
+          });
+        }
+        onClose();
+        toast.success(
+          language === "Vietnamese"
+            ? "Tạo hồ sơ thành công."
+            : "Created Profile."
+        );
+      } catch (error) {
+        toast.success(
+          language === "Vietnamese"
+            ? "Tạo hồ sơ không thành công."
+            : "Created Profile."
+        );
       }
-
-      onClose();
-      toast.success("Created Profile.");
     } else {
-      toast.error("Please looking for your form again.");
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy xem lại thông tin của bạn."
+          : "Please looking for your form again."
+      );
     }
   }
-  const favorites = [
-    "Motion",
-    "Photography",
-    "Anime",
-    "Art",
-    "Character",
-    "Food",
-    "Alien",
-    "Fashion",
-    "Video Games",
-    "Games Design",
-    "Product Design",
-    "Marketing",
-    "Education",
-    "Orther",
-  ];
+  const favorites =
+    language === "Vietnamese"
+      ? [
+          "Hoạt hình",
+          "Nhiếp ảnh",
+          "Anime",
+          "Vẽ",
+          "Nhân vật",
+          "Thức ăn",
+          "Alien",
+          "Thời trang",
+          "Trò chơi điện tử",
+          "Thiết kế game",
+          "Thiết kế sản phẩm",
+          "Thương mại",
+          "Giáo dục",
+          "Khác",
+        ]
+      : [
+          "Motion",
+          "Photography",
+          "Anime",
+          "Art",
+          "Character",
+          "Food",
+          "Alien",
+          "Fashion",
+          "Video Games",
+          "Games Design",
+          "Product Design",
+          "Marketing",
+          "Education",
+          "Orther",
+        ];
   return (
     <Modal
       backdrop="blur"
@@ -101,17 +136,21 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
               alt=""
             />
             <span className=" z-10">
-              Welcome to <span className="gradient-text">HeartSteal.Ai</span>
+              {language === "Vietnamese" ? "Chào mừng đến với" : "Welcome to"}{" "}
+              <span className="gradient-text">HeartSteal.Ai</span>
             </span>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className=" flex items-center flex-col gap-2">
-            <span className="text-lg font-semibold">Get started</span>
+            <span className="text-lg font-semibold">
+              {language === "Vietnamese" ? "Hãy bắt đầu" : "Get started"}
+            </span>
             <div className=" w-full flex-col gap-2 flex">
               <span>
-                Create your own
+                {language === "Vietnamese" ? "Hãy tạo" : "Create your own"}
                 <span className="gradient-text"> @username</span>{" "}
+                {language === "Vietnamese" ? "của riêng bạn" : ""}
               </span>
 
               <Input
@@ -145,15 +184,22 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
                     ) : null}
                   </>
                 }
-                placeholder="someawesomeusername"
+                placeholder={
+                  language === "Vietnamese"
+                    ? "tengidohayhay"
+                    : "someawesomeusername"
+                }
               />
               <span className=" text-slate-400 text-xs">
-                Username must be between 4-15 characters and contain letters,
-                number and underscores only.
+                {language === "Vietnamese"
+                  ? "Tên người dùng phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới"
+                  : "Username must be between 4-15 characters and contain letters, number and underscores only."}
               </span>
             </div>
             <span className="text-lg font-semibold mt-2">
-              What are your interests?
+              {language === "Vietnamese"
+                ? "Điều gì khiến bạn thích thú?"
+                : "What are your interests?"}
             </span>
 
             <div className=" flex flex-wrap gap-2">
@@ -188,8 +234,9 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
                   }}
                 />
                 <span>
-                  I confirm that I am over 18 and want to show NSFW content by
-                  default
+                  {language === "Vietnamese"
+                    ? "Tôi xác nhận rằng tôi trên 18 tuổi và muốn hiển thị nội dung NSFW theo mặc định."
+                    : "I confirm that I am over 18 and want to show NSFW content by default."}
                 </span>
               </div>
             </div>
@@ -202,7 +249,7 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
             type="submit"
             onPress={onSubmit}
           >
-            Next
+            {language === "Vietnamese" ? "Tiếp theo" : "Next"}
           </Button>
         </ModalFooter>
       </ModalContent>

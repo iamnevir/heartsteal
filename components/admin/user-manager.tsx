@@ -24,6 +24,7 @@ import ChangePro from "./change-pro";
 import ChangeRole from "./change-role";
 import ChangeCoin from "./change-coin";
 import Loading from "@/app/loading";
+import { toast } from "sonner";
 const UserManager = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
   const users = useQuery(api.user.getUsers);
@@ -118,7 +119,19 @@ const UserManager = ({ userId }: { userId: string }) => {
         isOpen={delele.o}
         onClose={() => setDelete({ o: false, id: undefined })}
         handleDelete={() => {
-          remove({ id: delele.id! });
+          try {
+            remove({ id: delele.id! });
+            toast.success(
+              language === "Vietnamese" ? "Đã xóa người dùng." : "User Deleted."
+            );
+          } catch (error) {
+            console.log(error);
+            toast.error(
+              language === "Vietnamese"
+                ? "Xóa người dùng không thành công."
+                : "Delete Failed."
+            );
+          }
           setDelete({ o: false, id: undefined });
         }}
       />
