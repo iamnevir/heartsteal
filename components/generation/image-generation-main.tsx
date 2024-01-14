@@ -85,7 +85,7 @@ const ImageGenerationMain = () => {
         };
         const res = await axios({
           method: "post",
-          url: `${backEndUrl}/generate_image_with_image`,
+          url: `${backEndUrl}/generation/generate_image_with_image`,
           maxBodyLength: Infinity,
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const ImageGenerationMain = () => {
         };
         const res = await axios({
           method: "post",
-          url: `${backEndUrl}/edit_image`,
+          url: `${backEndUrl}/generation/edit_image`,
           maxBodyLength: Infinity,
           headers: { "Content-Type": "application/json" },
           data,
@@ -152,7 +152,7 @@ const ImageGenerationMain = () => {
       } else if (generation.model === "bimg") {
         const res = await axios({
           method: "post",
-          url: `${backEndUrl}/bing_gen`,
+          url: `${backEndUrl}/generation/bing_gen`,
           maxBodyLength: Infinity,
           headers: { "Content-Type": "application/json" },
           data: {
@@ -219,7 +219,7 @@ const ImageGenerationMain = () => {
       } else if (generation.model === "imagine") {
         const res = await axios({
           method: "post",
-          url: `${backEndUrl}/generate_imagine`,
+          url: `${backEndUrl}/generation/generate_imagine`,
           maxBodyLength: Infinity,
           headers: { "Content-Type": "application/json" },
           data: {
@@ -256,7 +256,7 @@ const ImageGenerationMain = () => {
         const generateI = async (model: number) => {
           const response = await axios({
             method: "post",
-            url: `${backEndUrl}/img_gen`,
+            url: `${backEndUrl}/generation/img_gen`,
             maxBodyLength: Infinity,
             headers: { "Content-Type": "application/json" },
             data: {

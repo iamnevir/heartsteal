@@ -93,7 +93,7 @@ const ImageItem = ({
     try {
       const res = await axios({
         method: "post",
-        url: `${backEndUrl}/imagine_upscale`,
+        url: `${backEndUrl}/generation/imagine_upscale`,
         maxBodyLength: Infinity,
         headers: { "Content-Type": "application/json" },
         data: {
@@ -137,7 +137,7 @@ const ImageItem = ({
     try {
       const res = await axios({
         method: "post",
-        url: `${backEndUrl}/rm_bg`,
+        url: `${backEndUrl}/generation/rm_bg`,
         maxBodyLength: Infinity,
         headers: { "Content-Type": "application/json" },
         data: {
