@@ -1,5 +1,4 @@
 "use client";
-import { api } from "@/convex/_generated/api";
 import {
   Button,
   Divider,
@@ -12,26 +11,41 @@ import {
   Switch,
   useDisclosure,
 } from "@nextui-org/react";
-import { useMutation, useQuery } from "convex/react";
 import { Check, Flower, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { backEndUrl, cn } from "@/lib/utils";
 import isValidName from "@/actions/isValidName";
 import { toast } from "sonner";
+import { Doc } from "@/convex/_generated/dataModel";
+import { useLanguage } from "@/hooks/use-language";
 const UserInfoModal = ({ userId }: { userId: string }) => {
-  const update = useMutation(api.user.update);
-  const u = useQuery(api.user.getUserByUser, { userId });
+  const { language } = useLanguage();
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [fav, setFav] = useState<string[]>([]);
+  const [u, setU] = useState<Doc<"user">>();
   useEffect(() => {
-    if (u?.username === undefined) {
-      onOpen();
-    }
-  }, [u, onOpen]);
+    const fetchUser = async () => {
+      const response = await fetch(`${backEndUrl}/user/by_user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+        }),
+      });
+      const data = await response.json();
+      setU(data.user);
+      if (u?.username === undefined) {
+        onOpen();
+      }
+    };
+    fetchUser();
+  }, [onOpen, userId]);
   if (u?.username) {
     return null;
   }
@@ -41,25 +55,39 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
 
   async function onSubmit() {
     if (isValid && confirm) {
-      if (!u?.coin) {
-        await update({
-          id: u?._id!,
-          username: name?.replace(/\s/g, ""),
-          favorite: fav,
-          coin: 150,
+      try {
+        const response = await fetch(`${backEndUrl}/user/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: u?._id,
+            username: name,
+            favorites: fav,
+          }),
         });
-      } else {
-        await update({
-          id: u?._id!,
-          username: name?.replace(/\s/g, ""),
-          favorite: fav,
-        });
+        if (response.status === 200) {
+          toast.success(
+            language === "Vietnamese" ? "Tạo thành công." : "Created Profile."
+          );
+          onClose();
+        } else {
+          toast.error(
+            language === "Vietnamese"
+              ? "Tạo không thành công."
+              : "Created Failed."
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
-
-      onClose();
-      toast.success("Created Profile.");
     } else {
-      toast.error("Please looking for your form again.");
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy xem lại thông tin."
+          : "Please looking for your form again."
+      );
     }
   }
   const favorites = [

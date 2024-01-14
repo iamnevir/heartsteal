@@ -4,7 +4,7 @@ import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
 import ImageItem from "./image-item";
 import LoadMore from "../load-more";
-import { CircularProgress, SliderValue } from "@nextui-org/react";
+import { SliderValue } from "@nextui-org/react";
 import { useMediaQuery } from "usehooks-ts";
 import ImageSkeleton from "../image-skeleton";
 import { useUser } from "@clerk/nextjs";
@@ -18,6 +18,7 @@ const CommunityFeed = ({
   grid: SliderValue;
 }) => {
   const { user } = useUser();
+
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImages,
     {},

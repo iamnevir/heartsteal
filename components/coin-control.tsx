@@ -1,17 +1,36 @@
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import { useLanguage } from "@/hooks/use-language";
-import { cn } from "@/lib/utils";
+import { backEndUrl, cn } from "@/lib/utils";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import { useQuery } from "convex/react";
 import { Gem, LucideShieldQuestion } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 const CoinControl = ({ userId }: { userId: string }) => {
-  const user = useQuery(api.user.getUserByUser, { userId });
   const router = useRouter();
   const { language } = useLanguage();
+  const [user, setUser] = useState<Doc<"user">>();
   const isMobile = useMediaQuery("(max-width:768px)");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch(`${backEndUrl}/user/by_user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+        }),
+      });
+      const data = await response.json();
+      setUser(data.user);
+    };
+    fetchUser();
+  }, [userId]);
   return (
     <div className=" w-full justify-center flex items-center mb-3">
       <div className=" rounded-full dark:bg-[#0B0F17] bg-slate-200  sm:h-12 h-14 p-4 flex items-center justify-center gap-1">

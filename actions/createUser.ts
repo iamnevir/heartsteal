@@ -1,22 +1,21 @@
-import { api } from "@/convex/_generated/api";
-import { ConvexHttpClient } from "convex/browser";
-
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+import { backEndUrl } from "@/lib/utils";
 
 export async function createUser(userId: string) {
   if (!userId) {
     return;
   }
   try {
-    const currentUser = await convex.query(api.user.getUserByUser, { userId });
-    if (!currentUser) {
-      await convex.mutation(api.user.create, {
+    const response = await fetch(`${backEndUrl}/user/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         userId,
-        like: [],
-        upload: [],
-        coin: 150,
-        isPro: false,
-      });
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
     console.log(error);

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { backEndUrl, cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
 import { Button, ModalFooter, User } from "@nextui-org/react";
 import {
@@ -18,48 +18,105 @@ import isValidName from "@/actions/isValidName";
 import { Check, Flower, X } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useLanguage } from "@/hooks/use-language";
+import { Doc } from "@/convex/_generated/dataModel";
 const Profile = ({ userId }: { userId: string }) => {
   const isMobile = useMediaQuery("(max-width:768px)");
-  const u = useQuery(api.user.getUserByUser, { userId });
+  const { language } = useLanguage();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const update = useMutation(api.user.update);
-  const [username, setUserName] = useState(u?.username);
+  const [u, setU] = useState<Doc<"user">>();
+  const [username, setUserName] = useState("");
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [fav, setFav] = useState<string[]>([]);
-  const language = useLanguage();
-  useEffect(() => {
+  const fetchUser = async () => {
+    const response = await fetch(`${backEndUrl}/user/by_user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
+    const data = await response.json();
+    setU(data.user);
+    setUserName(data.user.username);
     if (u?.favorite) {
       setFav(u?.favorite);
     }
-  }, [u]);
+  };
+  useEffect(() => {
+    fetchUser();
+  }, [userId]);
   async function onSubmit() {
-    if (isValid === true) {
-      await update({
-        id: u?._id!,
-        username: username?.replace(/\s/g, ""),
-        favorite: fav,
-      });
-      toast.success("Updated Profile.");
+    if (isValid) {
+      try {
+        const response = await fetch(`${backEndUrl}/user/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: u?._id,
+            username: username,
+            favorites: fav,
+          }),
+        });
+        if (response.status === 200) {
+          toast.success(
+            language === "Vietnamese"
+              ? "Cập nhật thành công."
+              : "Created Profile."
+          );
+          await fetchUser();
+        } else {
+          toast.error(
+            language === "Vietnamese"
+              ? "Cập nhật không thành công."
+              : "Created Failed."
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else if (isValid === null) {
-      await update({
-        id: u?._id!,
-        favorite: fav,
-      });
-      toast.success(
-        language.language === "Vietnamese"
-          ? "Đã cập nhật hồ sơ."
-          : "Updated Profile."
-      );
+      try {
+        const response = await fetch(`${backEndUrl}/user/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: u?._id,
+            favorites: fav,
+          }),
+        });
+        if (response.status === 200) {
+          toast.success(
+            language === "Vietnamese"
+              ? "Cập nhật thành công."
+              : "Created Profile."
+          );
+          await fetchUser();
+        } else {
+          toast.error(
+            language === "Vietnamese"
+              ? "Cập nhật không thành công."
+              : "Created Failed."
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       toast.error(
-        language.language === "Vietnamese"
+        language === "Vietnamese"
           ? "Làm ơn xem lại lựa chọn."
           : "Please looking for your form again."
       );
     }
   }
   const favorites =
-    language.language === "Vietnamese"
+    language === "Vietnamese"
       ? [
           "Hoạt hình",
           "Nhiếp ảnh",
@@ -102,18 +159,14 @@ const Profile = ({ userId }: { userId: string }) => {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            {language.language === "Vietnamese"
-              ? "Hồ sơ của bạn"
-              : "Your Profile"}
+            {language === "Vietnamese" ? "Hồ sơ của bạn" : "Your Profile"}
           </ModalHeader>
           <ModalBody>
             <div className=" flex items-center flex-col gap-2">
               <div className=" w-full flex-col gap-2 flex">
                 <span className="gradient-text">
                   {" "}
-                  {language.language === "Vietnamese"
-                    ? "@Biệt danh"
-                    : "@username"}
+                  {language === "Vietnamese" ? "@Biệt danh" : "@username"}
                 </span>{" "}
                 <Input
                   defaultValue={u?.username}
@@ -150,7 +203,7 @@ const Profile = ({ userId }: { userId: string }) => {
                   placeholder="someawesomeusername"
                 />
                 <span className=" text-slate-400 text-xs">
-                  {language.language === "Vietnamese"
+                  {language === "Vietnamese"
                     ? "Hồ sơ của bạn"
                     : "Biệt danh phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới."}
                 </span>
@@ -191,7 +244,7 @@ const Profile = ({ userId }: { userId: string }) => {
                 isValid === false ? "opacity-50 pointer-events-none" : ""
               )}
             >
-              {language.language === "Vietnamese" ? "Lưu" : "Save"}
+              {language === "Vietnamese" ? "Lưu" : "Save"}
             </Button>
           </ModalFooter>
         </ModalContent>

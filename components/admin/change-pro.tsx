@@ -3,16 +3,20 @@ import { Chip, useDisclosure } from "@nextui-org/react";
 import ConfirmModal from "../confirm-modal";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { backEndUrl } from "@/lib/utils";
+import { toast } from "sonner";
+import { useLanguage } from "@/hooks/use-language";
 
 const ChangePro = ({
   userId,
   isPro,
+  reset,
 }: {
   userId: Id<"user">;
   isPro: boolean;
+  reset: () => void;
 }) => {
-  const update = useMutation(api.user.update);
-
+  const { language } = useLanguage();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -24,8 +28,31 @@ const ChangePro = ({
         }
         isOpen={isOpen}
         onClose={onClose}
-        handleDelete={() => {
-          update({ id: userId, isPro: !isPro });
+        handleDelete={async () => {
+          const response = await fetch(`${backEndUrl}/user/update`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId,
+              isPro: !isPro,
+            }),
+          });
+          if (response.status === 200) {
+            toast.success(
+              language === "Vietnamese"
+                ? "Cập nhật thành công."
+                : "Created Profile."
+            );
+            reset();
+          } else {
+            toast.error(
+              language === "Vietnamese"
+                ? "Cập nhật không thành công."
+                : "Created Failed."
+            );
+          }
           onClose();
         }}
       />

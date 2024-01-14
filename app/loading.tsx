@@ -7,7 +7,7 @@ export default function Loading() {
         <div className=" rounded-[30px] w-36 h-36 flex items-center justify-center">
           <div className=" rotating-element absolute rounded-[40px] w-28 h-28 loading-gr flex items-center justify-center" />
           <Image
-            src="/logo.png"
+            src="/placeholder.png"
             width={120}
             height={120}
             alt=""

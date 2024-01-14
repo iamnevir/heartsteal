@@ -13,22 +13,43 @@ import {
   User,
   cn,
 } from "@nextui-org/react";
-import { useMutation, useQuery } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
 import { Trash2, UserCheck2, Users } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Doc, Id } from "@/convex/_generated/dataModel";
-import { formatVietnameseDateTime } from "@/lib/utils";
+import { backEndUrl, formatVietnameseDateTime } from "@/lib/utils";
 import ConfirmModal from "../confirm-modal";
 import ChangePro from "./change-pro";
 import ChangeRole from "./change-role";
 import ChangeCoin from "./change-coin";
 import Loading from "@/app/loading";
+import { toast } from "sonner";
 const UserManager = ({ userId }: { userId: string }) => {
-  const user = useQuery(api.user.getUserByUser, { userId });
-  const users = useQuery(api.user.getUsers);
-
-  const remove = useMutation(api.user.remove);
+  const [u, setU] = useState<Doc<"user">>();
+  const [users, setUsers] = useState<Doc<"user">[]>();
+  const fetchUser = async () => {
+    const response = await fetch(`${backEndUrl}/user/by_user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
+    const data = await response.json();
+    setU(data.user);
+    if (data.user?.isAdmin) {
+      const response2 = await fetch(`${backEndUrl}/user`, {
+        method: "GET",
+      });
+      const data2 = await response2.json();
+      setUsers(data2.users);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, [userId]);
   const isMobile = useMediaQuery("(max-width:768px)");
   const { language } = useLanguage();
   const [delele, setDelete] = useState<{ o: boolean; id?: Id<"user"> }>({
@@ -71,12 +92,24 @@ const UserManager = ({ userId }: { userId: string }) => {
         );
       case "coin":
         return (
-          <ChangeCoin coin={user.coin ? user.coin : 0} userId={user._id} />
+          <ChangeCoin
+            coin={user.coin ? user.coin : 0}
+            userId={user._id}
+            reset={fetchUser}
+          />
         );
       case "isAdmin":
-        return <ChangeRole isAdmin={!!user.isAdmin} userId={user._id} />;
+        return (
+          <ChangeRole
+            isAdmin={!!user.isAdmin}
+            userId={user._id}
+            reset={fetchUser}
+          />
+        );
       case "isPro":
-        return <ChangePro isPro={!!user.isPro} userId={user._id} />;
+        return (
+          <ChangePro isPro={!!user.isPro} userId={user._id} reset={fetchUser} />
+        );
       case "_creationTime":
         return formatVietnameseDateTime(user._creationTime);
       case "actions":
@@ -104,7 +137,7 @@ const UserManager = ({ userId }: { userId: string }) => {
   if (users === undefined) {
     return <Loading />;
   }
-  if (!user?.isAdmin) {
+  if (!u?.isAdmin) {
     return null;
   }
   return (
@@ -117,9 +150,31 @@ const UserManager = ({ userId }: { userId: string }) => {
         }
         isOpen={delele.o}
         onClose={() => setDelete({ o: false, id: undefined })}
-        handleDelete={() => {
-          remove({ id: delele.id! });
+        handleDelete={async () => {
+          const res = await fetch(`${backEndUrl}/user/remove`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: delele.id,
+            }),
+          });
+          if (res.status === 200) {
+            toast.success(
+              language === "Vietnamese"
+                ? "Cập nhật thành công."
+                : "Created Profile."
+            );
+          } else {
+            toast.error(
+              language === "Vietnamese"
+                ? "Cập nhật không thành công."
+                : "Created Failed."
+            );
+          }
           setDelete({ o: false, id: undefined });
+          await fetchUser();
         }}
       />
       <div>

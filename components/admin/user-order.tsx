@@ -1,8 +1,9 @@
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { cn } from "@/lib/utils";
+import { Doc, Id } from "@/convex/_generated/dataModel";
+import { backEndUrl, cn } from "@/lib/utils";
 import { User } from "@nextui-org/react";
 import { useQuery } from "convex/react";
+import { useEffect, useState } from "react";
 
 const UserOrder = ({
   userId,
@@ -11,7 +12,23 @@ const UserOrder = ({
   userId: Id<"user">;
   isMobile: boolean;
 }) => {
-  const user = useQuery(api.user.getUserById, { userId });
+  const [user, setU] = useState<Doc<"user">>();
+  const fetchUser = async () => {
+    const response = await fetch(`${backEndUrl}/user/by_user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
+    const data = await response.json();
+    setU(data.user);
+  };
+  useEffect(() => {
+    fetchUser();
+  }, [userId]);
   return (
     <User
       className={cn("ml-5 gradient-text ")}
