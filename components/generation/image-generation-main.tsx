@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Select,
   SelectItem,
+  Slider,
   Switch,
   Tab,
   Tabs,
@@ -21,6 +22,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import GenerationHistory from "./generation-history";
+import robot from "@/public/no-history.json";
 import {
   backEndUrl,
   base64toFile,
@@ -46,7 +48,9 @@ import {
   CandyCane,
   LucideShieldQuestion,
 } from "lucide-react";
-
+import Lottie from "lottie-react";
+import { motion } from "framer-motion";
+import Guide from "./guide";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -57,7 +61,7 @@ const ImageGenerationMain = () => {
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImageByOwnUser,
     { userId: user?.id! },
-    { initialNumItems: 8 }
+    { initialNumItems: 16 }
   );
   const { language } = useLanguage();
   const images = groupObjectsByPrompt(results);
@@ -355,11 +359,15 @@ const ImageGenerationMain = () => {
   };
   return (
     <div className="sm:pl-64 px-2 pt-6">
-      <span className=" font-semibold gradient-text text-lg">
-        {language === "Vietnamese"
-          ? "Mô hình tạo ảnh bằng trí trệ nhân tạo."
-          : "AI Image Generation"}
-      </span>
+      <div className=" flex items-center gap-2">
+        <span className=" font-semibold gradient-text sm:text-lg text-xl">
+          {language === "Vietnamese"
+            ? "Mô hình tạo ảnh bằng AI"
+            : "AI Image Generation"}
+        </span>
+        <Guide />
+      </div>
+
       <div
         className={cn(
           "flex sm:flex-row flex-col items-start gap-3 py-5 sm:pr-10",
@@ -639,11 +647,51 @@ const ImageGenerationMain = () => {
               : "Generation History"
           }
         >
-          <GenerationHistory
-            user={u!}
-            isLoading={generation.isLoading}
-            images={images}
-          />
+          {images.length < 1 && status !== "LoadingFirstPage" ? (
+            <div className="flex items-start ">
+              <div className=" w-full h-full sm:max-w-xs relative justify-center flex sm:flex-row flex-col items-center">
+                <motion.div
+                  whileInView="show"
+                  initial="hidden"
+                  variants={{
+                    hidden: {
+                      scaleX: 0,
+                      translateX: 0,
+                    },
+                    show: {
+                      scaleX: 1,
+                      translateX: isMobile ? "0%" : "80%",
+                      transition: {
+                        type: "spring",
+                        duration: 0.5,
+                      },
+                    },
+                  }}
+                  className=" px-5 py-2 absolute sm:right-0 left-0 top-0 rounded-full dark:bg-slate-900 sm:mt-10"
+                >
+                  <span className="gradient-text sm:text-base text-xl">
+                    {language === "Vietnamese"
+                      ? "Bạn chưa tạo ảnh nào? Tạo ảnh ngay thôi."
+                      : "Doesn't have any images? Let's create one."}
+                  </span>
+                </motion.div>
+                <Lottie
+                  className="sm:mt-0 mt-8"
+                  animationData={robot}
+                  preload=""
+                  width={300}
+                  height={300}
+                />
+              </div>{" "}
+            </div>
+          ) : (
+            <GenerationHistory
+              user={u!}
+              isLoading={generation.isLoading}
+              images={images}
+            />
+          )}
+
           {status === "CanLoadMore" ? (
             <LoadMore loadMore={() => loadMore(isMobile ? 4 : 12)} />
           ) : null}

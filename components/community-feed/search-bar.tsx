@@ -2,16 +2,17 @@ import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import { Button, Input, Slider, SliderValue } from "@nextui-org/react";
 import {
-  Cake,
+  Bot,
+  Codesandbox,
   Film,
+  Globe2,
   Grid,
   Instagram,
   LayoutList,
   Palette,
   SearchIcon,
-  Skull,
   Snail,
-  UsersRound,
+  Waves,
 } from "lucide-react";
 
 const SearchBar = ({
@@ -26,36 +27,40 @@ const SearchBar = ({
   const { language } = useLanguage();
   const category = [
     {
-      title: language === "Vietnamese" ? "Tất cả" : "All",
+      title: "Tất cả",
       icon: LayoutList,
     },
     {
-      title: language === "Vietnamese" ? "Hoạt hình" : "Motion",
+      title: "8k",
       icon: Film,
     },
     {
-      title: language === "Vietnamese" ? "Nhiếp ảnh" : "Photography",
-      icon: Instagram,
+      title: "Vintage",
+      icon: Globe2,
     },
     {
       title: "Anime",
       icon: Snail,
     },
     {
-      title: language === "Vietnamese" ? "Vẽ" : "Art",
+      title: "Robot",
+      icon: Bot,
+    },
+    {
+      title: "Photography",
+      icon: Instagram,
+    },
+    {
+      title: "Van Gogh",
       icon: Palette,
     },
     {
-      title: language === "Vietnamese" ? "Nhân vật" : "Character",
-      icon: UsersRound,
+      title: "Water",
+      icon: Waves,
     },
     {
-      title: language === "Vietnamese" ? "Thức ăn" : "Food",
-      icon: Cake,
-    },
-    {
-      title: "Alien",
-      icon: Skull,
+      title: "Cyberpunk",
+      icon: Codesandbox,
     },
   ];
   return (
@@ -122,16 +127,16 @@ const SearchBar = ({
               setSearch(
                 item.title === "All" || item.title === "Tất cả"
                   ? ""
-                  : item.title
+                  : item.title.toLowerCase()
               )
             }
             key={index}
             className={cn(
               " cursor-pointer dark:bg-[#101622] bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 rounded-full gap-2 flex items-center justify-center px-3 py-1",
-              item.title === "All" || (item.title === "Tất cả" && search === "")
+              item.title === "Tất cả" && search === ""
                 ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff] text-white"
                 : "",
-              search === item.title
+              search.toLowerCase() === item.title.toLowerCase()
                 ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff] text-white"
                 : ""
             )}

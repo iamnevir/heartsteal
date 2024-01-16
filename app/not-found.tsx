@@ -9,7 +9,7 @@ const Error = () => {
   return (
     <div className="h-[100dvh] w-[100dvw] items-center flex flex-col justify-center">
       <div className=" flex items-center gap-3">
-        <div className=" text-3xl font-bold">404 Not Found</div>
+        <div className=" text-3xl font-bold">404 Page not found</div>
         <Button onPress={() => router.push("/ai")} className="bg-gr">
           Go Back
         </Button>

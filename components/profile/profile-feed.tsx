@@ -44,7 +44,7 @@ const ProfileFeed = ({
   function getColumns(colIndex: number) {
     if (search !== "") {
       return results
-        .filter((item) => item.prompt?.includes(search))
+        .filter((item) => item.prompt?.toLowerCase().includes(search))
         .filter((item, idx) => idx % colNumber === colIndex);
     } else {
       return results.filter((item, idx) => idx % colNumber === colIndex);

@@ -177,7 +177,7 @@ const SidebarPicker = () => {
                 </div>
               }
             >
-              <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+              <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4 sm:flex hidden" />
             </Tooltip>
           </div>
         }
@@ -208,7 +208,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4 sm:flex hidden" />
           </Tooltip>
         </div>
 
@@ -244,7 +244,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4 sm:flex hidden" />
           </Tooltip>
         </div>
 
@@ -277,7 +277,7 @@ const SidebarPicker = () => {
               </div>
             }
           >
-            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+            <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4 sm:flex hidden" />
           </Tooltip>
         </div>
 

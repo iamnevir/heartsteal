@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Slider,
   Switch,
   Tooltip,
   useDisclosure,
@@ -20,6 +21,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import { useLanguage } from "@/hooks/use-language";
+import { useMediaQuery } from "usehooks-ts";
 
 const ImageInput = () => {
   const generation = useGenerateImage();
@@ -27,6 +29,7 @@ const ImageInput = () => {
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   const { language } = useLanguage();
+  const isMobile = useMediaQuery("(max-width:768px)");
   return (
     <>
       <Modal
@@ -51,23 +54,29 @@ const ImageInput = () => {
                 : "Your Uploads"}
             </span>
             <Divider />
-            <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2 ">
-              {u?.upload.map((item, index) => (
-                <Image
-                  onClick={() => {
-                    generation.setInputUrl(item);
-                    onClose();
-                  }}
-                  key={index}
-                  width={250}
-                  className=" cursor-pointer rounded-md border-gr-image hover:opacity-50 border-3 border-transparent"
-                  height={250}
-                  alt=""
-                  style={{ objectFit: "cover", width: "auto" }}
-                  src={item}
-                />
-              ))}
-            </div>
+            {u!.upload.length > 0 ? (
+              <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2 ">
+                {u?.upload.map((item, index) => (
+                  <Image
+                    onClick={() => {
+                      generation.setInputUrl(item);
+                      onClose();
+                    }}
+                    key={index}
+                    width={250}
+                    className=" cursor-pointer rounded-md border-gr-image hover:opacity-50 border-3 border-transparent"
+                    height={250}
+                    alt=""
+                    style={{ objectFit: "cover", width: "auto" }}
+                    src={item}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className=" w-full h-full flex items-center">
+                Bạn chưa tải lên ảnh nào.
+              </div>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -90,7 +99,7 @@ const ImageInput = () => {
                   </div>
                 }
               >
-                <LucideShieldQuestion size="20" />
+                <LucideShieldQuestion size="20" className="sm:flex hidden" />
               </Tooltip>
             </span>
             <div className="ml-auto gap-2 flex items-center">
@@ -137,9 +146,45 @@ const ImageInput = () => {
                     </div>
                   }
                 >
-                  <LucideShieldQuestion size="20" />
+                  <LucideShieldQuestion size="20" className="sm:flex hidden" />
                 </Tooltip>
               </div>
+              <Slider
+                color="danger"
+                aria-label="a"
+                classNames={{
+                  filler: "bg-gr",
+                  thumb: "bg-gr",
+                  base: "px-2 gap-1 max-w-[150px] sm:max-w-[200px]",
+                }}
+                label={
+                  <div className=" flex items-center gap-1 text-xs">
+                    <span>
+                      {language === "Vietnamese" ? "Độ giống" : "Strength"}
+                    </span>
+                    <Tooltip
+                      placement="right"
+                      size="sm"
+                      delay={100}
+                      closeDelay={100}
+                      content={
+                        <div className=" w-40 ">
+                          {language === "Vietnamese"
+                            ? "Điểm này giúp tăng độ giống của ảnh đầu ra so với ảnh đầu vào của bạn."
+                            : "Điểm này giúp tăng độ giống của đầu ra ảnh để đầu vào ảnh của bạn."}
+                        </div>
+                      }
+                    >
+                      <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4 sm:flex hidden" />
+                    </Tooltip>
+                  </div>
+                }
+                step={0.1}
+                maxValue={1}
+                minValue={0}
+                defaultValue={0.4}
+                className="pb-2"
+              />
               <Button
                 onPress={onOpen}
                 size="sm"
@@ -147,7 +192,9 @@ const ImageInput = () => {
                 variant="shadow"
               >
                 {language === "Vietnamese"
-                  ? "Ảnh tải lên của bạn"
+                  ? isMobile
+                    ? "Ảnh tải lên"
+                    : "Ảnh tải lên của bạn"
                   : "Your Uploads"}
               </Button>
             </div>

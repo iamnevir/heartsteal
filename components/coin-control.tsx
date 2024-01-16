@@ -13,7 +13,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
   const { language } = useLanguage();
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
-    <div className=" w-full justify-center flex items-center mb-3">
+    <div className=" w-full justify-center flex items-center sm:mb-3">
       <div className=" rounded-full dark:bg-[#0B0F17] bg-slate-200  sm:h-12 h-14 p-4 flex items-center justify-center gap-1">
         {user?.isPro ? null : (
           <span className={cn(" sm:text-xs text-sm font-semibold")}>
@@ -23,7 +23,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
         {user?.isPro ? null : isMobile ? (
           <Gem className=" w-5 h-5 sm:hidden text-red-400" />
         ) : (
-          <div className="w-6 h-6 mt-1 sm:block hidden">
+          <div className="w-5 h-5 sm:block hidden">
             <svg
               fill="none"
               viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ const CoinControl = ({ userId }: { userId: string }) => {
           >
             <LucideShieldQuestion
               size={isMobile ? "20" : "17"}
-              className=" text-slate-400/70"
+              className=" text-slate-400/70 sm:flex hidden"
             />
           </Tooltip>
         )}
@@ -84,14 +84,14 @@ const CoinControl = ({ userId }: { userId: string }) => {
                 : `Unlimited Tokens`
             }
           >
-            <Chip className="bg-gr sm:text-[10px] text-sm font-semibold">
+            <Chip className="bg-gr sm:text-[10px] text-sm py-[14px] font-semibold">
               Premium
             </Chip>
           </Tooltip>
         ) : (
           <Button
             onPress={() => router.push("/payment")}
-            className=" hover:scale-105 bg-gr rounded-full sm:text-[10px] text-sm font-semibold sm:max-h-6 px-4"
+            className=" hover:scale-105 bg-gr rounded-full py-[14px] sm:text-[10px] text-sm font-semibold sm:max-h-6 px-4"
             size="sm"
           >
             {language === "Vietnamese" ? "Nâng cấp" : "Upgrade"}

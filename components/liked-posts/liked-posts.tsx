@@ -36,7 +36,7 @@ const LikedPost = ({ search, grid }: { search: string; grid: SliderValue }) => {
   function getColumns(colIndex: number) {
     if (search !== "") {
       return posts!
-        .filter((item) => item?.prompt?.includes(search))
+        .filter((item) => item?.prompt?.toLowerCase().includes(search))
         .filter((item, idx) => idx % colNumber === colIndex);
     } else {
       return posts?.filter((item, idx) => idx % colNumber === colIndex);
