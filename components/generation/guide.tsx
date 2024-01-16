@@ -365,6 +365,7 @@ const Guide = () => {
                   <div className=" flex flex-col gap-3 items-center">
                     {guides.map((item, index) => (
                       <div
+                        key={index}
                         onClick={() => {
                           setOpen({ o: true, i: index });
                         }}
@@ -497,6 +498,7 @@ const CarouselFooter = ({
           .fill(0)
           .map((item, index) => (
             <span
+              key={index}
               className={cn(
                 " rounded-full w-2 h-2 bg-white/50 duration-500",
                 current === index + 1 && "w-4 bg-gr"
