@@ -85,7 +85,7 @@ const ProfileFeed = ({
         </div>
       ))}
       {status === "CanLoadMore" ? (
-        <LoadMore loadMore={() => loadMore(isMobile ? 5 : 20)} />
+        <LoadMore loadMore={() => loadMore(isMobile ? 5 : 30)} />
       ) : null}
     </div>
   );
