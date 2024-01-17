@@ -3,14 +3,12 @@ import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
 import { Divider, Link } from "@nextui-org/react";
 import {
-  Biohazard,
   CandyCane,
   Codesandbox,
   Dna,
   Drama,
   Flame,
   HeartPulseIcon,
-  ImageOff,
   LogOut,
   Settings,
   VenetianMask,
@@ -63,17 +61,6 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
     {
       icon: Codesandbox,
       title: language === "Vietnamese" ? "Ảnh từ ảnh" : "Image Variation",
-      href: "/ai/generation",
-    },
-    {
-      icon: Biohazard,
-      title:
-        language === "Vietnamese" ? "Tăng chất lượng ảnh" : "Image Upscale",
-      href: "/ai/generation",
-    },
-    {
-      icon: ImageOff,
-      title: language === "Vietnamese" ? "Xóa nền" : "Remove Background",
       href: "/ai/generation",
     },
   ];
@@ -176,7 +163,7 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
           </Link>
         ))}
       </div>
-      <Divider />
+
       <div className=" flex flex-col w-full gap-2 mt-auto">
         {footerItems.map((item, index) => (
           <Link

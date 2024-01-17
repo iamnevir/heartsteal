@@ -145,8 +145,8 @@ const Profile = ({ userId }: { userId: string }) => {
                 />
                 <span className=" text-slate-400 text-xs">
                   {language === "Vietnamese"
-                    ? "Hồ sơ của bạn"
-                    : "Biệt danh phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới."}
+                    ? "Biệt danh phải dài từ 4-15 ký tự và chỉ chứa chữ cái, số và dấu gạch dưới."
+                    : "Username must be 4-15 characters long and contain only letters, numbers, and underscores."}
                 </span>
               </div>
 

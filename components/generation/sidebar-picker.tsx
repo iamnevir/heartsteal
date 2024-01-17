@@ -85,7 +85,7 @@ const SidebarPicker = () => {
                   onClick={() => generation.setImageNumber(index)}
                   key={index}
                   className={cn(
-                    "sm:w-10 sm:h-7 w-14 h-9 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
+                    " sm:h-7 h-9 text-xs rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
 
                     generation.imageNumber === index ? "border-gr" : "",
                     !u?.isPro && index > 5 && "pointer-events-none opacity-50",
@@ -136,7 +136,7 @@ const SidebarPicker = () => {
                 key={index}
                 onClick={() => generation.setImageSize(item)}
                 className={cn(
-                  "sm:w-20 sm:h-8 w-28 h-9 sm:text-xs text-lg rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
+                  " sm:h-8 h-9 sm:text-xs text-lg rounded-[5px] dark:bg-slate-950 bg-slate-200 border-1 border-slate-200 dark:border-white/15 flex items-center justify-center border-gr-hover duration-300 transition-all cursor-pointer",
                   generation.imageSize === item && "border-gr",
                   generation.model === "dall-e-2" &&
                     index > 2 &&
@@ -187,12 +187,7 @@ const SidebarPicker = () => {
         defaultValue={0.4}
         className="pb-2"
       />
-      <div
-        className={cn(
-          " flex items-center gap-2 w-full pb-2",
-          generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
-        )}
-      >
+      <div className={cn(" flex items-center gap-2 w-full pb-2")}>
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
           <span>{language === "Vietnamese" ? "Tự nhiên" : "Natural"}</span>
           <Tooltip
@@ -204,7 +199,7 @@ const SidebarPicker = () => {
               <div className=" w-40">
                 {language === "Vietnamese"
                   ? "Nếu bật, ảnh của bạn sẽ trông rực rỡ, nếu không ảnh sẽ trông tự nhiên hơn. Thông số này chỉ được hỗ trợ cho Heart Steal Pro."
-                  : " If it&apos;s on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Heart Steal Pro."}
+                  : " If it's on, your photo will look vibrant, otherwise it will look more natural. This param is only supported for Heart Steal Pro."}
               </div>
             }
           >
@@ -214,7 +209,10 @@ const SidebarPicker = () => {
 
         <Switch
           size={!isMobile ? "sm" : "lg"}
-          className="ml-auto"
+          className={cn(
+            "ml-auto",
+            generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
+          )}
           onValueChange={(v) => generation.setNatural(v)}
           classNames={{
             wrapper: generation.natural
@@ -223,12 +221,7 @@ const SidebarPicker = () => {
           }}
         />
       </div>
-      <div
-        className={cn(
-          " flex items-center gap-2 w-full pb-2 ",
-          generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
-        )}
-      >
+      <div className={cn(" flex items-center gap-2 w-full pb-2 ")}>
         <div className="ml-2 flex items-center gap-2 font-semibold sm:text-xs text-xl">
           <span>HD</span>
           <Tooltip
@@ -250,7 +243,10 @@ const SidebarPicker = () => {
 
         <Switch
           size={!isMobile ? "sm" : "lg"}
-          className="ml-auto"
+          className={cn(
+            "ml-auto",
+            generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
+          )}
           onValueChange={(v) => generation.setHd(v)}
           classNames={{
             wrapper: generation.hd

@@ -174,6 +174,7 @@ const ImageCommunityItem = ({
   return (
     <>
       <Modal
+        backdrop="blur"
         scrollBehavior="outside"
         size="2xl"
         isOpen={isOpen}
@@ -238,14 +239,19 @@ const ImageCommunityItem = ({
 
                 <div className=" flex flex-col items-start gap-3 w-full">
                   <div className="flex items-center gap-2 w-full justify-between ">
-                    <User
+                    <div
                       onClick={() => router.push(`/ai/profile/${imageAuthor}`)}
-                      name={imageAuthor}
-                      avatarProps={{
-                        name: imageAuthor?.charAt(0),
-                        className: "w-[30px] h-[30px] bg-gr cursor-pointer",
-                      }}
-                    />
+                      className="cursor-pointer w-fit h-fit p-0 m-0"
+                    >
+                      <User
+                        name={imageAuthor}
+                        avatarProps={{
+                          name: imageAuthor?.charAt(0),
+                          className: "w-[30px] h-[30px] bg-gr ",
+                        }}
+                      />
+                    </div>
+
                     <div className=" flex items-center gap-1">
                       {image.likes}
                       <Heart
@@ -299,7 +305,7 @@ const ImageCommunityItem = ({
                           </div>
                         </CardBody>
                         <CardFooter>
-                          <div className=" text-xs grid grid-cols-3 w-full items-center gap-3">
+                          <div className=" text-xs flex flex-row w-full items-center gap-3">
                             <Tooltip
                               size="sm"
                               delay={100}
@@ -312,7 +318,7 @@ const ImageCommunityItem = ({
                             >
                               <div
                                 onClick={handleRemoveBg}
-                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                                className="dark:bg-black w-full whitespace-nowrap bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
                               >
                                 <Film className="w-4 h-4" />
                                 {language === "Vietnamese"
@@ -332,7 +338,7 @@ const ImageCommunityItem = ({
                             >
                               <div
                                 onClick={handleInput}
-                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                                className="dark:bg-black w-full whitespace-nowrap bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
                               >
                                 <ScanEyeIcon className="w-4 h-4" />
                                 Input
@@ -350,7 +356,7 @@ const ImageCommunityItem = ({
                             >
                               <div
                                 onClick={handleRemix}
-                                className="dark:bg-black bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
+                                className="dark:bg-black w-full whitespace-nowrap bg-slate-300 hover:bg-gradient-to-r hover:text-white from-[#fa5560] via-[#b14bf4] to-[#4d91ff] duration-500 flex items-center justify-center gap-1 p-1 cursor-pointer rounded-md"
                               >
                                 <Wand2 className="w-4 h-4" />
                                 Remix

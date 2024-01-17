@@ -73,7 +73,7 @@ const Dive = () => {
           ease: "easeInOut",
         },
       }}
-      className=" bg-slate-200 dark:bg-slate-900/70 h-12 sm:w-12 w-14 p-2 cursor-pointer rounded-md flex items-center justify-center"
+      className=" bg-slate-200 box-border dark:bg-slate-900/70 h-12 sm:w-12 w-14 p-2 cursor-pointer rounded-md flex items-center justify-center"
     >
       <svg viewBox="0 0 38 32" focusable="false" aria-hidden="true">
         <path

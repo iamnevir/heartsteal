@@ -86,7 +86,7 @@ const Guide = () => {
           title: "Tổng quan về nền tảng",
           subTitle: "Trang chủ",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   <span className="gradient-text font-semibold">
@@ -117,7 +117,7 @@ const Guide = () => {
           title: "Trình tạo ảnh",
           subTitle: "Trao quyền cho trí tưởng tượng của bạn",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   Sử dụng{" "}
@@ -172,7 +172,7 @@ const Guide = () => {
           title: "Tạo ảnh từ văn bản",
           subTitle: "Giải phóng sức mạnh tưởng tượng của bạn",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60 ">
               <ul>
                 <li>
                   Giải phóng khả năng sáng tạo của bạn với{" "}
@@ -200,7 +200,7 @@ const Guide = () => {
           title: "Cài đặt & Thông số",
           subTitle: "Trao quyền cho sự sáng tạo của bạn một cách chính xác",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   {" "}
@@ -228,7 +228,7 @@ const Guide = () => {
           title: "Tạo hình ảnh từ hình ảnh",
           subTitle: "Xây dựng trên hình ảnh hiện có",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   Tương tự nhưng khác với tính năng nhắc nhở bằng hình ảnh,
@@ -257,7 +257,7 @@ const Guide = () => {
           title: "Mặt nạ ảnh",
           subTitle: "Chỉnh sửa ảnh theo ý của bạn",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   {" "}
@@ -299,7 +299,7 @@ const Guide = () => {
           title: "Xóa nền & tăng chất lượng",
           subTitle: "Xóa nền ảnh và tăng gấp đôi chất lượng",
           desc: (
-            <article className="prose prose-li:text-sm prose-li:text-white/50">
+            <article className="prose prose-li:text-sm dark:prose-li:text-white/60">
               <ul>
                 <li>
                   {" "}
@@ -338,7 +338,9 @@ const Guide = () => {
     <>
       <Modal
         placement="center"
-        classNames={{ closeButton: "bg-black/10 z-10 backdrop-blur-lg" }}
+        classNames={{
+          closeButton: "  z-10 ",
+        }}
         className={cn("max-w-sm", open.o && "max-w-[500px]")}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -369,7 +371,7 @@ const Guide = () => {
                         onClick={() => {
                           setOpen({ o: true, i: index });
                         }}
-                        className=" w-full h-12 flex items-center justify-between px-3 text-sm font-medium bg-white/5 rounded-lg cursor-pointer hover:bg-white/15 duration-500"
+                        className=" w-full h-12 flex items-center justify-between px-3 text-sm font-medium dark:bg-white/5 bg-black/5 hover:bg-black/15 rounded-lg cursor-pointer dark:hover:bg-white/15 duration-500"
                       >
                         <div className="flex items-center gap-2">
                           <item.icon className="w-5 h-5" />
@@ -404,7 +406,7 @@ const Guide = () => {
       </Modal>
       <div
         onClick={onOpen}
-        className=" group flex items-center justify-center p-2 cursor-pointer hover:bg-slate-900 duration-500 rounded-full border border-slate-700"
+        className=" group flex items-center justify-center p-2 cursor-pointer hover:bg-black/10 dark:hover:bg-slate-900 duration-500 rounded-full border border-slate-700"
       >
         <span className=" group-hover:scale-105 duration-500 flex items-center justify-center w-4 h-4 text-xs rounded-full bg-gr">
           ?
@@ -458,7 +460,7 @@ const GuideItem = ({ item }: { item: GuideProps }) => {
                     />
                   </div>
                 </CardHeader>
-                <CardBody className="overflow-hidden items-center border-none">
+                <CardBody className="overflow-hidden items-center border-none ">
                   <span className=" font-semibold text-lg">{i.title}</span>
                   <span className=" font-semibold">{i.subTitle}</span>
                   {i.desc}
@@ -487,7 +489,7 @@ const CarouselFooter = ({
       <div
         onClick={scrollPrev}
         className={cn(
-          " rounded-lg p-3 flex items-center justify-center cursor-pointer hover:bg-white/10 bg-white/5",
+          "rounded-lg p-3 flex items-center justify-center cursor-pointer dark:hover:bg-white/10 dark:bg-white/5 bg-black/5 hover:bg-black/10",
           !canScrollPrev && "opacity-50 pointer-events-none"
         )}
       >
@@ -500,7 +502,7 @@ const CarouselFooter = ({
             <span
               key={index}
               className={cn(
-                " rounded-full w-2 h-2 bg-white/50 duration-500",
+                " rounded-full w-2 h-2 dark:bg-white/50 bg-black/50 duration-500",
                 current === index + 1 && "w-4 bg-gr"
               )}
             ></span>

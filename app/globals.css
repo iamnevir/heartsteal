@@ -116,6 +116,7 @@ body,
 }
 .border-gr-hover:hover {
   border-width: 1px;
+  border-radius: 5px;
   border-image: linear-gradient(
       122deg,
       rgb(250, 85, 96) 0.01%,
@@ -130,6 +131,7 @@ body,
 
 .border-gr {
   border-width: 1px;
+  border-radius: 5px;
   border-image: linear-gradient(
       122deg,
       rgb(250, 85, 96) 0.01%,
@@ -161,23 +163,4 @@ body,
   100% {
     transform: rotate(360deg);
   }
-}
-html.lenis {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
 }

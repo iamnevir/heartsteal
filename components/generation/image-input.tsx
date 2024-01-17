@@ -74,7 +74,9 @@ const ImageInput = () => {
               </div>
             ) : (
               <div className=" w-full h-full flex items-center">
-                Bạn chưa tải lên ảnh nào.
+                {language === "Vietnamese"
+                  ? "Bạn chưa tải lên ảnh nào."
+                  : "No uploads yet."}
               </div>
             )}
           </ModalBody>
@@ -171,7 +173,7 @@ const ImageInput = () => {
                         <div className=" w-40 ">
                           {language === "Vietnamese"
                             ? "Điểm này giúp tăng độ giống của ảnh đầu ra so với ảnh đầu vào của bạn."
-                            : "Điểm này giúp tăng độ giống của đầu ra ảnh để đầu vào ảnh của bạn."}
+                            : "This point helps increase the similarity of your image output to your image input."}
                         </div>
                       }
                     >
