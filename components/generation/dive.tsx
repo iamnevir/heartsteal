@@ -307,23 +307,21 @@ const Dive = () => {
         </motion.div>
       </DropdownTrigger>
       <DropdownMenu aria-label="og" className=" ">
-        <DropdownItem onClick={handleRandomPrompt} key="new">
-          <div className=" flex items-center gap-3">
-            {" "}
-            <Dices className="w-4 h-4" />
-            {language === "Vietnamese"
-              ? "Lời nhắc ngẫu nhiên"
-              : "New Random Prompt"}
-          </div>
+        <DropdownItem
+          onClick={handleRandomPrompt}
+          key="new"
+          startContent={<Dices className="w-4 h-4" />}
+        >
+          {language === "Vietnamese"
+            ? "Lời nhắc ngẫu nhiên"
+            : "New Random Prompt"}
         </DropdownItem>
-        <DropdownItem onClick={handleImprovePrompt} key="improve">
-          <div className=" flex items-center gap-3">
-            {" "}
-            <Wand2Icon className="w-4 h-4" />
-            {language === "Vietnamese"
-              ? "Cải thiện lời nhắc"
-              : "Improve Prompt"}
-          </div>
+        <DropdownItem
+          onClick={handleImprovePrompt}
+          key="improve"
+          startContent={<Wand2Icon className="w-4 h-4" />}
+        >
+          {language === "Vietnamese" ? "Cải thiện lời nhắc" : "Improve Prompt"}
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

@@ -24,6 +24,7 @@
     "convex": "^1.7.1",
     "embla-carousel-react": "^8.0.0-rc18",
     "file-saver": "^2.0.5",
+    "file64": "^1.0.3",
     "framer-motion": "^10.16.16",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.303.0",

@@ -23,6 +23,7 @@ import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import GenerationHistory from "./generation-history";
 import robot from "@/public/no-history.json";
+import { base64ToFile as base642file } from "file64";
 import {
   backEndUrl,
   base64toFile,
@@ -46,6 +47,7 @@ import {
   Box,
   BrainCog,
   CandyCane,
+  Donut,
   LucideShieldQuestion,
 } from "lucide-react";
 import Lottie from "lottie-react";
@@ -305,6 +307,53 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
+      } else if (generation.model === "animagine") {
+        const generateI = async () => {
+          const response = await axios({
+            method: "post",
+            url: `${backEndUrl}/animagine`,
+            maxBodyLength: Infinity,
+            headers: { "Content-Type": "application/json" },
+            data: {
+              prompt: generation.prompt,
+            },
+          });
+          const file = await base642file(
+            `data:text/plain;base64,${response.data.image_base64}`,
+            "file.png"
+          );
+          if (!file) {
+            return null;
+          }
+          const res = await edgestore.publicFiles.upload({
+            file,
+          });
+          if (!res.url) {
+            return null;
+          }
+          return res.url;
+        };
+        const promises = [];
+        for (let index = 0; index < generation.imageNumber; index++) {
+          promises.push(generateI());
+        }
+        const results = await Promise.all(promises);
+        results.forEach((result) => {
+          if (result !== null) {
+            create({
+              prompt: generation.prompt,
+              negativePrompt: generation.negativePrompt,
+              url: result,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(500, 1000),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          } else {
+            console.error("One or more calls to generateI failed.");
+          }
+        });
       } else {
         const data = {
           model: generation.model,
@@ -474,6 +523,8 @@ const ImageGenerationMain = () => {
                 <CandyCane className={isMobile ? "w-8 h-8" : ""} />
               ) : generation.model === "imagine" ? (
                 <Biohazard className={isMobile ? "w-8 h-8" : ""} />
+              ) : generation.model === "animagine" ? (
+                <Donut className={isMobile ? "w-8 h-8" : ""} />
               ) : (
                 <Aperture className={isMobile ? "w-8 h-8" : ""} />
               )
@@ -545,6 +596,19 @@ const ImageGenerationMain = () => {
               )}
             >
               Imagine
+            </SelectItem>
+            <SelectItem
+              classNames={{ title: "sm:text-base text-xl" }}
+              startContent={<Donut className={isMobile ? "w-8 h-8" : ""} />}
+              endContent={<Chip className="bg-gr">Premium</Chip>}
+              key={"animagine"}
+              value={"Animagine"}
+              className={cn(
+                "sm:max-w-xs",
+                !u?.isPro && " opacity-50 pointer-events-none"
+              )}
+            >
+              Animagine
             </SelectItem>
             <SelectItem
               classNames={{ title: "sm:text-base text-xl" }}
