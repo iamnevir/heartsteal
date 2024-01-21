@@ -31,4 +31,16 @@ export default defineSchema({
     cardType: v.optional(v.string()),
     bank: v.optional(v.string()),
   }).index("by_user", ["userId"]),
+  model: defineTable({
+    modelId: v.string(),
+    isActive: v.boolean(),
+    isPro:v.optional(v.boolean()),
+    name: v.optional(v.string()),
+    desc: v.optional(v.string()),
+    author: v.optional(v.string()),
+    size: v.optional(v.string()),
+    version: v.optional(v.string()),
+    baseModel: v.optional(v.string()),
+    avatar: v.optional(v.string()),
+  }).index("by_active", ["isActive"]),
 });

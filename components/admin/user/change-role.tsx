@@ -1,6 +1,6 @@
 import { Id } from "@/convex/_generated/dataModel";
 import { Chip, cn, useDisclosure } from "@nextui-org/react";
-import ConfirmModal from "../confirm-modal";
+import ConfirmModal from "../../confirm-modal";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";

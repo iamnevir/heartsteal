@@ -13,11 +13,14 @@ import { useLanguage } from "@/hooks/use-language";
 const SingleFileUpload = ({
   value,
   onChange,
+  size,
 }: {
   value: string;
   onChange: (v: string) => void;
+  size: "lg" | "md";
 }) => {
   const { user } = useUser();
+  const [oldFile, setOldFile] = useState("");
   const update = useMutation(api.user.update);
   const { edgestore } = useEdgeStore();
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
@@ -29,7 +32,11 @@ const SingleFileUpload = ({
       onClick={() => imageInput.current?.click()}
       className={cn(
         " relative cursor-pointer rounded-[10px]  border-dashed border-blue-500 border-2 flex flex-col items-center h-[300px] max-w-2xl",
-        value ? "xl:w-[650px] xl:h-[300px]" : ""
+        value
+          ? size === "lg"
+            ? "xl:w-[650px] w-full xl:h-[300px]"
+            : "xl:w-[300px] w-full"
+          : ""
       )}
     >
       {value ? (
@@ -68,11 +75,24 @@ const SingleFileUpload = ({
               setIsLoading(true);
               const file = event.target.files![0];
               if (file) {
-                const res = await edgestore.publicFiles.upload({
-                  file,
-                });
-                update({ id: u?._id!, upload: [...u?.upload!, res.url] });
-                onChange(res.url);
+                if (oldFile === "") {
+                  const res = await edgestore.publicFiles.upload({
+                    file,
+                  });
+                  update({ id: u?._id!, upload: [...u?.upload!, res.url] });
+                  onChange(res.url);
+                  setOldFile(res.url);
+                } else {
+                  const res = await edgestore.publicFiles.upload({
+                    file,
+                    options: {
+                      replaceTargetUrl: oldFile,
+                    },
+                  });
+                  update({ id: u?._id!, upload: [...u?.upload!, res.url] });
+                  onChange(res.url);
+                  setOldFile(res.url);
+                }
               }
               setIsLoading(false);
             }}

@@ -19,7 +19,7 @@ import { Trash2, UserCheck2, Users } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { formatVietnameseDateTime } from "@/lib/utils";
-import ConfirmModal from "../confirm-modal";
+import ConfirmModal from "../../confirm-modal";
 import ChangePro from "./change-pro";
 import ChangeRole from "./change-role";
 import ChangeCoin from "./change-coin";

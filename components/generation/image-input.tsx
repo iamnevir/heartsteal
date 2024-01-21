@@ -201,6 +201,7 @@ const ImageInput = () => {
               </Button>
             </div>
             <SingleFileUpload
+              size="lg"
               value={generation.inputUrl}
               onChange={generation.setInputUrl}
             />

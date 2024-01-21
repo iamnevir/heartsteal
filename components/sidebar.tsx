@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
 import { Divider, Link } from "@nextui-org/react";
 import {
+  Box,
   CandyCane,
   Codesandbox,
   Dna,
@@ -45,6 +46,11 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
       icon: Flame,
       title: language === "Vietnamese" ? "Tin đã thích" : "Liked Posts",
       href: "/ai/like-posts",
+    },
+    {
+      icon: Box,
+      title: language === "Vietnamese" ? "Mô hình" : "Models",
+      href: "/ai/models",
     },
   ];
   const toolItems = [

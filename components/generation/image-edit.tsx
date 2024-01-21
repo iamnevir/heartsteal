@@ -52,7 +52,6 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
               isSelected={generation.isEdit}
               onValueChange={(v) => {
                 generation.setEdit(v);
-                generation.setImageInput(!v);
               }}
               size="sm"
               classNames={{
@@ -90,6 +89,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
                 </Tooltip>
               </div>
               <SingleFileUpload
+                size="md"
                 value={generation.maskInput}
                 onChange={generation.setMaskInput}
               />
@@ -118,6 +118,7 @@ const ImageInput = ({ isPro }: { isPro: boolean }) => {
                 </Tooltip>
               </div>
               <SingleFileUpload
+                size="md"
                 value={generation.maskUrl}
                 onChange={generation.setMaskUrl}
               />

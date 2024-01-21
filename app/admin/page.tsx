@@ -1,18 +1,8 @@
-"use client";
-
-import UserManager from "@/components/admin/user-manager";
-import { useUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 const AdminPage = () => {
-  const { user } = useUser();
-  if (!user?.id) {
-    return null;
-  }
-  return (
-    <div>
-      <UserManager userId={user.id} />
-    </div>
-  );
-};
-
+    redirect("/admin/user")
+    
+}
+ 
 export default AdminPage;

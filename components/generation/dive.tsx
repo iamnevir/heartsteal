@@ -37,7 +37,7 @@ const Dive = () => {
         );
         const result = await response.json();
         generation.setPrompt(result[0].generated_text);
-        console.log(result);
+
         toast.success(
           language === "Vietnamese"
             ? "Cải thiện lời nhắc thành công."

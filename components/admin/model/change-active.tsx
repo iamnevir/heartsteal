@@ -1,33 +1,33 @@
 import { Id } from "@/convex/_generated/dataModel";
 import { Chip, useDisclosure } from "@nextui-org/react";
-import ConfirmModal from "../confirm-modal";
+import ConfirmModal from "../../confirm-modal";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/hooks/use-language";
 import { toast } from "sonner";
-const ChangePro = ({
-  userId,
-  isPro,
+const ChangeActive = ({
+  modelId,
+  isActive,
 }: {
-  userId: Id<"user">;
-  isPro: boolean;
+  modelId: Id<"model">;
+  isActive: boolean;
 }) => {
-  const update = useMutation(api.user.update);
+  const update = useMutation(api.model.update);
   const { language } = useLanguage();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <ConfirmModal
         title={
-          isPro
-            ? "Xác nhận hủy Premium của người dùng này?"
-            : "Xác nhận nâng cấp tài khoản lên Premium?"
+          isActive
+            ? "Xác nhận tắt kích hoạt mô hình này?"
+            : "Xác nhận kích hoạt mô hình này?"
         }
         isOpen={isOpen}
         onClose={onClose}
         handleDelete={() => {
           try {
-            update({ id: userId, isPro: !isPro });
+            update({ id: modelId, isActive: !isActive });
             toast.success(
               language === "Vietnamese"
                 ? "Cập nhật thành công."
@@ -48,14 +48,14 @@ const ChangePro = ({
       <Chip
         onClick={onOpen}
         className="capitalize cursor-pointer"
-        color={isPro ? "success" : "danger"}
+        color={isActive ? "success" : "danger"}
         size="sm"
         variant="flat"
       >
-        {isPro ? "Premium" : "None"}
+        {isActive ? "Hoạt động" : "Không hoạt động"}
       </Chip>
     </>
   );
 };
 
-export default ChangePro;
+export default ChangeActive;

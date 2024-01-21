@@ -1,17 +1,18 @@
 "use client";
-import OrderManager from "@/components/admin/order-manager";
+
+import UserManager from "@/components/admin/user/user-manager";
 import { useUser } from "@clerk/nextjs";
 
-const OrderPage = () => {
+const AdminPage = () => {
   const { user } = useUser();
   if (!user?.id) {
     return null;
   }
   return (
     <div>
-      <OrderManager userId={user.id} />
+      <UserManager userId={user.id} />
     </div>
   );
 };
 
-export default OrderPage;
+export default AdminPage;

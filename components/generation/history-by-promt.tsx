@@ -1,5 +1,5 @@
 import { api } from "@/convex/_generated/api";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import ImageItem from "./image-item";
 import {
   Dropdown,
@@ -22,7 +22,7 @@ import {
   BrainCog,
   Eye,
   EyeOff,
-  Image,
+  Image as Img,
   MoreHorizontal,
   Move,
   Trash2,
@@ -34,6 +34,8 @@ import { useLanguage } from "@/hooks/use-language";
 import ConfirmModal from "../confirm-modal";
 import ImageModal from "./image-modal";
 import { useState } from "react";
+import { useEdgeStore } from "@/lib/edgestore";
+import Image from "next/image";
 
 const HistoryByPrompt = ({
   item,
@@ -45,8 +47,9 @@ const HistoryByPrompt = ({
   const generation = useGenerateImage();
   const removeAll = useMutation(api.image.removeAll);
   const updateAll = useMutation(api.image.updateAll);
+  const models=useQuery(api.model.getmodels)
   const { language } = useLanguage();
-
+  const { edgestore } = useEdgeStore();
   const handleDeleteAll = async () => {
     try {
       const ids = item.map((i) => i._id);
@@ -56,6 +59,9 @@ const HistoryByPrompt = ({
           ? "Xóa tất cả thành công."
           : "Removed All Successfully."
       );
+      for (let index = 0; index < item.length; index++) {
+        await edgestore.publicFiles.delete({ url: item[index].url });
+      }
     } catch (error) {
       toast.error(
         language === "Vietnamese"
@@ -133,7 +139,7 @@ const HistoryByPrompt = ({
           closeDelay={100}
           content={<div className=" w-60">{item[0].prompt}</div>}
         >
-          <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
+          <div className="xl:max-w-[45vw] lg:max-w-[35vw] md:max-w-[15vw] max-w-[0px] truncate">
             {item[0].prompt}
           </div>
         </Tooltip>
@@ -145,7 +151,7 @@ const HistoryByPrompt = ({
             closeDelay={100}
             content={formatVietnameseDateTime(item[0]._creationTime)}
           >
-            <span>{formatVietnameseDate(item[0]._creationTime)}</span>
+            <span className=" whitespace-nowrap">{formatVietnameseDate(item[0]._creationTime)}</span>
           </Tooltip>
           <>
             <Tooltip
@@ -171,36 +177,11 @@ const HistoryByPrompt = ({
               </div>
             </Tooltip>
             <div className="md:flex hidden items-center gap-1 ">
-              {item[0].model === "dall-e-2" ? (
-                <>
-                  {" "}
-                  <Atom className="w-4 h-4" />
-                  <span>Heart Steal</span>
-                </>
-              ) : item[0].model === "pro" ? (
-                <>
-                  <BrainCog className="w-4 h-4" />
-                  <span>Heart Steal Pro</span>
-                </>
-              ) : item[0].model === "imagine" ? (
-                <>
-                  <BrainCog className="w-4 h-4" />
-                  <span>Imagine</span>
-                </>
-              ) : item[0].model === "dream" ? (
-                <>
-                  <BrainCog className="w-4 h-4" />
-                  <span>Dream</span>
-                </>
-              ) : (
-                <>
-                  <Aperture className="w-4 h-4" />
-                  <span>Heart Steal V2</span>
-                </>
-              )}
+            <Image src={models?.find(f=>f.modelId===item[0].model)?.avatar!} alt="" width={512} sizes="(max-width: 768px) 100vw,66vw" height={512} className="w-7 h-7" style={{objectFit:"cover"}} />
+             {models?.find(f=>f.modelId===item[0].model)?.name}
             </div>
             <div className="flex items-center gap-1">
-              <Image className="w-4 h-4" />
+              <Img className="w-4 h-4" />
               {item.length}
             </div>
             <div className="flex items-center gap-1">

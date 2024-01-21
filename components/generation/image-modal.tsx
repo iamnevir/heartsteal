@@ -146,7 +146,7 @@ const ImageModal = ({
       generation.setIsLoading(false);
     }
   };
-  const handleRemoveBG = async (image: Doc<"image">) => {
+  const handleRemoveBgByClipDrop = async (image: Doc<"image">) => {
     if (!isPro) {
       toast.error(
         language === "Vietnamese"
@@ -168,6 +168,54 @@ const ImageModal = ({
         },
       });
       const file = base64toFile(res.data.image_base64);
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+        });
+        if (res.url) {
+          create({
+            prompt: `${image._id} remove background`,
+            url: res.url,
+            userId: user?.id!,
+            isPublish: image.isPublish,
+            likes: 0,
+            model: image.model,
+            size: image.size,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      generation.setIsLoading(false);
+    }
+  };
+  const handleRemoveBgByRemoveBg = async (image: Doc<"image">) => {
+    if (!isPro) {
+      toast.error(
+        language === "Vietnamese"
+          ? "Hãy nâng cấp Premium để sử dụng."
+          : "Upgrade to Professor to use."
+      );
+
+      return;
+    }
+    generation.setIsLoading(true);
+    try {
+      const res = await axios({
+        method: "post",
+        url: `https://api.remove.bg/v1.0/removebg`,
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": "DPoctZRR7msSWKfUgqqrRRwv",
+        },
+        data: {
+          size: "auto",
+          image_url: image.url,
+        },
+      });
+      const file = new File([res.data], "hearsteal.png", { type: "image/png" });
       if (file) {
         const res = await edgestore.publicFiles.upload({
           file,
@@ -253,7 +301,7 @@ const ImageModal = ({
                           }
                         >
                           <div
-                            onClick={() => handleRemoveBG(item)}
+                            onClick={() => handleRemoveBgByRemoveBg(item)}
                             className={cn(
                               " w-8 h-8 flex duration-500 hover:scale-105 items-center cursor-pointer justify-center bg-gradient-to-br from-black/20 to-black/10 dark:from-white/20 dark:to-white/0 backdrop-blur-lg rounded-full"
                             )}

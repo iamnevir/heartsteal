@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 import Logo from "../logo";
-import { ListOrdered, LogOut, User2 } from "lucide-react";
+import { BrainCog, ListOrdered, LogOut, User2 } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import { Link } from "@nextui-org/react";
@@ -22,12 +22,17 @@ const Sidebar = ({ userId }: { userId: string }) => {
     {
       icon: User2,
       title: language === "Vietnamese" ? "Người dùng" : "User",
-      href: "/admin",
+      href: "/admin/user",
     },
     {
       icon: ListOrdered,
       title: language === "Vietnamese" ? "Đơn hàng" : "Order",
       href: "/admin/order",
+    },
+    {
+      icon: BrainCog,
+      title: language === "Vietnamese" ? "Mô hình" : "Model",
+      href: "/admin/model",
     },
   ];
   if (user === undefined) {

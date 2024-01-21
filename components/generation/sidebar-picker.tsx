@@ -245,7 +245,7 @@ const SidebarPicker = () => {
           size={!isMobile ? "sm" : "lg"}
           className={cn(
             "ml-auto",
-            generation.model !== "pro" ? "opacity-50 pointer-events-none" : ""
+            generation.model !== "heart-steal-pro" ? "opacity-50 pointer-events-none" : ""
           )}
           onValueChange={(v) => generation.setHd(v)}
           classNames={{

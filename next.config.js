@@ -25,6 +25,8 @@ const nextConfig = {
       },
       {
         hostname: "app.leonardo.ai",
+      },{
+        hostname: "cdn.leonardo.ai",
       },
     ],
   },

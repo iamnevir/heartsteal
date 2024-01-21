@@ -49,17 +49,22 @@ import {
   CandyCane,
   Donut,
   LucideShieldQuestion,
+  Move,
+  ScanFace,
 } from "lucide-react";
 import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import Guide from "./guide";
+import Image from "next/image";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
   const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
+  const models = useQuery(api.model.getmodels);
   const update = useMutation(api.user.update);
   const isMobile = useMediaQuery("(max-width:768px)");
   const create = useMutation(api.image.create);
+
   const { results, status, loadMore } = usePaginatedQuery(
     api.image.getImageByOwnUser,
     { userId: user?.id! },
@@ -130,6 +135,7 @@ const ImageGenerationMain = () => {
           prompt: generation.prompt,
           size: generation.imageSize,
         };
+
         const res = await axios({
           method: "post",
           url: `${backEndUrl}/edit_image`,
@@ -354,6 +360,89 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
+      } else if (generation.model === "prodia") {
+        // if (!generation.maskUrl || !generation.maskInput) {
+        //   toast.error(
+        //     language === "Vietnamese"
+        //       ? "Không thấy ảnh đầu vào."
+        //       : "No image input found."
+        //   );
+        // }
+
+        // const res = await fetch("https://api.prodia.com/v1/sd/generate", {
+        //   method: "POST",
+        //   mode: "no-cors",
+        //   headers: {
+        //     "X-Prodia-Key": "22cb3eca-5698-4ee2-ae04-e56b70cbd65b",
+        //     accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     prompt: generation.prompt,
+        //   }),
+        // });
+        // console.log(res);
+        // const result = await res.json();
+        // console.log(result);
+        // create({
+        //   prompt: generation.prompt,
+        //   url,
+        //   negativePrompt: generation.negativePrompt,
+        //   userId: user?.id!,
+        //   isPublish: generation.publicImage,
+        //   likes: randomInt(50, 300),
+        //   model: generation.model,
+        //   size: generation.imageSize,
+        // });
+        // if (!u?.isPro) {
+        //   update({
+        //     id: u?._id!,
+        //     coin: u?.coin! - price,
+        //   });
+        // }
+        const generateI = async () => {
+          const response = await axios({
+            method: "post",
+            url: `${backEndUrl}/prodia`,
+            maxBodyLength: Infinity,
+            headers: { "Content-Type": "application/json" },
+            data: {
+              prompt: generation.prompt,
+            },
+          });
+          const file = base64toFile(response.data.image_base64);
+          if (!file) {
+            return null;
+          }
+          const res = await edgestore.publicFiles.upload({
+            file,
+          });
+          if (!res.url) {
+            return null;
+          }
+          return res.url;
+        };
+        const promises = [];
+        for (let index = 0; index < generation.imageNumber; index++) {
+          promises.push(generateI());
+        }
+        const results = await Promise.all(promises);
+        results.forEach((result) => {
+          if (result !== null) {
+            create({
+              prompt: generation.prompt,
+              negativePrompt: generation.negativePrompt,
+              url: result,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(500, 1000),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          } else {
+            console.error("One or more calls to generateI failed.");
+          }
+        });
       } else {
         const data = {
           model: generation.model,
@@ -406,6 +495,9 @@ const ImageGenerationMain = () => {
       generation.setIsLoading(false);
     }
   };
+  if (!models) {
+    return null;
+  }
   return (
     <div className="sm:pl-64 px-2 pt-6">
       <div className=" flex items-center gap-2">
@@ -512,24 +604,31 @@ const ImageGenerationMain = () => {
         <div className="flex sm:items-center sm:flex-row flex-col gap-3 items-start w-full sm:px-0 px-2 pb-2">
           <Select
             aria-label="a"
-            defaultSelectedKeys={["dall-e-2"]}
+            defaultSelectedKeys={[generation.model]}
             value={generation.model}
             startContent={
-              generation.model === "dall-e-2" ? (
-                <Atom className={isMobile ? "w-8 h-8" : ""} />
-              ) : generation.model === "pro" ? (
-                <BrainCog className={isMobile ? "w-8 h-8" : ""} />
-              ) : generation.model === "dream" ? (
-                <CandyCane className={isMobile ? "w-8 h-8" : ""} />
-              ) : generation.model === "imagine" ? (
-                <Biohazard className={isMobile ? "w-8 h-8" : ""} />
-              ) : generation.model === "animagine" ? (
-                <Donut className={isMobile ? "w-8 h-8" : ""} />
-              ) : (
-                <Aperture className={isMobile ? "w-8 h-8" : ""} />
-              )
+              <Image
+                src={
+                  models?.find((f) => f.modelId === generation.model)!.avatar!
+                }
+                alt="model"
+                width={512}
+                sizes="(max-width: 768px) 100vw,66vw"
+                height={512}
+                className="w-8 h-8"
+                style={{ objectFit: "cover" }}
+              />
             }
-            endContent={<Box />}
+            endContent={
+              <div className="flex items-center gap-1 text-xs">
+                {" "}
+                <Move size={15} />{" "}
+                <span>
+                  {models?.find((f) => f.modelId === generation.model)!.size}
+                </span>{" "}
+                <Box size={15} />
+              </div>
+            }
             className={cn("sm:max-w-xs")}
             variant="bordered"
             onChange={(v) => {
@@ -558,82 +657,35 @@ const ImageGenerationMain = () => {
               language === "Vietnamese" ? "Chọn mô hình" : "Select Model"
             }
           >
-            <SelectItem
-              startContent={<Atom className={isMobile ? "w-8 h-8" : ""} />}
-              key={"dall-e-2"}
-              value={"Heart Steal"}
-              classNames={{ title: "sm:text-base text-xl" }}
-            >
-              Heart Steal
-            </SelectItem>
-            <SelectItem
-              classNames={{ title: "sm:text-base text-xl" }}
-              startContent={<Aperture className={isMobile ? "w-8 h-8" : ""} />}
-              key={"bimg"}
-              value={"Heart Steal V2"}
-              className={cn("sm:max-w-xs ")}
-            >
-              Heart Steal V2
-            </SelectItem>
-            <SelectItem
-              classNames={{ title: "sm:text-base text-xl" }}
-              startContent={<CandyCane className={isMobile ? "w-8 h-8" : ""} />}
-              key={"dream"}
-              value={"Dream"}
-              className={cn("sm:max-w-xs ")}
-            >
-              Dream
-            </SelectItem>
-            <SelectItem
-              classNames={{ title: "sm:text-base text-xl" }}
-              startContent={<Biohazard className={isMobile ? "w-8 h-8" : ""} />}
-              endContent={<Chip className="bg-gr">Premium</Chip>}
-              key={"imagine"}
-              value={"Imagine"}
-              className={cn(
-                "sm:max-w-xs",
-                !u?.isPro && " opacity-50 pointer-events-none"
-              )}
-            >
-              Imagine
-            </SelectItem>
-            <SelectItem
-              classNames={{ title: "sm:text-base text-xl" }}
-              startContent={<Donut className={isMobile ? "w-8 h-8" : ""} />}
-              endContent={<Chip className="bg-gr">Premium</Chip>}
-              key={"animagine"}
-              value={"Animagine"}
-              className={cn(
-                "sm:max-w-xs",
-                !u?.isPro && " opacity-50 pointer-events-none"
-              )}
-            >
-              Animagine
-            </SelectItem>
-            <SelectItem
-              classNames={{ title: "sm:text-base text-xl" }}
-              startContent={
-                <Tooltip
-                  placement="right"
-                  size="sm"
-                  delay={100}
-                  closeDelay={100}
-                  classNames={{ content: "bg-gr" }}
-                  content="Premium"
-                >
-                  <BrainCog className={isMobile ? "w-8 h-8" : ""} />
-                </Tooltip>
-              }
-              key={"pro"}
-              endContent={<Chip className="bg-gr">Premium</Chip>}
-              value={"Heart Steal Pro"}
-              className={cn(
-                "sm:max-w-xs overflow-auto",
-                !u?.isPro && " opacity-50 pointer-events-none"
-              )}
-            >
-              Heart Steal Pro
-            </SelectItem>
+            {models.map((item, index) => (
+              <SelectItem
+                startContent={
+                  <Image
+                    src={item.avatar!}
+                    alt="model"
+                    width={30}
+                    sizes="(max-width: 768px) 100vw,66vw"
+                    height={30}
+                    className="w-8 h-8"
+                    style={{ objectFit: "cover" }}
+                  />
+                }
+                key={item.modelId}
+                value={item.name}
+                classNames={{ title: "sm:text-base text-xl" }}
+                endContent={
+                  item.isPro ? (
+                    <Chip className="bg-gr">Premium</Chip>
+                  ) : (
+                    <Chip color="success" variant="flat">
+                      Free
+                    </Chip>
+                  )
+                }
+              >
+                {item.name}
+              </SelectItem>
+            ))}
           </Select>
           {generation.model === "imagine" && (
             <Select

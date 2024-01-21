@@ -56,6 +56,7 @@ const ImageCommunityItem = ({
   grid: SliderValue;
 }) => {
   const users = useQuery(api.user.getUsers);
+  const models=useQuery(api.model.getmodels)
   const userName = useQuery(api.user.getUserByUser, { userId });
   const create = useMutation(api.image.create);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -428,42 +429,10 @@ const ImageCommunityItem = ({
                       <span className=" text-xs dark:text-white/50 text-black/50">
                         {language === "Vietnamese" ? "Mô hình" : "Model"}
                       </span>
-                      <span className="text-xs flex items-center gap-1">
-                        {" "}
-                        {image.model === "dall-e-2" ? (
-                          <>
-                            {" "}
-                            <Atom className="w-4 h-4" />
-                            <span>Heart Steal</span>
-                          </>
-                        ) : image.model === "pro" ? (
-                          <>
-                            <BrainCog className="w-4 h-4" />
-                            <span>Heart Steal Pro</span>
-                            <Chip className="bg-gr w-8 justify-center h-4 text-xs">
-                              Pro
-                            </Chip>
-                          </>
-                        ) : image.model === "imagine" ? (
-                          <>
-                            <BrainCog className="w-4 h-4" />
-                            <span>Imagine</span>
-                            <Chip className="bg-gr w-8 justify-center h-4 text-xs">
-                              Pro
-                            </Chip>
-                          </>
-                        ) : image.model === "dream" ? (
-                          <>
-                            <BrainCog className="w-4 h-4" />
-                            <span>Dream</span>
-                          </>
-                        ) : (
-                          <>
-                            <Aperture className="w-4 h-4" />
-                            <span>Heart Steal V2</span>
-                          </>
-                        )}
-                      </span>
+                      <div className="flex text-xs items-center gap-2 ">
+                      <Image src={models?.find(f=>f.modelId===image.model)?.avatar!} alt="" width={512} sizes="(max-width: 768px) 100vw,66vw" height={512} className="w-7 h-7" style={{objectFit:"cover"}} />
+                      {models?.find(f=>f.modelId===image.model)?.name}
+                      </div>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className=" text-xs dark:text-white/50 text-black/50">

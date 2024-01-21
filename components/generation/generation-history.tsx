@@ -7,6 +7,7 @@ import {
   ArrowUpCircle,
   Atom,
   BrainCog,
+  Donut,
   Image as Img,
   Move,
 } from "lucide-react";
@@ -82,10 +83,10 @@ const GenerationHistory = ({
                     <BrainCog className="w-4 h-4" />
                     <span>Imagine</span>
                   </>
-                ) : generation.model === "dream" ? (
+                ) : generation.model === "animagine" ? (
                   <>
-                    <BrainCog className="w-4 h-4" />
-                    <span>Dream</span>
+                    <Donut className="w-4 h-4" />
+                    <span>Animagine</span>
                   </>
                 ) : (
                   <>
