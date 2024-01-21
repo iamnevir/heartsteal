@@ -4,10 +4,6 @@ import {
   CardBody,
   CardHeader,
   Divider,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
   Slider,
   Switch,
   Tooltip,
@@ -17,71 +13,26 @@ import { Image as ImageIcon, LucideShieldQuestion } from "lucide-react";
 import SingleFileUpload from "../single-file-upload";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
 import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import Image from "next/image";
 import { useLanguage } from "@/hooks/use-language";
 import { useMediaQuery } from "usehooks-ts";
+import YourUpload from "./your-upload";
 
 const ImageInput = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
-  const u = useQuery(api.user.getUserByUser, { userId: user?.id! });
+
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   const { language } = useLanguage();
   const isMobile = useMediaQuery("(max-width:768px)");
   return (
     <>
-      <Modal
-        className=" z-[99999] relative"
-        size="4xl"
-        scrollBehavior="inside"
-        placement="center"
-        backdrop="blur"
+      <YourUpload
+        mode="img2img"
         isOpen={isOpen}
+        onClose={onClose}
         onOpenChange={onOpenChange}
-      >
-        <ModalContent>
-          <ModalHeader>
-            {language === "Vietnamese"
-              ? "Chọn ảnh làm đầu vào"
-              : "Select Image Input"}
-          </ModalHeader>
-          <ModalBody>
-            <span>
-              {language === "Vietnamese"
-                ? "Ảnh tải lên của bạn"
-                : "Your Uploads"}
-            </span>
-            <Divider />
-            {u!.upload.length > 0 ? (
-              <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2 ">
-                {u?.upload.map((item, index) => (
-                  <Image
-                    onClick={() => {
-                      generation.setInputUrl(item);
-                      onClose();
-                    }}
-                    key={index}
-                    width={250}
-                    className=" cursor-pointer rounded-md border-gr-image hover:opacity-50 border-3 border-transparent"
-                    height={250}
-                    alt=""
-                    style={{ objectFit: "cover", width: "auto" }}
-                    src={item}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className=" w-full h-full flex items-center">
-                {language === "Vietnamese"
-                  ? "Bạn chưa tải lên ảnh nào."
-                  : "No uploads yet."}
-              </div>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+        userId={user?.id!}
+      />
       <div className=" max-w-2xl text-sm ">
         <Card classNames={{ base: "dark:bg-slate-950/70 bg-slate-200 " }}>
           <CardHeader>

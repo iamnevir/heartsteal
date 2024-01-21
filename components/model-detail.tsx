@@ -82,7 +82,7 @@ export const ModelItem = ({ item }: { item: Doc<"model"> }) => {
             <ModalBody>
               <div className="flex sm:flex-row flex-col item-start gap-4 py-2 w-full">
                 <Image
-                  className="rounded-md"
+                  className="rounded-md sm:w-[240px] sm:h-[370px] w-full"
                   alt=""
                   placeholder="blur"
                   blurDataURL="/placeholder.png"
@@ -91,8 +91,6 @@ export const ModelItem = ({ item }: { item: Doc<"model"> }) => {
                   width={512}
                   height={512}
                   style={{
-                    width: "240px",
-                    height: "370px",
                     objectFit: "cover",
                   }}
                 />

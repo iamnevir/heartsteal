@@ -15,6 +15,8 @@ import { cn, formatVietnameseDate } from "@/lib/utils";
 import { CircularProgress, Skeleton } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const GenerationHistory = ({
   images,
@@ -27,6 +29,7 @@ const GenerationHistory = ({
 }) => {
   const generation = useGenerateImage();
   const date = new Date();
+  const models = useQuery(api.model.getmodels);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   useEffect(() => {
     let timerId: NodeJS.Timeout;
@@ -67,33 +70,21 @@ const GenerationHistory = ({
               </div>
 
               <div className="md:flex hidden items-center gap-1 ">
-                {generation.model === "dall-e-2" ? (
-                  <>
-                    {" "}
-                    <Atom className="w-4 h-4" />
-                    <span>Heart Steal</span>
-                  </>
-                ) : generation.model === "pro" ? (
-                  <>
-                    <BrainCog className="w-4 h-4" />
-                    <span>Heart Steal Pro</span>
-                  </>
-                ) : generation.model === "imagine" ? (
-                  <>
-                    <BrainCog className="w-4 h-4" />
-                    <span>Imagine</span>
-                  </>
-                ) : generation.model === "animagine" ? (
-                  <>
-                    <Donut className="w-4 h-4" />
-                    <span>Animagine</span>
-                  </>
-                ) : (
-                  <>
-                    <Aperture className="w-4 h-4" />
-                    <span>Heart Steal V2</span>
-                  </>
-                )}
+                <div className="md:flex hidden items-center gap-1 ">
+                  <Image
+                    src={
+                      models?.find((f) => f.modelId === generation.model)
+                        ?.avatar!
+                    }
+                    alt=""
+                    width={512}
+                    sizes="(max-width: 768px) 100vw,66vw"
+                    height={512}
+                    className="w-7 h-7"
+                    style={{ objectFit: "cover" }}
+                  />
+                  {models?.find((f) => f.modelId === generation.model)?.name}
+                </div>
               </div>
               <div className="flex items-center gap-1">
                 <Img className="w-4 h-4" />

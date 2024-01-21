@@ -56,6 +56,7 @@ import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import Guide from "./guide";
 import Image from "next/image";
+import { createProdia, faceSwap, image2Image } from "@/actions/prodia";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -89,31 +90,51 @@ const ImageGenerationMain = () => {
               : "No image input found."
           );
         }
-        const data = {
-          n: generation.imageNumber,
-          image_url: generation.inputUrl,
-          size: generation.imageSize,
-        };
-        const res = await axios({
-          method: "post",
-          url: `${backEndUrl}/generate_image_with_image`,
-          maxBodyLength: Infinity,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data,
-        });
-        for (let index = 0; index < generation.imageNumber; index++) {
-          create({
-            prompt: generation.prompt,
-            url: res.data.data[index],
-            userId: user?.id!,
-            isPublish: generation.publicImage,
-            likes: randomInt(50, 300),
-            model: generation.model,
+        if (generation.model === "dall-e-2") {
+          const data = {
+            n: generation.imageNumber,
+            image_url: generation.inputUrl,
             size: generation.imageSize,
+          };
+          const res = await axios({
+            method: "post",
+            url: `${backEndUrl}/generate_image_with_image`,
+            maxBodyLength: Infinity,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data,
           });
+          for (let index = 0; index < generation.imageNumber; index++) {
+            create({
+              prompt: generation.prompt,
+              url: res.data.data[index],
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(50, 300),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
+        } else if (generation.model === "prodia") {
+          const url = await image2Image(
+            generation.prompt,
+            generation.negativePrompt,
+            generation.inputUrl
+          );
+          if (url) {
+            create({
+              prompt: generation.prompt,
+              url,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(50, 300),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
         }
+
         if (!u?.isPro) {
           update({
             id: u?._id!,
@@ -127,33 +148,50 @@ const ImageGenerationMain = () => {
               ? "Không thấy ảnh đầu vào."
               : "No image input found."
           );
+          return;
         }
-        const data = {
-          n: generation.imageNumber,
-          image_url: generation.maskInput,
-          mask: generation.maskUrl,
-          prompt: generation.prompt,
-          size: generation.imageSize,
-        };
-
-        const res = await axios({
-          method: "post",
-          url: `${backEndUrl}/edit_image`,
-          maxBodyLength: Infinity,
-          headers: { "Content-Type": "application/json" },
-          data,
-        });
-        for (let index = 0; index < generation.imageNumber; index++) {
-          create({
+        if (generation.model === "dall-e-2") {
+          const data = {
+            n: generation.imageNumber,
+            image_url: generation.maskInput,
+            mask: generation.maskUrl,
             prompt: generation.prompt,
-            url: res.data.data[index],
-            negativePrompt: generation.negativePrompt,
-            userId: user?.id!,
-            isPublish: generation.publicImage,
-            likes: randomInt(50, 300),
-            model: generation.model,
             size: generation.imageSize,
+          };
+
+          const res = await axios({
+            method: "post",
+            url: `${backEndUrl}/edit_image`,
+            maxBodyLength: Infinity,
+            headers: { "Content-Type": "application/json" },
+            data,
           });
+          for (let index = 0; index < generation.imageNumber; index++) {
+            create({
+              prompt: generation.prompt,
+              url: res.data.data[index],
+              negativePrompt: generation.negativePrompt,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(50, 300),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
+        } else if (generation.model === "prodia") {
+          const url = await faceSwap(generation.maskInput, generation.maskUrl);
+          console.log(url);
+          if (url) {
+            create({
+              prompt: generation.prompt,
+              url,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(50, 300),
+              model: generation.model,
+              size: generation.imageSize,
+            });
+          }
         }
         if (!u?.isPro) {
           update({
@@ -368,59 +406,12 @@ const ImageGenerationMain = () => {
         //       : "No image input found."
         //   );
         // }
-
-        // const res = await fetch("https://api.prodia.com/v1/sd/generate", {
-        //   method: "POST",
-        //   mode: "no-cors",
-        //   headers: {
-        //     "X-Prodia-Key": "22cb3eca-5698-4ee2-ae04-e56b70cbd65b",
-        //     accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     prompt: generation.prompt,
-        //   }),
-        // });
-        // console.log(res);
-        // const result = await res.json();
-        // console.log(result);
-        // create({
-        //   prompt: generation.prompt,
-        //   url,
-        //   negativePrompt: generation.negativePrompt,
-        //   userId: user?.id!,
-        //   isPublish: generation.publicImage,
-        //   likes: randomInt(50, 300),
-        //   model: generation.model,
-        //   size: generation.imageSize,
-        // });
-        // if (!u?.isPro) {
-        //   update({
-        //     id: u?._id!,
-        //     coin: u?.coin! - price,
-        //   });
-        // }
         const generateI = async () => {
-          const response = await axios({
-            method: "post",
-            url: `${backEndUrl}/prodia`,
-            maxBodyLength: Infinity,
-            headers: { "Content-Type": "application/json" },
-            data: {
-              prompt: generation.prompt,
-            },
-          });
-          const file = base64toFile(response.data.image_base64);
-          if (!file) {
-            return null;
-          }
-          const res = await edgestore.publicFiles.upload({
-            file,
-          });
-          if (!res.url) {
-            return null;
-          }
-          return res.url;
+          const url = await createProdia(
+            generation.prompt,
+            generation.negativePrompt
+          );
+          return url;
         };
         const promises = [];
         for (let index = 0; index < generation.imageNumber; index++) {
@@ -428,7 +419,7 @@ const ImageGenerationMain = () => {
         }
         const results = await Promise.all(promises);
         results.forEach((result) => {
-          if (result !== null) {
+          if (result) {
             create({
               prompt: generation.prompt,
               negativePrompt: generation.negativePrompt,
