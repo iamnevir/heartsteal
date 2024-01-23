@@ -6,6 +6,8 @@ import AuthProvider from "@/components/provider/auth-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import ConvexClientProvider from "@/components/provider/convex-provider";
 import { Toaster } from "sonner";
+import dynamic from "next/dynamic";
+const FlyMenu = dynamic(() => import("@/components/fly-menu"), { ssr: false });
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -35,7 +37,7 @@ export default function RootLayout({
           <ConvexClientProvider>
             <EdgeStoreProvider>
               <NextUiProviders>
-                {children}{" "}
+                {children} <FlyMenu />
                 <Toaster
                   toastOptions={{
                     style: {

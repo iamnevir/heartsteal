@@ -20,6 +20,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { formatVietnameseDateTime } from "@/lib/utils";
 import UserOrder from "./user-order";
 import Loading from "@/app/loading";
+import CountUp from "react-countup";
 const OrderManager = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
   const orders = useQuery(api.order.getorders);
@@ -73,7 +74,11 @@ const OrderManager = ({ userId }: { userId: string }) => {
                     ? "Số lượng đơn hàng"
                     : "Total Order"}
                 </span>
-                <span className="font-semibold text-2xl">{orders?.length}</span>
+                <CountUp
+                  className="dark:text-white font-semibold"
+                  end={orders.length}
+                  separator=","
+                />
               </div>
             </div>
             <div className=" flex items-center p-5 gap-3">
@@ -82,9 +87,11 @@ const OrderManager = ({ userId }: { userId: string }) => {
                 <span className="text-xl dark:text-white/50">
                   {language === "Vietnamese" ? "Đã thanh toán" : "Order Paied"}
                 </span>
-                <span className="font-semibold text-2xl">
-                  {orders?.filter((f) => f.isPay === true).length}
-                </span>
+                <CountUp
+                  className="dark:text-white font-semibold"
+                  end={orders.length}
+                  separator=","
+                />
               </div>
             </div>
           </CardBody>

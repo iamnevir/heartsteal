@@ -14,6 +14,7 @@ import { BrainCog, CalendarHeart, ScrollText, Users } from "lucide-react";
 import EventItem from "./event-item";
 import { Area, AreaConfig } from "@ant-design/plots";
 import { getDataForChart } from "@/lib/utils";
+import CountUp from "react-countup";
 const DashBoard = () => {
   const { language } = useLanguage();
   const models = useQuery(api.model.getmodelsforAdmin);
@@ -59,6 +60,7 @@ const DashBoard = () => {
       end: 1,
     },
   };
+
   return (
     <div>
       <div className=" flex sm:flex-row flex-col gap-5">
@@ -70,7 +72,11 @@ const DashBoard = () => {
                 <span className="text-xl dark:text-white/50">
                   {language === "Vietnamese" ? "Số lượng model" : "Total Model"}
                 </span>
-                <span className="font-semibold text-2xl">{models?.length}</span>
+                <CountUp
+                  className="dark:text-white font-semibold"
+                  end={models.length}
+                  separator=","
+                />
               </div>
               <Area
                 data={modelsData!}
@@ -117,7 +123,11 @@ const DashBoard = () => {
                     ? "Số lượng người dùng"
                     : "Total User"}
                 </span>
-                <span className="font-semibold text-2xl">{users?.length}</span>
+                <CountUp
+                  className="dark:text-white font-semibold"
+                  end={users.length}
+                  separator=","
+                />
               </div>
               <Area
                 data={usersData!}
@@ -164,7 +174,11 @@ const DashBoard = () => {
                     ? "Số lượng đơn hàng"
                     : "Total Order"}
                 </span>
-                <span className="font-semibold text-2xl">{orders?.length}</span>
+                <CountUp
+                  className="dark:text-white font-semibold"
+                  end={orders.length}
+                  separator=","
+                />
               </div>
               <Area
                 data={ordersData!}

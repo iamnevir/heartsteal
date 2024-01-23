@@ -38,7 +38,7 @@ const ModelDetail = () => {
           {models?.map((item, index) => (
             <CarouselItem
               key={index}
-              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 p-1 pl-5"
             >
               <ModelItem item={item} />
             </CarouselItem>

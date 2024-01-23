@@ -2,57 +2,27 @@ import { Doc } from "@/convex/_generated/dataModel";
 
 import HistoryByPrompt from "./history-by-promt";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
-import {
-  Aperture,
-  ArrowUpCircle,
-  Atom,
-  BrainCog,
-  Donut,
-  Image as Img,
-  Move,
-} from "lucide-react";
+import { ArrowUpCircle, Image as Img, Move } from "lucide-react";
 import { cn, formatVietnameseDate } from "@/lib/utils";
 import { CircularProgress, Skeleton } from "@nextui-org/react";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import CountUp from "react-countup";
 
 const GenerationHistory = ({
   images,
-  isLoading,
   user,
 }: {
   images: Doc<"image">[][];
-  isLoading: boolean;
   user: Doc<"user">;
 }) => {
   const generation = useGenerateImage();
   const date = new Date();
   const models = useQuery(api.model.getmodels);
-  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
-  useEffect(() => {
-    let timerId: NodeJS.Timeout;
-
-    if (isLoading) {
-      const startTime = new Date().getTime();
-
-      timerId = setInterval(() => {
-        const currentTime = new Date().getTime();
-        const seconds = Math.floor((currentTime - startTime) / 1000);
-        setElapsedSeconds(seconds);
-      }, 1000);
-    } else {
-      setElapsedSeconds(0);
-    }
-
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [isLoading]);
   return (
     <div className=" w-full h-full">
-      {isLoading && (
+      {generation.isLoading && (
         <>
           <div className=" flex py-2 items-center sm:justify-between text-xs">
             <div className="xl:max-w-[50vw] lg:max-w-[40vw] md:max-w-[20vw] max-w-[0px] truncate">
@@ -116,7 +86,12 @@ const GenerationHistory = ({
                     aria-label="Loading..."
                   />
                   <span className=" absolute left-4 text-xs top-12 z-10">
-                    {elapsedSeconds}s
+                    <CountUp
+                      end={500}
+                      duration={3000}
+                      separator="."
+                      decimals={2}
+                    />
                   </span>
                   <Skeleton
                     className={cn(

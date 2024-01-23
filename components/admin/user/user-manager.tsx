@@ -25,6 +25,7 @@ import ChangeRole from "./change-role";
 import ChangeCoin from "./change-coin";
 import Loading from "@/app/loading";
 import { toast } from "sonner";
+import CountUp from "react-countup";
 const UserManager = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
   const users = useQuery(api.user.getUsers);
@@ -148,9 +149,11 @@ const UserManager = ({ userId }: { userId: string }) => {
                       ? "Số lượng người dùng"
                       : "Total User"}
                   </span>
-                  <span className="font-semibold text-2xl">
-                    {users?.length}
-                  </span>
+                  <CountUp
+                    className="dark:text-white font-semibold"
+                    end={users.length}
+                    separator=","
+                  />
                 </div>
               </div>
               <div className=" flex items-center p-5 gap-3">
@@ -161,9 +164,12 @@ const UserManager = ({ userId }: { userId: string }) => {
                       ? "Người dùng vip"
                       : "Premium User"}
                   </span>
-                  <span className="font-semibold text-2xl">
-                    {users?.filter((f) => f.isPro === true).length}
-                  </span>
+
+                  <CountUp
+                    className="dark:text-white font-semibold"
+                    end={users.length}
+                    separator=","
+                  />
                 </div>
               </div>
             </CardBody>

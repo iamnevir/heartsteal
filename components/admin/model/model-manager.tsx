@@ -29,6 +29,7 @@ import ChangeActive from "./change-active";
 import CreateEditModel from "./create-edit-model";
 import { useEdgeStore } from "@/lib/edgestore";
 import ChangePro from "./change-pro";
+import CountUp from "react-countup";
 const ModelManager = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
   const models = useQuery(api.model.getmodelsforAdmin);
@@ -157,9 +158,11 @@ const ModelManager = ({ userId }: { userId: string }) => {
                       ? "Số lượng model"
                       : "Total Model"}
                   </span>
-                  <span className="font-semibold text-2xl">
-                    {models?.length}
-                  </span>
+                  <CountUp
+                    className="dark:text-white font-semibold"
+                    end={models.length}
+                    separator=","
+                  />
                 </div>
               </div>
               <div className=" flex items-center p-5 gap-3">
@@ -170,9 +173,11 @@ const ModelManager = ({ userId }: { userId: string }) => {
                       ? "Mô hình hoạt động"
                       : "Active Model"}
                   </span>
-                  <span className="font-semibold text-2xl">
-                    {models?.filter((f) => f.isActive === true).length}
-                  </span>
+                  <CountUp
+                    className="dark:text-white font-semibold"
+                    end={models.length}
+                    separator=","
+                  />
                 </div>
               </div>
             </CardBody>

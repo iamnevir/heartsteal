@@ -793,11 +793,7 @@ const ImageGenerationMain = () => {
               </div>{" "}
             </div>
           ) : (
-            <GenerationHistory
-              user={u!}
-              isLoading={generation.isLoading}
-              images={images}
-            />
+            <GenerationHistory user={u!} images={images} />
           )}
 
           {status === "CanLoadMore" ? (
