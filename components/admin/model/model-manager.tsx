@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/react";
 import { useMutation, useQuery } from "convex/react";
 import { useMediaQuery } from "usehooks-ts";
-import { Edit, Trash2, UserCheck2, Users } from "lucide-react";
+import { BrainCog, Edit, Trash2, UserCheck2, Users } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { formatVietnameseDateTime } from "@/lib/utils";
@@ -31,7 +31,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import ChangePro from "./change-pro";
 const ModelManager = ({ userId }: { userId: string }) => {
   const user = useQuery(api.user.getUserByUser, { userId });
-  const models = useQuery(api.model.getmodels);
+  const models = useQuery(api.model.getmodelsforAdmin);
   const remove = useMutation(api.model.remove);
   const { edgestore } = useEdgeStore();
   const { language } = useLanguage();
@@ -59,15 +59,14 @@ const ModelManager = ({ userId }: { userId: string }) => {
           if (model.avatar) {
             return (
               <div className=" relative w-[150px] h-[100px]">
-              <Image
-                src={model.avatar!}
-                alt={model.name ? model.name : "Unknown"}
-                fill
-                sizes="(max-width: 768px) 100vw,66vw"
-                style={{ objectFit: "cover" }}
-              />
+                <Image
+                  src={model.avatar!}
+                  alt={model.name ? model.name : "Unknown"}
+                  fill
+                  sizes="(max-width: 768px) 100vw,66vw"
+                  style={{ objectFit: "cover" }}
+                />
               </div>
-             
             );
           } else {
             return (
@@ -151,7 +150,7 @@ const ModelManager = ({ userId }: { userId: string }) => {
           <Card className="w-fit mt-4">
             <CardBody className="flex sm:flex-row">
               <div className=" flex items-center p-5 gap-3">
-                <Users className="w-20 h-20" />
+                <BrainCog className="w-20 h-20" />
                 <div className="flex flex-col">
                   <span className="text-xl dark:text-white/50">
                     {language === "Vietnamese"

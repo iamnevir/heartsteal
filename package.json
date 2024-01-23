@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/plots": "^1.2.6",
     "@clerk/nextjs": "^4.29.1",
     "@clerk/themes": "^1.7.9",
     "@edgestore/react": "^0.1.6",

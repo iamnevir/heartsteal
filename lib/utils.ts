@@ -149,3 +149,110 @@ export function base64toFile(base64: string): File {
 
   return new File([blob], "hearsteal.png", { type: "image/png" });
 }
+
+export const getDataForChart = (
+  models?: Doc<"model">[],
+  users?: Doc<"user">[],
+  orders?: Doc<"order">[],
+  language?: "Vietnamese" | "English"
+) => {
+  if (!models || !users || !orders) {
+    return;
+  }
+
+  if (language === "Vietnamese") {
+    const summary: {
+      date: string;
+      countType: "Người dùng" | "Đơn hàng" | "Mô hình";
+      count: number;
+    }[] = [];
+
+    // Tạo một mảng chứa tất cả ngày tạo từ user, order, và model
+    const allDates: string[] = Array.from(
+      new Set([
+        ...users.map((user) => formatVietnameseDate(user._creationTime)),
+        ...orders.map((order) => formatVietnameseDate(order._creationTime)),
+        ...models.map((model) => formatVietnameseDate(model._creationTime)),
+      ])
+    );
+
+    allDates.forEach((date) => {
+      const userCount = users.filter(
+        (user) => formatVietnameseDate(user._creationTime) === date
+      ).length;
+      const orderCount = orders.filter(
+        (order) => formatVietnameseDate(order._creationTime) === date
+      ).length;
+      const modelCount = models.filter(
+        (model) => formatVietnameseDate(model._creationTime) === date
+      ).length;
+
+      summary.push({
+        date,
+        countType: "Người dùng",
+        count: userCount,
+      });
+
+      summary.push({
+        date,
+        countType: "Đơn hàng",
+        count: orderCount,
+      });
+
+      summary.push({
+        date,
+        countType: "Mô hình",
+        count: modelCount,
+      });
+    });
+    return summary;
+  } else {
+    const summary: {
+      date: string;
+      countType: "user" | "order" | "model";
+      count: number;
+    }[] = [];
+
+    // Tạo một mảng chứa tất cả ngày tạo từ user, order, và model
+    const allDates: string[] = Array.from(
+      new Set([
+        ...users.map((user) => formatVietnameseDate(user._creationTime)),
+        ...orders.map((order) => formatVietnameseDate(order._creationTime)),
+        ...models.map((model) => formatVietnameseDate(model._creationTime)),
+      ])
+    );
+
+    allDates.forEach((date) => {
+      const userCount = users.filter(
+        (user) => formatVietnameseDate(user._creationTime) === date
+      ).length;
+      const orderCount = orders.filter(
+        (order) => formatVietnameseDate(order._creationTime) === date
+      ).length;
+      const modelCount = models.filter(
+        (model) => formatVietnameseDate(model._creationTime) === date
+      ).length;
+
+      // Thêm thông tin tổng hợp vào mảng summary
+      summary.push({
+        date,
+        countType: "user",
+        count: userCount,
+      });
+
+      summary.push({
+        date,
+        countType: "order",
+        count: orderCount,
+      });
+
+      summary.push({
+        date,
+        countType: "model",
+        count: modelCount,
+      });
+    });
+
+    return summary;
+  }
+};

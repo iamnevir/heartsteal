@@ -4,7 +4,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 import Logo from "../logo";
-import { BrainCog, ListOrdered, LogOut, User2 } from "lucide-react";
+import {
+  BrainCog,
+  LayoutDashboard,
+  ListOrdered,
+  LogOut,
+  User2,
+} from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import { Link } from "@nextui-org/react";
@@ -19,6 +25,11 @@ const Sidebar = ({ userId }: { userId: string }) => {
   const isMobile = useMediaQuery("(max-width:768px)");
   const pathname = usePathname();
   const sidebarItems = [
+    {
+      icon: LayoutDashboard,
+      title: language === "Vietnamese" ? "Bảng điều khiển" : "Dashboard",
+      href: "/admin",
+    },
     {
       icon: User2,
       title: language === "Vietnamese" ? "Người dùng" : "User",

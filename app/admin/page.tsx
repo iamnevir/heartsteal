@@ -1,8 +1,11 @@
-import { redirect } from "next/navigation";
+import DashBoard from "@/components/admin/dashboard/dashboard";
 
 const AdminPage = () => {
-    redirect("/admin/user")
-    
-}
- 
+  return (
+    <div className="sm:pl-64 sm:p-4 p-2">
+      <DashBoard />
+    </div>
+  );
+};
+
 export default AdminPage;

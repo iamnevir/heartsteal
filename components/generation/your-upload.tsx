@@ -57,7 +57,7 @@ const YourUpload = ({
           {u!.upload.length > 0 ? (
             <div className=" grid md:grid-cols-4 grid-cols-2 gap-4 p-2 ">
               {u?.upload.map((item, index) => (
-                <div className=" relative">
+                <div key={index} className=" relative">
                   <Image
                     onClick={() => setIsSelected(item)}
                     key={index}

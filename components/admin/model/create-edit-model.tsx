@@ -21,15 +21,18 @@ import { toast } from "sonner";
 import slugify from "slugify";
 import { Doc } from "@/convex/_generated/dataModel";
 import { Edit } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
+  const { user } = useUser();
   const { language } = useLanguage();
   const update = useMutation(api.model.update);
   const create = useMutation(api.model.create);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const [isEdit, setIsEdit] = useState(false);
   const [model, setModel] = useState<{
     avatar?: string;
     name?: string;
-    isPro?:boolean;
+    isPro?: boolean;
     author?: string;
     size?: string;
     version?: string;
@@ -42,7 +45,7 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
           avatar: currentModel.avatar,
           name: currentModel.name,
           author: currentModel.author,
-          isPro:currentModel.isPro,
+          isPro: currentModel.isPro,
           size: currentModel.size,
           version: currentModel.version,
           baseModel: currentModel.baseModel,
@@ -52,7 +55,7 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
       : {
           avatar: undefined,
           name: undefined,
-          isPro:false,
+          isPro: false,
           author: undefined,
           size: undefined,
           version: undefined,
@@ -82,11 +85,12 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
           size: model.size,
           name: model.name,
           isActive: model.isActive,
-          isPro:model.isPro,
+          isPro: model.isPro,
           author: model.author,
           version: model.version,
           desc: model.desc,
           baseModel: model.baseModel,
+          updatedBy: user?.id,
         });
         onClose();
         toast.success(
@@ -108,11 +112,13 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
           size: model.size,
           name: model.name,
           isActive: model.isActive,
-          isPro:model.isPro,
+          isPro: model.isPro,
           author: model.author,
           version: model.version,
           desc: model.desc,
           baseModel: model.baseModel,
+          createdBy: user?.id,
+          updatedBy: user?.id,
         });
         onClose();
         toast.success(
@@ -187,7 +193,10 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
                     </span>
                     <SingleFileUpload
                       value={model.avatar ? model.avatar : ""}
-                      onChange={(avatar) => setModel({ ...model, avatar })}
+                      onChange={(avatar) => {
+                        setModel({ ...model, avatar });
+                        setIsEdit(true);
+                      }}
                       size="md"
                     />
                   </div>
@@ -197,14 +206,20 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
                         language === "Vietnamese" ? "Tên mô hình" : "Model Name"
                       }
                       value={model.name}
-                      onValueChange={(name) => setModel({ ...model, name })}
+                      onValueChange={(name) => {
+                        setModel({ ...model, name });
+                        setIsEdit(true);
+                      }}
                       labelPlacement="outside"
                       className="w-full"
                     />
 
                     <Input
                       value={model.author}
-                      onValueChange={(author) => setModel({ ...model, author })}
+                      onValueChange={(author) => {
+                        setModel({ ...model, author });
+                        setIsEdit(true);
+                      }}
                       label={
                         language === "Vietnamese" ? "Tác giả" : "Model Author"
                       }
@@ -214,7 +229,10 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
 
                     <Input
                       value={model.size}
-                      onValueChange={(size) => setModel({ ...model, size })}
+                      onValueChange={(size) => {
+                        setModel({ ...model, size });
+                        setIsEdit(true);
+                      }}
                       label={
                         language === "Vietnamese" ? "Kích thước" : "Model Size"
                       }
@@ -225,7 +243,7 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
                       <Input
                         value={model.version}
                         onValueChange={(version) =>
-                          setModel({ ...model, version})
+                          setModel({ ...model, version })
                         }
                         label={
                           language === "Vietnamese"
@@ -238,9 +256,10 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
 
                       <Switch
                         isSelected={model.isActive}
-                        onValueChange={(isActive) =>
-                          setModel({ ...model, isActive })
-                        }
+                        onValueChange={(isActive) => {
+                          setModel({ ...model, isActive });
+                          setIsEdit(true);
+                        }}
                         classNames={{
                           base: "whitespace-nowrap mt-5",
                           wrapper: model.isActive
@@ -252,34 +271,36 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
                       </Switch>
                     </div>
                     <div className=" flex items-center gap-3 justify-between">
-                    <Input
-                      value={model.baseModel}
-                      onValueChange={(baseModel) =>
-                        setModel({ ...model, baseModel })
-                      }
-                      label={
-                        language === "Vietnamese"
-                          ? "Mô hình cơ sở"
-                          : "Base Model"
-                      }
-                      labelPlacement="outside"
-                      className="w-full"
-                    />  
-                    <Switch
-                    isSelected={model.isPro}
-                    onValueChange={(isPro) =>
-                      setModel({ ...model, isPro })
-                    }
-                    classNames={{
-                      base: "whitespace-nowrap mt-5 mr-2",
-                      wrapper: model.isPro
-                        ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]"
-                        : "",
-                    }}
-                  >
-                    Premium
-                  </Switch>
-                </div>
+                      <Input
+                        value={model.baseModel}
+                        onValueChange={(baseModel) => {
+                          setModel({ ...model, baseModel });
+                          setIsEdit(true);
+                        }}
+                        label={
+                          language === "Vietnamese"
+                            ? "Mô hình cơ sở"
+                            : "Base Model"
+                        }
+                        labelPlacement="outside"
+                        className="w-full"
+                      />
+                      <Switch
+                        isSelected={model.isPro}
+                        onValueChange={(isPro) => {
+                          setModel({ ...model, isPro });
+                          setIsEdit(true);
+                        }}
+                        classNames={{
+                          base: "whitespace-nowrap mt-5 mr-2",
+                          wrapper: model.isPro
+                            ? "bg-gradient-to-r from-[#fa5560] via-[#b14bf4] to-[#4d91ff]"
+                            : "",
+                        }}
+                      >
+                        Premium
+                      </Switch>
+                    </div>
                   </div>
                 </div>
 
@@ -289,14 +310,23 @@ const CreateEditModel = ({ currentModel }: { currentModel?: Doc<"model"> }) => {
                     language === "Vietnamese" ? "Mô tả" : "Model Description"
                   }
                   value={model.desc}
-                  onValueChange={(desc) => setModel({ ...model, desc })}
+                  onValueChange={(desc) => {
+                    setModel({ ...model, desc });
+                    setIsEdit(true);
+                  }}
                 />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   {language === "Vietnamese" ? "Đóng" : "Close"}
                 </Button>
-                <Button className="bg-gr" onPress={onSubmit}>
+                <Button
+                  className={cn(
+                    "bg-gr",
+                    !isEdit ? "pointer-events-none opacity-50" : ""
+                  )}
+                  onPress={onSubmit}
+                >
                   {currentModel
                     ? language === "Vietnamese"
                       ? "Cập nhật"

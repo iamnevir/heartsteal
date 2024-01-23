@@ -34,7 +34,7 @@ export default defineSchema({
   model: defineTable({
     modelId: v.string(),
     isActive: v.boolean(),
-    isPro:v.optional(v.boolean()),
+    isPro: v.optional(v.boolean()),
     name: v.optional(v.string()),
     desc: v.optional(v.string()),
     author: v.optional(v.string()),
@@ -42,5 +42,7 @@ export default defineSchema({
     version: v.optional(v.string()),
     baseModel: v.optional(v.string()),
     avatar: v.optional(v.string()),
+    createdBy: v.optional(v.string()),
+    updatedBy: v.optional(v.string()),
   }).index("by_active", ["isActive"]),
 });

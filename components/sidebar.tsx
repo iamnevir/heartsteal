@@ -127,10 +127,14 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
               className={cn(
                 "ml-5",
                 isMobile && "w-7 h-7",
-                pathname === item.href && " text-rose-500"
+                pathname.includes(item.href) && " text-rose-500"
               )}
             />
-            <span className={cn(pathname === item.href ? "gradient-text" : "")}>
+            <span
+              className={cn(
+                pathname.includes(item.href) ? "gradient-text" : ""
+              )}
+            >
               {item.title}
             </span>
           </Link>

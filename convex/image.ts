@@ -56,6 +56,21 @@ export const getImageByUser = query({
     return image;
   },
 });
+export const getImageByModel = query({
+  args: {
+    modelId: v.string(),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const image = await ctx.db
+      .query("image")
+      .withIndex("by_public", (q) => q.eq("isPublish", true))
+      .filter((q) => q.eq(q.field("model"), args.modelId))
+      .order("desc")
+      .paginate(args.paginationOpts);
+    return image;
+  },
+});
 export const getImageByOwnUser = query({
   args: {
     userId: v.string(),

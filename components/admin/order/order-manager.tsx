@@ -71,7 +71,7 @@ const OrderManager = ({ userId }: { userId: string }) => {
                 <span className="text-xl dark:text-white/50">
                   {language === "Vietnamese"
                     ? "Số lượng đơn hàng"
-                    : "Total User"}
+                    : "Total Order"}
                 </span>
                 <span className="font-semibold text-2xl">{orders?.length}</span>
               </div>
@@ -80,7 +80,7 @@ const OrderManager = ({ userId }: { userId: string }) => {
               <ListChecks className="w-20 h-20" />
               <div className="flex flex-col">
                 <span className="text-xl dark:text-white/50">
-                  {language === "Vietnamese" ? "Đã thanh toán" : "Premium User"}
+                  {language === "Vietnamese" ? "Đã thanh toán" : "Order Paied"}
                 </span>
                 <span className="font-semibold text-2xl">
                   {orders?.filter((f) => f.isPay === true).length}

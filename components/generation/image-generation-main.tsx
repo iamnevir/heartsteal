@@ -57,6 +57,7 @@ import { motion } from "framer-motion";
 import Guide from "./guide";
 import Image from "next/image";
 import { createProdia, faceSwap, image2Image } from "@/actions/prodia";
+import Loading from "@/app/loading";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -487,7 +488,7 @@ const ImageGenerationMain = () => {
     }
   };
   if (!models) {
-    return null;
+    return <Loading />;
   }
   return (
     <div className="sm:pl-64 px-2 pt-6">

@@ -9,35 +9,21 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   User,
   useDisclosure,
 } from "@nextui-org/react";
-import {
-  Aperture,
-  Atom,
-  Biohazard,
-  BrainCog,
-  CandyCane,
-  User2Icon,
-  Wand2,
-} from "lucide-react";
+import { User2Icon, Wand2 } from "lucide-react";
 import Image from "next/image";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 import { useRouter } from "next/navigation";
-import { useQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
-import { formatVietnameseDateTime } from "@/lib/utils";
 import { useGenerateImage } from "@/hooks/use-generate-picker";
+import { cn } from "@/lib/utils";
 
 const ModelDetail = () => {
-  const router = useRouter();
   const models = useQuery(api.model.getmodels);
 
   return (
@@ -52,7 +38,7 @@ const ModelDetail = () => {
           {models?.map((item, index) => (
             <CarouselItem
               key={index}
-              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4  cursor-pointer"
+              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
             >
               <ModelItem item={item} />
             </CarouselItem>
@@ -65,6 +51,11 @@ const ModelDetail = () => {
 
 export const ModelItem = ({ item }: { item: Doc<"model"> }) => {
   const { language } = useLanguage();
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.image.getImageByModel,
+    { modelId: item.modelId },
+    { initialNumItems: 20 }
+  );
   const generation = useGenerateImage();
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -98,7 +89,7 @@ export const ModelItem = ({ item }: { item: Doc<"model"> }) => {
                 <div className=" flex flex-col items-start gap-3 w-full">
                   <div className="cursor-pointer w-fit h-fit p-0 m-0">
                     <User
-                      name={item.author}
+                      name={item.author ? item.author : "Unknow"}
                       avatarProps={{
                         name: item.author?.charAt(0),
                         className: "w-[30px] h-[30px] bg-gr ",
@@ -132,6 +123,30 @@ export const ModelItem = ({ item }: { item: Doc<"model"> }) => {
                 </div>
               </div>
             </ModalBody>
+            <ModalFooter
+              className={cn(
+                " grid  gap-4 sm:pr-2 py-2 sm:py-10 sm:grid-cols-4 grid-cols-2"
+              )}
+            >
+              {results?.map((item, index) => (
+                <Image
+                  key={index}
+                  className={"rounded-md"}
+                  alt=""
+                  placeholder="blur"
+                  blurDataURL="/placeholder.png"
+                  src={item.url}
+                  sizes="(max-width: 768px) 100vw,66vw"
+                  width={512}
+                  height={512}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                  }}
+                />
+              ))}
+            </ModalFooter>
           </>
         </ModalContent>
       </Modal>
