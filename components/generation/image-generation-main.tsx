@@ -56,8 +56,15 @@ import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import Guide from "./guide";
 import Image from "next/image";
-import { createProdia, faceSwap, image2Image } from "@/actions/prodia";
+import {
+  createProdia,
+  createProdia1,
+  faceRestore,
+  faceSwap,
+  image2Image,
+} from "@/actions/prodia";
 import Loading from "@/app/loading";
+import { StylePresent } from "prodia.js";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -80,6 +87,19 @@ const ImageGenerationMain = () => {
     generation.imageNumber,
     generation.isImageInput
   );
+  const prodiaStyle = [
+    { key: "restore", value: "Face Restore" },
+    { key: "3d-model", value: "3D Model" },
+    { key: "analog-film", value: "Analog Film" },
+    { key: "anime", value: "Anime" },
+    { key: "comic-book", value: "Comic" },
+    { key: "digital-art", value: "Digital Art" },
+    { key: "neon-punk", value: "Neon Punk" },
+    { key: "fantasy-art", value: "Fantasy Art" },
+    { key: "origami", value: "Origami" },
+    { key: "photographic", value: "Photographic" },
+    { key: "pixel-art", value: "Pixel" },
+  ];
   const handleGenerate = async () => {
     generation.setIsLoading(true);
     try {
@@ -180,18 +200,36 @@ const ImageGenerationMain = () => {
             });
           }
         } else if (generation.model === "prodia") {
-          const url = await faceSwap(generation.maskInput, generation.maskUrl);
-          console.log(url);
-          if (url) {
-            create({
-              prompt: generation.prompt,
-              url,
-              userId: user?.id!,
-              isPublish: generation.publicImage,
-              likes: randomInt(50, 300),
-              model: generation.model,
-              size: generation.imageSize,
-            });
+          if (generation.style === "restore") {
+            const url = await faceRestore(generation.maskInput);
+            if (url) {
+              create({
+                prompt: generation.prompt,
+                url,
+                userId: user?.id!,
+                isPublish: generation.publicImage,
+                likes: randomInt(50, 300),
+                model: generation.model,
+                size: generation.imageSize,
+              });
+            }
+          } else {
+            const url = await faceSwap(
+              generation.maskInput,
+              generation.maskUrl
+            );
+
+            if (url) {
+              create({
+                prompt: generation.prompt,
+                url,
+                userId: user?.id!,
+                isPublish: generation.publicImage,
+                likes: randomInt(50, 300),
+                model: generation.model,
+                size: generation.imageSize,
+              });
+            }
           }
         }
         if (!u?.isPro) {
@@ -410,7 +448,8 @@ const ImageGenerationMain = () => {
         const generateI = async () => {
           const url = await createProdia(
             generation.prompt,
-            generation.negativePrompt
+            generation.negativePrompt,
+            generation.style as StylePresent
           );
           return url;
         };
@@ -717,6 +756,44 @@ const ImageGenerationMain = () => {
               >
                 {language === "Vietnamese" ? "Chân thực" : "Realistic"}
               </SelectItem>
+            </Select>
+          )}
+          {generation.model === "prodia" && (
+            <Select
+              onChange={(v) => generation.setStyle(v.target.value)}
+              variant="bordered"
+              label={
+                <div className="flex items-center gap-1">
+                  <span>
+                    {language === "Vietnamese" ? "Phong cách" : "Imagine Style"}
+                  </span>
+                  <Tooltip
+                    placement="right"
+                    size="sm"
+                    delay={100}
+                    closeDelay={100}
+                    content={
+                      <div className="w-40">
+                        {language === "Vietnamese"
+                          ? "Bằng cách chọn phong cách, bạn hướng dẫn AI tạo hình ảnh có tính thẩm mỹ thị giác cụ thể."
+                          : "By choosing a style, you instruct the AI to create images with a specific visual aesthetic, defaulting to Anime."}
+                      </div>
+                    }
+                  >
+                    <LucideShieldQuestion className="sm:text-xs text-xl w-4 h-4" />
+                  </Tooltip>
+                </div>
+              }
+              className="max-w-[150px]"
+            >
+              {prodiaStyle.map((item) => (
+                <SelectItem
+                  key={item.key.toString()}
+                  value={item.value.toString()}
+                >
+                  {item.value}
+                </SelectItem>
+              ))}
             </Select>
           )}
           <Switch

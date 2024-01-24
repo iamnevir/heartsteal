@@ -1,3 +1,4 @@
+import { StylePresent } from "prodia.js";
 import { create } from "zustand";
 
 type GenerateImage = {
@@ -14,7 +15,7 @@ type GenerateImage = {
   maskUrl: string;
   maskInput: string;
   isLoading: boolean;
-  style: string;
+  style: string | StylePresent;
   negativePrompt: string;
   isNegative: boolean;
   tab: string;

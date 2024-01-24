@@ -1,11 +1,17 @@
 "use server";
-import { Prodia } from "prodia.js";
+import { Prodia, StylePresent } from "prodia.js";
 const prodia = new Prodia("22cb3eca-5698-4ee2-ae04-e56b70cbd65b");
-export const createProdia = async (prompt: string, negativePrompt: string) => {
+export const createProdia = async (
+  prompt: string,
+  negative_prompt: string,
+  style_preset: StylePresent
+) => {
   const generate = await prodia.generateImage({
     prompt,
     model: "absolutereality_v181.safetensors [3d9d4d2b]",
-    negativePrompt,
+    negative_prompt,
+    style_preset,
+    upscale: true,
   });
 
   while (generate.status !== "succeeded" && generate.status !== "failed") {
@@ -18,19 +24,38 @@ export const createProdia = async (prompt: string, negativePrompt: string) => {
     }
   }
 };
+export const createProdia1 = async (
+  prompt: string,
+  negative_prompt: string
+) => {
+  const generate: any = await prodia.SDXL({
+    prompt,
+    model: "absolutereality_v181.safetensors [3d9d4d2b]",
+    negative_prompt,
+  });
 
+  while (generate.status !== "succeeded" && generate.status !== "failed") {
+    new Promise((resolve) => setTimeout(resolve, 250));
+
+    const job = await prodia.getJob(generate.job);
+
+    if (job.status === "succeeded") {
+      return job.imageUrl.toString();
+    }
+  }
+};
 export const image2Image = async (
   prompt: string,
-  negativePrompt: string,
+  negative_prompt: string,
   imageUrl: string
 ) => {
-  const generate: any = await prodia.transformImage({
+  const generate = await prodia.transformImage({
     imageUrl,
     prompt,
     model: "absolutereality_v181.safetensors [3d9d4d2b]",
-    negativePrompt,
+    negative_prompt,
     sampler: "DPM++ SDE Karras",
-    cfgScale: 9,
+    cfg_scale: 9,
     steps: 30,
   });
 
@@ -45,35 +70,33 @@ export const image2Image = async (
   }
 };
 export const faceSwap = async (sourceUrl: string, targetUrl: string) => {
-  const url = "https://api.prodia.com/v1/faceswap";
-  const options = {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "X-Prodia-Key": "22cb3eca-5698-4ee2-ae04-e56b70cbd65b",
-    },
-    body: JSON.stringify({ sourceUrl, targetUrl }),
-  };
-  const resp = await fetch(url, options);
-  const job = await resp.json();
-  while (true) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const res = await fetch(
-      `https://api.prodia.com/v1/job/2b05e51b-6737-4e87-a21a-1099bdd9bf1f`,
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "X-Prodia-Key": "22cb3eca-5698-4ee2-ae04-e56b70cbd65b",
-        },
-      }
-    );
-    const result = await res.json();
-    console.log(result);
-    if (result.status === "succeeded") {
-      return result.imageUrl;
+  const generate = await prodia.faceSwap({
+    sourceUrl,
+    targetUrl,
+  });
+
+  while (generate.status !== "succeeded" && generate.status !== "failed") {
+    new Promise((resolve) => setTimeout(resolve, 500));
+
+    const job = await prodia.getJob(generate.job);
+
+    if (job.status === "succeeded") {
+      return job.imageUrl.toString();
+    }
+  }
+};
+export const faceRestore = async (imageUrl: string) => {
+  const generate = await prodia.faceRestore({
+    imageUrl,
+  });
+
+  while (generate.status !== "succeeded" && generate.status !== "failed") {
+    new Promise((resolve) => setTimeout(resolve, 500));
+
+    const job = await prodia.getJob(generate.job);
+
+    if (job.status === "succeeded") {
+      return job.imageUrl.toString();
     }
   }
 };
