@@ -15,7 +15,7 @@ type GenerateImage = {
   maskUrl: string;
   maskInput: string;
   isLoading: boolean;
-  style: string | StylePresent;
+  style?: string | StylePresent;
   negativePrompt: string;
   isNegative: boolean;
   tab: string;
@@ -52,7 +52,7 @@ export const useGenerateImage = create<GenerateImage>((set, get) => ({
   maskUrl: "",
   maskInput: "",
   isLoading: false,
-  style: "21",
+  style: undefined,
   negativePrompt: "",
   isNegative: false,
   tab: "",

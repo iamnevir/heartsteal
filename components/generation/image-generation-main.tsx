@@ -138,24 +138,38 @@ const ImageGenerationMain = () => {
             });
           }
         } else if (generation.model === "prodia") {
-          const url = await image2Image(
-            generation.prompt,
-            generation.negativePrompt,
-            generation.inputUrl
-          );
-          if (url) {
-            create({
-              prompt: generation.prompt,
-              url,
-              userId: user?.id!,
-              isPublish: generation.publicImage,
-              likes: randomInt(50, 300),
-              model: generation.model,
-              size: generation.imageSize,
-            });
+          if (generation.style === "restore") {
+            const url = await faceRestore(generation.inputUrl);
+            if (url) {
+              create({
+                prompt: generation.prompt,
+                url,
+                userId: user?.id!,
+                isPublish: generation.publicImage,
+                likes: randomInt(50, 300),
+                model: generation.model,
+                size: generation.imageSize,
+              });
+            }
+          } else {
+            const url = await image2Image(
+              generation.prompt,
+              generation.negativePrompt,
+              generation.inputUrl
+            );
+            if (url) {
+              create({
+                prompt: generation.prompt,
+                url,
+                userId: user?.id!,
+                isPublish: generation.publicImage,
+                likes: randomInt(50, 300),
+                model: generation.model,
+                size: generation.imageSize,
+              });
+            }
           }
         }
-
         if (!u?.isPro) {
           update({
             id: u?._id!,
@@ -200,36 +214,18 @@ const ImageGenerationMain = () => {
             });
           }
         } else if (generation.model === "prodia") {
-          if (generation.style === "restore") {
-            const url = await faceRestore(generation.maskInput);
-            if (url) {
-              create({
-                prompt: generation.prompt,
-                url,
-                userId: user?.id!,
-                isPublish: generation.publicImage,
-                likes: randomInt(50, 300),
-                model: generation.model,
-                size: generation.imageSize,
-              });
-            }
-          } else {
-            const url = await faceSwap(
-              generation.maskInput,
-              generation.maskUrl
-            );
+          const url = await faceSwap(generation.maskInput, generation.maskUrl);
 
-            if (url) {
-              create({
-                prompt: generation.prompt,
-                url,
-                userId: user?.id!,
-                isPublish: generation.publicImage,
-                likes: randomInt(50, 300),
-                model: generation.model,
-                size: generation.imageSize,
-              });
-            }
+          if (url) {
+            create({
+              prompt: generation.prompt,
+              url,
+              userId: user?.id!,
+              isPublish: generation.publicImage,
+              likes: randomInt(50, 300),
+              model: generation.model,
+              size: generation.imageSize,
+            });
           }
         }
         if (!u?.isPro) {
@@ -702,6 +698,12 @@ const ImageGenerationMain = () => {
                   />
                 }
                 key={item.modelId}
+                className={cn(
+                  "",
+                  !u?.isPro && item.isPro
+                    ? " pointer-events-none opacity-50"
+                    : ""
+                )}
                 value={item.name}
                 classNames={{ title: "sm:text-base text-xl" }}
                 endContent={
