@@ -15,7 +15,7 @@ export default authMiddleware({
       });
     }
 
-    if (auth.userId && !auth.isPublicRoute) {
+    if (auth.userId) {
       createUser(auth.userId);
       return NextResponse.next();
     }

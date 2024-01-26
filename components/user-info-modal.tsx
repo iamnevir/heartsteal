@@ -44,20 +44,12 @@ const UserInfoModal = ({ userId }: { userId: string }) => {
   async function onSubmit() {
     if (isValid && confirm) {
       try {
-        if (!u?.coin) {
-          await update({
-            id: u?._id!,
-            username: name?.replace(/\s/g, ""),
-            favorite: fav,
-            coin: 150,
-          });
-        } else {
-          await update({
-            id: u?._id!,
-            username: name?.replace(/\s/g, ""),
-            favorite: fav,
-          });
-        }
+        await update({
+          id: u?._id!,
+          username: name?.replace(/\s/g, ""),
+          favorite: fav,
+        });
+
         onClose();
         toast.success(
           language === "Vietnamese"
