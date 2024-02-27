@@ -234,7 +234,7 @@ const ImageGenerationMain = () => {
             coin: u?.coin! - price,
           });
         }
-      } else if (generation.model === "bimg") {
+      } else if (generation.model === "heart-steal-v2") {
         const res = await axios({
           method: "post",
           url: `${backEndUrl}/bing_gen`,
@@ -434,13 +434,13 @@ const ImageGenerationMain = () => {
           }
         });
       } else if (generation.model === "prodia") {
-        // if (!generation.maskUrl || !generation.maskInput) {
-        //   toast.error(
-        //     language === "Vietnamese"
-        //       ? "Không thấy ảnh đầu vào."
-        //       : "No image input found."
-        //   );
-        // }
+        if (!generation.maskUrl || !generation.maskInput) {
+          toast.error(
+            language === "Vietnamese"
+              ? "Không thấy ảnh đầu vào."
+              : "No image input found."
+          );
+        }
         const generateI = async () => {
           const url = await createProdia(
             generation.prompt,
@@ -533,7 +533,7 @@ const ImageGenerationMain = () => {
             ? "Mô hình tạo ảnh bằng AI"
             : "AI Image Generation"}
         </span>
-        <Guide />
+        {/* <Guide /> */}
       </div>
 
       <div

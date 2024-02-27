@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
-import { Divider, Link } from "@nextui-org/react";
+import { Chip, Divider, Link } from "@nextui-org/react";
 import {
   Box,
   CandyCane,
@@ -11,6 +11,7 @@ import {
   Flame,
   HeartPulseIcon,
   LogOut,
+  Paintbrush,
   Settings,
   VenetianMask,
 } from "lucide-react";
@@ -68,6 +69,12 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
       icon: Codesandbox,
       title: language === "Vietnamese" ? "Ảnh từ ảnh" : "Image Variation",
       href: "/ai/generation",
+    },
+    {
+      icon: Paintbrush,
+      title: "Realtime Canvas",
+      href: "/realtime-canvas",
+      isPro: true,
     },
   ];
   const footerItems = [
@@ -170,6 +177,11 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
             <span className={cn(pathname === item.href ? "gradient-text" : "")}>
               {item.title}
             </span>
+            {item.isPro && (
+              <Chip size="sm" className="bg-gr">
+                Pro
+              </Chip>
+            )}
           </Link>
         ))}
       </div>

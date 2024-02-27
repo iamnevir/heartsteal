@@ -47,7 +47,7 @@ const HistoryByPrompt = ({
   const generation = useGenerateImage();
   const removeAll = useMutation(api.image.removeAll);
   const updateAll = useMutation(api.image.updateAll);
-  const models=useQuery(api.model.getmodels)
+  const models = useQuery(api.model.getmodels);
   const { language } = useLanguage();
   const { edgestore } = useEdgeStore();
   const handleDeleteAll = async () => {
@@ -151,7 +151,9 @@ const HistoryByPrompt = ({
             closeDelay={100}
             content={formatVietnameseDateTime(item[0]._creationTime)}
           >
-            <span className=" whitespace-nowrap">{formatVietnameseDate(item[0]._creationTime)}</span>
+            <span className=" whitespace-nowrap">
+              {formatVietnameseDate(item[0]._creationTime)}
+            </span>
           </Tooltip>
           <>
             <Tooltip
@@ -177,8 +179,16 @@ const HistoryByPrompt = ({
               </div>
             </Tooltip>
             <div className="md:flex hidden items-center gap-1 ">
-            <Image src={models?.find(f=>f.modelId===item[0].model)?.avatar!} alt="" width={512} sizes="(max-width: 768px) 100vw,66vw" height={512} className="w-7 h-7" style={{objectFit:"cover"}} />
-             {models?.find(f=>f.modelId===item[0].model)?.name}
+              <Image
+                src={models?.find((f) => f.modelId === item[0].model)?.avatar!}
+                alt=""
+                width={512}
+                sizes="(max-width: 768px) 100vw,66vw"
+                height={512}
+                className="w-7 h-7"
+                style={{ objectFit: "cover" }}
+              />
+              {models?.find((f) => f.modelId === item[0].model)?.name}
             </div>
             <div className="flex items-center gap-1">
               <Img className="w-4 h-4" />

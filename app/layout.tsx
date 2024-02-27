@@ -37,7 +37,8 @@ export default function RootLayout({
           <ConvexClientProvider>
             <EdgeStoreProvider>
               <NextUiProviders>
-                {children} <FlyMenu />
+                {children}
+                <FlyMenu />
                 <Toaster
                   toastOptions={{
                     style: {
