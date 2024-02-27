@@ -434,13 +434,6 @@ const ImageGenerationMain = () => {
           }
         });
       } else if (generation.model === "prodia") {
-        if (!generation.maskUrl || !generation.maskInput) {
-          toast.error(
-            language === "Vietnamese"
-              ? "Không thấy ảnh đầu vào."
-              : "No image input found."
-          );
-        }
         const generateI = async () => {
           const url = await createProdia(
             generation.prompt,
@@ -533,7 +526,7 @@ const ImageGenerationMain = () => {
             ? "Mô hình tạo ảnh bằng AI"
             : "AI Image Generation"}
         </span>
-        {/* <Guide /> */}
+        <Guide />
       </div>
 
       <div
