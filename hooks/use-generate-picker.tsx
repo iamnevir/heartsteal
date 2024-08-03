@@ -1,4 +1,3 @@
-import { StylePresent } from "prodia.js";
 import { create } from "zustand";
 
 type GenerateImage = {
@@ -15,7 +14,7 @@ type GenerateImage = {
   maskUrl: string;
   maskInput: string;
   isLoading: boolean;
-  style?: string | StylePresent;
+  style?: string;
   negativePrompt: string;
   isNegative: boolean;
   tab: string;
@@ -40,7 +39,7 @@ type GenerateImage = {
 
 export const useGenerateImage = create<GenerateImage>((set, get) => ({
   prompt: "",
-  model: "dall-e-2",
+  model: "prodia",
   imageNumber: 1,
   imageSize: "512x512",
   natural: false,

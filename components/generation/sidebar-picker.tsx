@@ -62,7 +62,7 @@ const SidebarPicker = () => {
         />
       </div>
 
-      <CoinControl userId={user?.id!} />
+      {/* <CoinControl userId={user?.id!} /> */}
       <Divider className="px-5" />
 
       <Accordion selectionMode="multiple" defaultExpandedKeys={["2", "1"]}>
@@ -245,7 +245,9 @@ const SidebarPicker = () => {
           size={!isMobile ? "sm" : "lg"}
           className={cn(
             "ml-auto",
-            generation.model !== "heart-steal-pro" ? "opacity-50 pointer-events-none" : ""
+            generation.model !== "heart-steal-pro"
+              ? "opacity-50 pointer-events-none"
+              : ""
           )}
           onValueChange={(v) => generation.setHd(v)}
           classNames={{

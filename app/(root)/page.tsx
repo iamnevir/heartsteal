@@ -16,7 +16,7 @@ export default function Home() {
           <BrainCanvas />
         </div>
         <span className=" absolute right-5 gradient-text bottom-5 font-semibold flex items-center">
-          2023
+          2024
         </span>
       </div>
     </>

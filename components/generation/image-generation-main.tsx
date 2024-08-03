@@ -58,13 +58,11 @@ import Guide from "./guide";
 import Image from "next/image";
 import {
   createProdia,
-  createProdia1,
   faceRestore,
   faceSwap,
   image2Image,
 } from "@/actions/prodia";
 import Loading from "@/app/loading";
-import { StylePresent } from "prodia.js";
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -102,6 +100,7 @@ const ImageGenerationMain = () => {
   ];
   const handleGenerate = async () => {
     generation.setIsLoading(true);
+
     try {
       if (generation.isImageInput) {
         if (!generation.inputUrl) {
@@ -111,33 +110,7 @@ const ImageGenerationMain = () => {
               : "No image input found."
           );
         }
-        if (generation.model === "dall-e-2") {
-          const data = {
-            n: generation.imageNumber,
-            image_url: generation.inputUrl,
-            size: generation.imageSize,
-          };
-          const res = await axios({
-            method: "post",
-            url: `${backEndUrl}/generate_image_with_image`,
-            maxBodyLength: Infinity,
-            headers: {
-              "Content-Type": "application/json",
-            },
-            data,
-          });
-          for (let index = 0; index < generation.imageNumber; index++) {
-            create({
-              prompt: generation.prompt,
-              url: res.data.data[index],
-              userId: user?.id!,
-              isPublish: generation.publicImage,
-              likes: randomInt(50, 300),
-              model: generation.model,
-              size: generation.imageSize,
-            });
-          }
-        } else if (generation.model === "prodia") {
+        if (generation.model === "prodia") {
           if (generation.style === "restore") {
             const url = await faceRestore(generation.inputUrl);
             if (url) {
@@ -185,35 +158,7 @@ const ImageGenerationMain = () => {
           );
           return;
         }
-        if (generation.model === "dall-e-2") {
-          const data = {
-            n: generation.imageNumber,
-            image_url: generation.maskInput,
-            mask: generation.maskUrl,
-            prompt: generation.prompt,
-            size: generation.imageSize,
-          };
-
-          const res = await axios({
-            method: "post",
-            url: `${backEndUrl}/edit_image`,
-            maxBodyLength: Infinity,
-            headers: { "Content-Type": "application/json" },
-            data,
-          });
-          for (let index = 0; index < generation.imageNumber; index++) {
-            create({
-              prompt: generation.prompt,
-              url: res.data.data[index],
-              negativePrompt: generation.negativePrompt,
-              userId: user?.id!,
-              isPublish: generation.publicImage,
-              likes: randomInt(50, 300),
-              model: generation.model,
-              size: generation.imageSize,
-            });
-          }
-        } else if (generation.model === "prodia") {
+        if (generation.model === "prodia") {
           const url = await faceSwap(generation.maskInput, generation.maskUrl);
 
           if (url) {
@@ -227,37 +172,6 @@ const ImageGenerationMain = () => {
               size: generation.imageSize,
             });
           }
-        }
-        if (!u?.isPro) {
-          update({
-            id: u?._id!,
-            coin: u?.coin! - price,
-          });
-        }
-      } else if (generation.model === "heart-steal-v2") {
-        const res = await axios({
-          method: "post",
-          url: `${backEndUrl}/bing_gen`,
-          maxBodyLength: Infinity,
-          headers: { "Content-Type": "application/json" },
-          data: {
-            prompt: generation.prompt,
-          },
-        });
-        const urls: any[] = res.data.images.filter(
-          (url: string) => !url.includes(".svg")
-        );
-        for (let index = 0; index < urls?.length!; index++) {
-          create({
-            prompt: generation.prompt,
-            negativePrompt: generation.negativePrompt,
-            url: urls![index],
-            userId: user?.id!,
-            isPublish: generation.publicImage,
-            likes: randomInt(50, 300),
-            model: generation.model,
-            size: generation.imageSize,
-          });
         }
         if (!u?.isPro) {
           update({
@@ -438,7 +352,7 @@ const ImageGenerationMain = () => {
           const url = await createProdia(
             generation.prompt,
             generation.negativePrompt,
-            generation.style as StylePresent
+            generation.style
           );
           return url;
         };
@@ -463,41 +377,6 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
-      } else {
-        const data = {
-          model: generation.model,
-          n: generation.imageNumber,
-          size: generation.imageSize,
-          prompt: generation.prompt,
-        };
-        const res = await axios({
-          method: "post",
-          url: "https://api.openai.com/v1/images/generations",
-          data,
-          headers: {
-            Authorization: `Bearer ${openaiApi}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        for (let index = 0; index < generation.imageNumber; index++) {
-          create({
-            prompt: generation.prompt,
-            negativePrompt: generation.negativePrompt,
-            url: res.data.data[index].url,
-            userId: user?.id!,
-            isPublish: generation.publicImage,
-            likes: 0,
-            model: generation.model,
-            size: generation.imageSize,
-          });
-        }
-        if (!u?.isPro) {
-          update({
-            id: u?._id!,
-            coin: u?.coin! - price,
-          });
-        }
       }
       toast.success(
         language === "Vietnamese"
@@ -535,12 +414,7 @@ const ImageGenerationMain = () => {
           generation.isLoading ? "pointer-events-none" : ""
         )}
       >
-        <div
-          className={cn(
-            "flex gap-3 w-full",
-            generation.isImageInput ? " opacity-50 pointer-events-none" : ""
-          )}
-        >
+        <div className={cn("flex gap-3 w-full")}>
           <Dive />
           <Textarea
             disabled={generation.isLoading}

@@ -1,10 +1,10 @@
 "use server";
-import { Prodia, StylePresent } from "prodia.js";
-const prodia = new Prodia("22cb3eca-5698-4ee2-ae04-e56b70cbd65b");
+import { Prodia } from "prodia.js";
+const prodia = Prodia("22cb3eca-5698-4ee2-ae04-e56b70cbd65b");
 export const createProdia = async (
   prompt: string,
   negative_prompt: string,
-  style_preset: StylePresent
+  style_preset: any
 ) => {
   const generate = await prodia.generateImage({
     prompt,
@@ -28,7 +28,7 @@ export const createProdia1 = async (
   prompt: string,
   negative_prompt: string
 ) => {
-  const generate: any = await prodia.SDXL({
+  const generate: any = await prodia.generateImageSDXL({
     prompt,
     model: "absolutereality_v181.safetensors [3d9d4d2b]",
     negative_prompt,
@@ -49,7 +49,7 @@ export const image2Image = async (
   negative_prompt: string,
   imageUrl: string
 ) => {
-  const generate = await prodia.transformImage({
+  const generate = await prodia.transform({
     imageUrl,
     prompt,
     model: "absolutereality_v181.safetensors [3d9d4d2b]",

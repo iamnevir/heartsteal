@@ -42,12 +42,12 @@ const CheckOutButton = ({
               : "Choose your payment"}
           </ModalHeader>
           <ModalBody>
-            <Button
+            {/* <Button
               onClick={() => {}}
               className="bg-gr sm:text-lg font-semibold text-2xl sm:py-5 py-7 hover:scale-105 px-10 rounded-md"
             >
               {language === "Vietnamese" ? "Momo" : "Momo Payment"}
-            </Button>
+            </Button> */}
             <Button
               onClick={async () => {
                 const url = await createVNPay(userId, item.price * 1000);

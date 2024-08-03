@@ -14,7 +14,6 @@ export default authMiddleware({
         returnBackUrl: `${url}/sign-in`,
       });
     }
-
     if (auth.userId) {
       createUser(auth.userId);
       return NextResponse.next();

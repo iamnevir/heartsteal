@@ -59,6 +59,7 @@ const Sidebar = ({ isMobile }: { isMobile: boolean }) => {
       icon: Dna,
       title: language === "Vietnamese" ? "Tạo ảnh" : "Image Generation",
       href: "/ai/generation",
+      isPro: false,
     },
     {
       icon: CandyCane,
