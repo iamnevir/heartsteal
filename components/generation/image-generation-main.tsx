@@ -63,6 +63,7 @@ import {
   image2Image,
 } from "@/actions/prodia";
 import Loading from "@/app/loading";
+
 const ImageGenerationMain = () => {
   const generation = useGenerateImage();
   const { user } = useUser();
@@ -98,6 +99,36 @@ const ImageGenerationMain = () => {
     { key: "photographic", value: "Photographic" },
     { key: "pixel-art", value: "Pixel" },
   ];
+  const translateText = async (text: string) => {
+    if (language === "Vietnamese") {
+      const url =
+        "https://google-translate113.p.rapidapi.com/api/v1/translator/html";
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "x-rapidapi-key":
+              "6c46a5343fmshc12a682a3b5a193p1d6d92jsn886a613af694",
+            "x-rapidapi-host": "google-translate113.p.rapidapi.com",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "vi",
+            to: "en",
+            html: text,
+          }),
+        });
+        const result = await response.json();
+        console.log(result);
+        return result.trans;
+      } catch (error) {
+        console.error(error);
+        return text;
+      }
+    } else {
+      return text;
+    }
+  };
   const handleGenerate = async () => {
     generation.setIsLoading(true);
 
@@ -125,8 +156,9 @@ const ImageGenerationMain = () => {
               });
             }
           } else {
+            const prompt = await translateText(generation.prompt);
             const url = await image2Image(
-              generation.prompt,
+              prompt,
               generation.negativePrompt,
               generation.inputUrl
             );
@@ -181,7 +213,7 @@ const ImageGenerationMain = () => {
         }
       } else if (generation.model === "dream") {
         const res = await dreamGeneration(
-          generation.prompt,
+          await translateText(generation.prompt),
           generation.imageSize,
           generation.imageNumber
         );
@@ -300,6 +332,12 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
+        }
       } else if (generation.model === "animagine") {
         const generateI = async () => {
           const response = await axios({
@@ -347,10 +385,17 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
+        }
       } else if (generation.model === "prodia") {
         const generateI = async () => {
+          const prompt = await translateText(generation.prompt);
           const url = await createProdia(
-            generation.prompt,
+            prompt,
             generation.negativePrompt,
             generation.style
           );
@@ -377,7 +422,14 @@ const ImageGenerationMain = () => {
             console.error("One or more calls to generateI failed.");
           }
         });
+        if (!u?.isPro) {
+          update({
+            id: u?._id!,
+            coin: u?.coin! - price,
+          });
+        }
       }
+
       toast.success(
         language === "Vietnamese"
           ? "Tạo ảnh thành công."
@@ -431,7 +483,9 @@ const ImageGenerationMain = () => {
                 ? "Nhập mô tả cho bức ảnh của bạn..."
                 : "Type a prompt..."
             }
-            onValueChange={generation.setPrompt}
+            onValueChange={(v) => {
+              generation.setPrompt(v);
+            }}
             isRequired
             maxLength={1000}
           />

@@ -62,7 +62,7 @@ const SidebarPicker = () => {
         />
       </div>
 
-      {/* <CoinControl userId={user?.id!} /> */}
+      <CoinControl userId={user?.id!} />
       <Divider className="px-5" />
 
       <Accordion selectionMode="multiple" defaultExpandedKeys={["2", "1"]}>
